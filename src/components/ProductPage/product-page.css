@@ -1,0 +1,105 @@
+.product-page-wrapper {
+  height: 745px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 80px 130px 0 0;
+  display: flex;
+}
+
+.preview-img-wrapper {
+  width: 8%;
+  height: 511px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 40px;
+}
+
+.preview-img {
+  margin-bottom: 40px;
+  margin-right: 100px;
+}
+
+.product-info {
+  width: 90%;
+  height: 511px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.product-img {
+  margin-right: 100px;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.product-brief-description {
+  font-size: 30px;
+  font-weight: 400;
+  margin-bottom: 43px;
+}
+
+.product-sizes-title {
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.avail-sizes-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.avail-size {
+  width: 63px;
+  height: 45px;
+  border: 1px solid #1d1f22;
+  display: inline;
+  padding: 13px;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 12px 40px 0;
+}
+
+.product-price-title {
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-family: Raleway, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+p + button {
+  width: 292px;
+  height: 52px;
+  padding: 16px;
+  text-align: center;
+  background-color: #5ece7b;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.product-description {
+  font-family: Roboto, sans-serif;
+  line-height: 25px;
+  font-weight: 400;
+}
