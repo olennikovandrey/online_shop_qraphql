@@ -27,7 +27,7 @@ nav {
   transition: all 0.2s ease-in;
 }
 
-.header-content-wrapper nav:nth-child(3) { /*KIDS*/
+.header-content-wrapper nav:nth-child(3) {
   margin-right: 35%;
 }
 
@@ -47,7 +47,7 @@ nav {
   margin: 0 5px 0 40%;
 }
 
-.header-content-wrapper span:nth-child(6) { /*dropdown arrow*/
+.header-content-wrapper span:nth-child(6) {
   content: url("../../assets/images/header/arrow.svg");
   margin-right: 2%;
   cursor: pointer;
