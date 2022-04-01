@@ -43,14 +43,11 @@ nav {
   cursor: pointer;
 }
 
-.header-content-wrapper span:nth-child(5) {
-  margin: 0 5px 0 40%;
-}
-
-.header-content-wrapper span:nth-child(6) {
-  content: url("../../assets/images/header/arrow.svg");
-  margin-right: 2%;
-  cursor: pointer;
+.header-content-wrapper select {
+  margin: 0 15px 0 40%;
+  border: none;
+  background-color: #fff;
+  width: 45px;
 }
 
 .cart {

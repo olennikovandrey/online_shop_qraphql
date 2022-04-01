@@ -3,13 +3,6 @@ import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../Loader/Loader";
 import "./category.css";
-import client from "../../apollo";
-import { GET_SHOP } from "../../services/queries";
-
-async function loadShopDataAsync() {
-  const { data } = await client.query({query: GET_SHOP} );
-  return data
-}
 
 export default class CategoryWrapper extends Component {
   constructor(props) {
@@ -18,25 +11,9 @@ export default class CategoryWrapper extends Component {
       error: null,
       isLoaded: false,
       isOverflow: true,
-      showMoreBtn: true,
-      shopData: []
+      showMoreBtn: true
     };
     this.showMoreFn = this.showMoreFn.bind(this)
-    this.loadShopData = this.loadShopData.bind(this)
-  }
-
-  async loadShopData() {
-    const data = await loadShopDataAsync();
-    this.setState({
-      shopData: data.categories
-    })
-  }
-
-  componentDidMount() {
-    this.loadShopData();
-    this.setState({
-      isLoaded: true
-    })
   }
 
   showMoreFn(){
@@ -47,16 +24,11 @@ export default class CategoryWrapper extends Component {
   }
 
   render() {
-    const { error, isLoaded, shopData } = this.state;
-    const filteredShopData = shopData.filter(item => item.name === this.props.categoryName.toLowerCase())
-    console.log("shopData:",shopData)
-    console.log("filteredShopData:", filteredShopData)
-
-    if (error) {
+    if (this.state.error) {
       return (
-        <div>Error: {error.message}</div>
+        <div>Error: {this.state.error.message}</div>
       )
-    } else if (!isLoaded) {
+    } else if (!this.props.isLoaded) {
       return (
         <section className="category-wrapper">
           <span className="category-name">{this.props.categoryName}</span>
@@ -70,22 +42,27 @@ export default class CategoryWrapper extends Component {
         <section className="category-wrapper">
           <span className="category-name">{this.props.categoryName}</span>
           <div className={`${this.state.isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper"}`}>
-          {filteredShopData
+          {this.props.shopData
+            .filter(item => item.name === this.props.categoryName.toLowerCase())[0].products
             .map(item =>
               <React.Fragment key={item.id}>
                 <Link to={`/${item.id}`}>
                   <ProductCard
-                    image={item.gallery}
+                    image={item.gallery[0]}
                     name={item.name}
-                    currencyPrice={item.prices[0].amount}
-                    symbol={item.prices[0].currency.symbol}
+                    amount={(item.prices.some(cur => cur.currency.symbol === this.props.currency)) ? item.prices[0].amount : "fdfds"}
+                    currency={this.props.currency}
+
                     id={item.id}
                   />
                 </Link>
               </React.Fragment>
+
             )}
           </div>
-          {filteredShopData.length > 6 && <button className="show-more-btn" onClick={this.showMoreFn}>{this.state.showMoreBtn ? "SHOW MORE" : "HIDE"}</button>}
+          {this.props.shopData
+            .filter(item => item.name === this.props.categoryName.toLowerCase())[0].products.length > 6 &&
+            <button className="show-more-btn" onClick={this.showMoreFn}>{this.state.showMoreBtn ? "SHOW MORE" : "HIDE"}</button>}
         </section>
       )
     }

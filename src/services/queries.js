@@ -21,32 +21,47 @@ const GET_SHOP = gql`
 
 const GET_PRODUCT = gql`
   query Product($productId: String!) {
-    product(id: $productId) {
-      id
-      name
-      gallery
-      description
-      category
-      attributes {
+  product(id: $productId) {
+    id
+    name
+    gallery
+    description
+    prices {
+      amount
+      currency {
+        label
+        symbol
+      }
+    }
+    brand
+    attributes {
+      items {
+        displayValue
+        value
         id
-        name
-        type
-        items {
-          displayValue
-          value
-          id
-        }
       }
-      prices {
-        currency {
-          label
-          symbol
-        }
-        amount
-      }
-      brand
+      type
+      name
+      id
     }
   }
+}
 `
 
-export { GET_SHOP, GET_PRODUCT }
+const GET_PRICES = gql`
+  query Query {
+  categories {
+    products {
+      prices {
+        amount
+        currency {
+          symbol
+          label
+        }
+      }
+    }
+  }
+}
+`
+
+export { GET_SHOP, GET_PRODUCT, GET_PRICES }

@@ -1,16 +1,10 @@
 import React, { Component } from "react";
 import Header from "../Header/Header";
 import "./product-page.css";
-import { getProductDetails } from "../../services/queryFunctions";
 
 export default class ProductPage extends Component {
   constructor(props) {
     super(props)
-  }
-
-  componentDidMount() {
-    getProductDetails(this.props.id)
-    console.log(this.props)
   }
 
   render() {
