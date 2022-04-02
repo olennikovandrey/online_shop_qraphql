@@ -29,6 +29,20 @@
 @font-face {
   font-family: Roboto;
   font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/Raleway-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
   font-weight: 400;
   src: url("../fonts/Roboto-Regular\ 400.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/SourceSansPro-Regular.400.ttf") format("truetype");
 }

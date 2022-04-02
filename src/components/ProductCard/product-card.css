@@ -10,8 +10,11 @@
 }
 
 .product-card-wrapper img:nth-child(1) {
-  width: 338px;
-  height: 356px;
+  margin: 0 auto;
+  max-height: 356px;
+  height: 100%;
+  max-width: 338px;
+  width: auto;
   margin-bottom: 24px;
 }
 

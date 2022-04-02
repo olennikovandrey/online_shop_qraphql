@@ -27,7 +27,6 @@ dd {
 }
 
 body {
-  min-height: 100vh;
   max-width: 1440px;
   margin: 0 auto;
   background-color: #e5e5e5;
@@ -58,5 +57,5 @@ a {
 
 #root {
   background-color: #fff;
-  padding: 0 8%;
+  max-width: 1440px;
 }

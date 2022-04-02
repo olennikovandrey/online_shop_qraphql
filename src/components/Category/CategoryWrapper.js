@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../Loader/Loader";
+import { styles } from "../../assets/styles/styles";
 import "./category.css";
 
 export default class CategoryWrapper extends Component {
@@ -11,27 +12,30 @@ export default class CategoryWrapper extends Component {
       error: null,
       isLoaded: false,
       isOverflow: true,
-      showMoreBtn: true
+      isShowMoreBtn: true
     };
     this.showMoreFn = this.showMoreFn.bind(this)
   }
 
   showMoreFn(){
     this.setState({
-      showMoreBtn: !this.state.showMoreBtn,
+      isShowMoreBtn: !this.state.isShowMoreBtn,
       isOverflow: !this.state.isOverflow
     })
   }
 
   render() {
-    if (this.state.error) {
+    const { error, isOverflow, isShowMoreBtn } = this.state,
+          { isLoaded, categoryName, shopData, currency, setCurrency, isBachgroundBlur } = this.props;
+
+    if (error) {
       return (
-        <div>Error: {this.state.error.message}</div>
+        <div>Error: {error.message}</div>
       )
-    } else if (!this.props.isLoaded) {
+    } else if (!isLoaded) {
       return (
-        <section className="category-wrapper">
-          <span className="category-name">{this.props.categoryName}</span>
+        <section style={isBachgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
+          <span className="category-name">{categoryName}</span>
           <div className="category-items-wrapper">
             <Loader />
           </div>
@@ -39,30 +43,29 @@ export default class CategoryWrapper extends Component {
       )
     } else {
       return (
-        <section className="category-wrapper">
-          <span className="category-name">{this.props.categoryName}</span>
-          <div className={`${this.state.isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper"}`}>
-          {this.props.shopData
-            .filter(item => item.name === this.props.categoryName.toLowerCase())[0].products
+        <section style={isBachgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
+          <span className="category-name">{categoryName}</span>
+          <div className={`${isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper"}`}>
+          {shopData
+            .filter(item => item.name === categoryName.toLowerCase())[0].products
             .map(item =>
               <React.Fragment key={item.id}>
                 <Link to={`/${item.id}`}>
                   <ProductCard
                     image={item.gallery[0]}
                     name={item.name}
-                    amount={(item.prices.some(cur => cur.currency.symbol === this.props.currency)) ? item.prices[0].amount : "fdfds"}
-                    currency={this.props.currency}
-
+                    amount={item.prices.filter(current => current.currency.symbol === currency)[0].amount}
+                    currency={currency}
                     id={item.id}
+                    setCurrency={setCurrency}
                   />
                 </Link>
               </React.Fragment>
-
             )}
           </div>
-          {this.props.shopData
-            .filter(item => item.name === this.props.categoryName.toLowerCase())[0].products.length > 6 &&
-            <button className="show-more-btn" onClick={this.showMoreFn}>{this.state.showMoreBtn ? "SHOW MORE" : "HIDE"}</button>}
+          {shopData
+            .filter(item => item.name === categoryName.toLowerCase())[0].products.length > 6 &&
+            <button className="show-more-btn" onClick={this.showMoreFn}>{isShowMoreBtn ? "SHOW MORE" : "HIDE"}</button>}
         </section>
       )
     }
