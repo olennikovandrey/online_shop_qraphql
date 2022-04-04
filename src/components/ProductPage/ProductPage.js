@@ -1,52 +1,72 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
 import client from "../../apollo";
-import { GET_SHOP } from "../../services/queries";
+import { GET_PRODUCT } from "../../services/queries";
+import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
 
-async function loadShopDataAsync() {
-  const { data } = await client.query({query: GET_SHOP} );
-  return data
-}
 
 export default class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
-      shopData: [],
+      productData: [],
       symbols: [],
-      isLoaded: false
+      currency: "$",
+      error: null,
+      isLoaded: false,
+      isBackgroundBlur: false
     };
-    this.loadShopData = this.loadShopData.bind(this);
+    this.setCurrency = this.setCurrency.bind(this);
+    this.setBlur = this.setBlur.bind(this);
+  }
+
+  setCurrency(value) {
+    this.setState({
+      currency: value
+    })
+  }
+
+  async loadShopDataAsync() {
+    const { data } = await client.query({
+      query: GET_PRODUCT,
+      variables: {"productId": this.props.match.params.id}
+    });
+    return data
   }
 
   async loadShopData() {
-    const data = await loadShopDataAsync();
+    const data = await this.loadShopDataAsync();
     this.setState({
-      shopData: data.categories,
-      symbols: data.categories[0].products[0].prices
+      productData: data.product,
+      symbols: data.product.prices
     });
+  }
+
+  setBlur() {
+    this.setState({
+      isBackgroundBlur: !this.state.isBackgroundBlur
+    })
+  }
+
+  createMarkup(value) {
+    return {__html: value};
   }
 
   componentDidMount() {
     this.loadShopData();
     this.setState({
       isLoaded: true
-    })
+    });
+
   }
 
   render() {
-    const { symbols, error, isLoaded } = this.state,
-          { setCurrency } = this.props;
-    console.log(this.props)
+    const { productData, symbols, currency, isLoaded, isBackgroundBlur } = this.state;
+    console.log(productData);
 
-    if (error) {
-      return (
-        <div>Error: {error.message}</div>
-      )
-    } else if (!isLoaded) {
+    if (!isLoaded) {
       return (
         <div className="product-page-wrapper">
           <Loader />
@@ -58,19 +78,21 @@ export default class ProductPage extends Component {
           <Header
             setCategoryName={null}
             symbols={symbols}
-            setCurrency={setCurrency}
+            setCurrency={this.setCurrency}
+            setBlur={this.setBlur}
           />
-          <div className="product-page-wrapper">
+          <section style={isBackgroundBlur ? styles.ProductPageWrapperBlur : styles.ProductPageWrapper}>
             <div className="preview-img-wrapper">
-              <img className="preview-img" src="" width="80" height="80" alt=""/>
-              <img className="preview-img" src="" width="80" height="80" alt=""/>
-              <img className="preview-img" src="" width="80" height="80" alt=""/>
+              <img className="preview-img" width="80" height="auto" alt={productData.name} />
+              <img className="preview-img" src="https://images-na.ssl-images-amazon.com/images/I/71iQ4HGHtsL._SL1500_.jpg" width="80" height="auto" alt={productData.name} />
             </div>
             <div className="product-info">
-              <img className="product-img" src="" width="610" height="511" alt=""/>
+              <div>
+                  <img className="product-img" src="https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_4_720x.jpg?v=1612816087" alt={productData.name} />
+              </div>
               <div className="product-details">
-                <p className="product-name">Apollo</p>
-                <p className="product-brief-description">Running Short</p>
+                <p className="product-name">{productData.brand}</p>
+                <p className="product-brief-description">{productData.name}</p>
                 <p className="product-sizes-title">SIZE:</p>
                 <div className="avail-sizes-wrapper">
                   <div className="avail-size">XS</div>
@@ -79,12 +101,12 @@ export default class ProductPage extends Component {
                   <div className="avail-size">L</div>
                 </div>
                 <p className="product-price-title">PRICE:</p>
-                <p className="product-price">$50.00</p>
+                <p className="product-price">{currency} </p>
                 <button>ADD TO CART</button>
-                <span className="product-description">Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.</span>
+                <div className="product-description" dangerouslySetInnerHTML={this.createMarkup(productData.description)} />
               </div>
             </div>
-          </div>
+          </section>
         </>
       )
     }

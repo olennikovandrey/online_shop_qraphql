@@ -1,11 +1,3 @@
-.product-page-wrapper {
-  height: 745px;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 120px 8% 0;
-  display: flex;
-}
-
 .preview-img-wrapper {
   width: 8%;
   height: 511px;
@@ -20,17 +12,20 @@
 }
 
 .product-info {
-  width: 90%;
-  height: 511px;
+  max-width: 90%;
+  height: auto;
   display: flex;
   justify-content: flex-start;
 }
 
 .product-img {
+  display: block;
+  max-width: 100%;
   margin-right: 100px;
 }
 
 .product-details {
+  width: 60%;
   display: flex;
   flex-direction: column;
 }
@@ -99,7 +94,23 @@ p + button {
 }
 
 .product-description {
+  display: block;
+  max-width: 100%;
   font-family: Roboto, sans-serif;
-  line-height: 25px;
+  line-height: calc(0.6em + 1.3vmin);
+  font-size: calc(0.2em + 1.3vmin);
   font-weight: 400;
 }
+
+/*
+   *
+  { }
+ {   }
+{     }
+*/
+
+/*
+( )
+{ }
+[ ]
+*/

@@ -50,7 +50,7 @@ export default class CategoryWrapper extends Component {
             .filter(item => item.name === categoryName.toLowerCase())[0].products
             .map(item =>
               <React.Fragment key={item.id}>
-                <Link to={`/${item.id}`}>
+                <Link to={`id=${item.id}`}>
                   <ProductCard
                     image={item.gallery[0]}
                     name={item.name}

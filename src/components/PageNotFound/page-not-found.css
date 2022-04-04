@@ -1,0 +1,28 @@
+.page-not-found-wrapper {
+  max-width: 1440px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 150px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-not-found-wrapper > span:nth-child(1) {
+  color: #fc2828;
+  font-size: 200px;
+  font-weight: 700;
+  padding-bottom: 30px;
+}
+
+.page-not-found-wrapper > span:nth-child(2) {
+  font-size: 70px;
+  padding-bottom: 30px;
+}
+
+.page-not-found-wrapper > span:nth-child(3) {
+  color: #282cfc;
+  font-size: 30px;
+  padding-bottom: 30px;
+  text-decoration: underline;
+}

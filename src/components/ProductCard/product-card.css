@@ -4,7 +4,7 @@
   height: 90%;
   padding: 10px;
   cursor: pointer;
-  margin: 0 25px 50px;
+  margin: 30px 25px 50px;
   transition: all 0.3s ease-in-out;
   border-radius: 10px;
 }
@@ -30,7 +30,7 @@
 }
 
 .product-card-wrapper:hover {
-  box-shadow: 0 10px 35px #00000030;
+  box-shadow: 0 0 20px #00000098;
 }
 
 .add-to-cart-btn {
