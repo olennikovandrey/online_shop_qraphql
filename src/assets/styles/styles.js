@@ -10,7 +10,7 @@ const CategoryWrapperBlur = {
   alignItems: "center",
   justifyContent: "space-between",
 
-}
+};
 
 const CategoryWrapper = {
   maxWidth: "1440px",
@@ -22,7 +22,7 @@ const CategoryWrapper = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "space-between"
-}
+};
 
 const ProductPageWrapper = {
   height: "auto",
@@ -30,7 +30,7 @@ const ProductPageWrapper = {
   margin: "0 auto",
   padding: "120px 8% 100px",
   display: "flex"
-}
+};
 
 const ProductPageWrapperBlur = {
   height: "auto",
@@ -39,11 +39,11 @@ const ProductPageWrapperBlur = {
   padding: "120px 8% 100px",
   display: "flex",
   filter: "brightness(0.8)"
-}
+};
 
 export const styles = {
   CategoryWrapperBlur: CategoryWrapperBlur,
   CategoryWrapper: CategoryWrapper,
   ProductPageWrapper: ProductPageWrapper,
   ProductPageWrapperBlur: ProductPageWrapperBlur
-}
+};

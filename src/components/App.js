@@ -6,6 +6,7 @@ import "../assets/styles/general.css";
 import "../assets/styles/fonts.css";
 import ProductPage from "./ProductPage/ProductPage";
 import PageNotFount from "./PageNotFound/PageNotFount";
+import Cart from "./Cart/Cart";
 
 export default class App extends Component {
   render() {
@@ -13,15 +14,16 @@ export default class App extends Component {
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/id=:id" component={WithParamsProductPage} />
+        <Route path="/id=:id" component={WithParamsProductPage} />
+        <Route path="/cart" component={Cart} />
         <Route path="/404" component={PageNotFount} />
         <Route path="*"
-          render={() => {return <Redirect to="/404" />}}
+          render={() => {return <Redirect to="/404" />;}}
         />
       </Switch>
     </Router>
-    )
+    );
   }
 }
 
-const WithParamsProductPage = withRouter(ProductPage)
+const WithParamsProductPage = withRouter(ProductPage);

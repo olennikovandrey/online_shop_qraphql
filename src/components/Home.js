@@ -1,56 +1,61 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import client from "../apollo";
+import { connect } from "react-redux";
 import CategoryWrapper from "./Category/CategoryWrapper";
 import Header from "./Header/Header";
-import client from "../apollo";
+import { getCatalog, getSymbols } from "../actions/cart";
 import { GET_SHOP } from "../services/queries";
 
 async function loadShopDataAsync() {
   const { data } = await client.query({query: GET_SHOP} );
-  return data
+  return data;
 }
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state ={
       isLoaded: false,
-      isBachgroundBlur: false,
+      isBackgroundBlur: false,
       categoryName: "ALL",
-      currency: "$",
       shopData: [],
-      symbols: [],
     };
     this.setCategoryName = this.setCategoryName.bind(this);
     this.loadShopData = this.loadShopData.bind(this);
-    this.setCurrency = this.setCurrency.bind(this);
     this.setBlur = this.setBlur.bind(this);
   }
+
+  catalogLoader = (data) => {
+    this.props.getCatalog(data);
+  };
+
+  symbolsLoader = (data) => {
+    this.props.getSymbols(data);
+  };
 
   async loadShopData() {
     const data = await loadShopDataAsync();
     this.setState({
       shopData: data.categories,
-      symbols: data.categories[0].products[0].prices,
       isLoaded: true
-    })
+    });
+    this.catalogLoader(data.categories);
+    this.symbolsLoader(data.categories[0].products[0].prices);
+    console.log("state.catalog from Home", this.props.catalog);
+    console.log("shopData from Home", this.state.shopData);
   }
 
   setCategoryName(value) {
     this.setState({
       categoryName: value
-    })
-  }
-
-  setCurrency(value) {
-    this.setState({
-      currency: value
-    })
+    });
   }
 
   setBlur() {
     this.setState({
-      isBachgroundBlur: !this.state.isBachgroundBlur
-    })
+      isBackgroundBlur: !this.state.isBackgroundBlur
+    });
   }
 
   componentDidMount() {
@@ -58,25 +63,50 @@ export default class Home extends Component {
   }
 
   render() {
-    const { categoryName, shopData, isLoaded, symbols, currency, isBachgroundBlur } = this.state;
+    const { categoryName, shopData, isLoaded, isBackgroundBlur } = this.state;
 
     return (
       <div>
         <Header
           setCategoryName={this.setCategoryName}
-          symbols={symbols}
-          setCurrency={this.setCurrency}
           setBlur={this.setBlur}
         />
         <CategoryWrapper
           categoryName={categoryName}
           shopData={shopData}
           isLoaded={isLoaded}
-          currency={currency}
-          setCurrency={this.setCurrency}
-          isBachgroundBlur={isBachgroundBlur}
+          isBackgroundBlur={isBackgroundBlur}
         />
       </div>
-    )
+    );
   }
 }
+
+Home.propTypes = {
+  catalog: PropTypes.array,
+  symbols: PropTypes.array,
+  getCatalog: PropTypes.func,
+  getSymbols: PropTypes.func
+};
+
+
+const mapStateToProps = state => {
+  console.log("state", state);
+  return {
+    catalog: state.catalog,
+    symbols: state.symbols
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCatalog: (payload) => {
+      dispatch(getCatalog(payload));
+    },
+    getSymbols: (payload) => {
+      dispatch(getSymbols(payload));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

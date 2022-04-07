@@ -41,6 +41,7 @@ ol[class] {
 img {
   max-width: 100%;
   display: block;
+  object-fit: scale-down;
 }
 
 input,
@@ -58,8 +59,4 @@ a {
 #root {
   background-color: #fff;
   max-width: 1440px;
-}
-
-img {
-  object-fit: scale-down;
 }

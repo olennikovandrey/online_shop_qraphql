@@ -1,29 +1,45 @@
 import { gql } from "@apollo/client";
 
 const GET_SHOP = gql`
-  query Categories {
-    categories {
+  query Query {
+  categories {
+    name
+    products {
+      id
       name
-      products {
+      inStock
+      gallery
+      description
+      category
+      attributes {
         id
         name
-        gallery
-        prices {
-          currency {
-            symbol
-          }
-          amount
+        type
+        items {
+          displayValue
+          value
+          id
         }
       }
+      prices {
+        amount
+        currency {
+          label
+          symbol
+        }
+      }
+      brand
     }
   }
-`
+}
+`;
 
 const GET_PRODUCT = gql`
   query Product($productId: String!) {
   product(id: $productId) {
     id
     name
+    inStock
     gallery
     description
     prices {
@@ -46,7 +62,7 @@ const GET_PRODUCT = gql`
     }
   }
 }
-`
+`;
 
 const GET_PRICES = gql`
   query Query {
@@ -62,6 +78,6 @@ const GET_PRICES = gql`
     }
   }
 }
-`
+`;
 
-export { GET_SHOP, GET_PRODUCT, GET_PRICES }
+export { GET_SHOP, GET_PRODUCT, GET_PRICES };

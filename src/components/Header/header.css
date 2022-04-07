@@ -61,13 +61,34 @@ nav {
   margin-right: 20px;
   border: none;
   background: #fff;
-  width: 50px;
+  width: 55px;
   font-size: calc(0.4em + 1.3vmin);
 }
 
-.cart {
+.cart-icon-wrapper {
+  content: "0";
   position: relative;
-  content: url("../../assets/images/header/cart.svg");
   cursor: pointer;
   width: 20px;
+}
+
+.cart-icon {
+  display: block;
+  content: url("../../assets/images/header/cart.svg");
+}
+
+.cart-icon-total {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1d1f22;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
 }

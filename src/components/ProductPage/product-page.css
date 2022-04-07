@@ -11,6 +11,10 @@
   margin-right: 100px;
 }
 
+.preview-img::after {
+  content: url("../../assets/images/product-card/broken-img.svg");
+}
+
 .product-info {
   max-width: 90%;
   height: auto;
@@ -18,10 +22,14 @@
   justify-content: flex-start;
 }
 
+.product-img-wrapper {
+  width: 100%;
+  margin-right: 100px;
+}
+
 .product-img {
   display: block;
   max-width: 100%;
-  margin-right: 100px;
 }
 
 .product-details {
@@ -49,24 +57,44 @@
   margin-bottom: 8px;
 }
 
-.avail-sizes-wrapper {
+.available-sizes-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
 }
 
-.avail-size {
+.available-items-wrapper {
+  display: flex;
+}
+
+.available-size {
   width: 63px;
   height: 45px;
+  line-height: 45px;
   border: 1px solid #1d1f22;
-  display: inline;
-  padding: 13px;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
   text-align: center;
   cursor: pointer;
   margin: 0 12px 40px 0;
 }
 
+.not-available-size {
+  width: 63px;
+  height: 45px;
+  line-height: 45px;
+  border: 1px solid #a6a6a6;
+  color: #a6a6a6;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  text-align: center;
+  margin: 0 12px 40px 0;
+  cursor: not-allowed;
+}
+
 .product-price-title {
+  display: block;
+  width: 100%;
   font-family: Roboto, sans-serif;
   font-size: 18px;
   font-weight: 700;
@@ -101,16 +129,3 @@ p + button {
   font-size: calc(0.2em + 1.3vmin);
   font-weight: 400;
 }
-
-/*
-   *
-  { }
- {   }
-{     }
-*/
-
-/*
-( )
-{ }
-[ ]
-*/

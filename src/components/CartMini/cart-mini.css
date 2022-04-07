@@ -8,21 +8,25 @@
   right: 0;
   width: 30%;
   height: auto;
+  max-height: 656px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #fff;
   padding: 8px 16px 20px;
+  overflow-y: scroll;
   z-index: 2;
 }
 
 .cart-mini-item-wrapper {
   width: 100%;
   height: auto;
-  margin: 25px 0;
+  margin: 25px 0 0;
+  padding-bottom: 15px;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  border-bottom: 1px solid #191f1a;
 }
 
 .item-description-price-size-wrapper {
@@ -63,6 +67,7 @@
   border: 1px solid black;
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;
+  line-height: 20px;
   cursor: pointer;
 }
 
@@ -86,6 +91,7 @@
 
 .row-wrapper {
   width: 100%;
+  margin-top: 15px;
   display: flex;
   justify-content: space-between;
 }
@@ -109,7 +115,7 @@
 
 .view-bag-btn,
 .check-out-btn {
-  height: 100%;
+  height: 45px;
   width: 47%;
   font-weight: 600;
   transition: all 0.1s ease-in;

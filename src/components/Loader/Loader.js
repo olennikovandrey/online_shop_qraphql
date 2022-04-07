@@ -7,6 +7,6 @@ export default class Loading extends Component {
       <div className="loader-wrapper">
         <div className="loader"></div>
       </div>
-  )
+  );
   }
 }

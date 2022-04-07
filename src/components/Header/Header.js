@@ -1,50 +1,98 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import CartMini from "../Cart/CartMini";
+import { connect } from "react-redux";
+import { changeCurrency } from "../../actions/cart";
+import CartMini from "../CartMini/CartMini";
 import "./header.css";
 
-export default class Header extends Component {
+class Header extends Component {
   constructor(props){
     super(props);
     this.state = {
       isCartVisible: false
     };
-    this.setCartVisible = this.setCartVisible.bind(this)
+    this.setCartVisible = this.setCartVisible.bind(this);
   }
 
-  setCartVisible(e) {
+  handleClick = (value) => {
+    this.props.changeCurrency(value);
+  };
+
+  setCartVisible() {
     this.setState({
       isCartVisible: !this.state.isCartVisible
     });
-    this.props.setBlur()
+    this.props.setBlur();
   }
 
   render() {
-    const { setCategoryName, setCurrency } = this.props;
+    const { setCategoryName, setBlur, total, addedItems, currency } = this.props;
+    console.log("state.addedItems from Header", addedItems);
 
     return (
       <header className="header-wrapper">
         <div>
-          <nav onClick={(event) => {setCategoryName(event.target.textContent)}}>ALL</nav>
-          <nav onClick={(event) => {setCategoryName(event.target.textContent)}}>CLOTHES</nav>
-          <nav onClick={(event) => {setCategoryName(event.target.textContent)}}>TECH</nav>
+          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>ALL</nav>
+          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>CLOTHES</nav>
+          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>TECH</nav>
         </div>
         <Link to="/"><span className="logo"></span></Link>
         <div>
-          <select>
+          <select value={currency}>
             {this.props.symbols.map(item =>
               <option
-                onClick={(event) => {setCurrency(event.target.value)}}
-                key={item.currency.symbol}
-                value={item.currency.symbol} >
-                {item.currency.symbol}
+                onClick={ (event) => { this.handleClick(event.target.value); } }
+                key={ item.currency.symbol }
+                value={ item.currency.symbol }
+              >
+                { item.currency.symbol }
               </option>)
             }
           </select>
-          <div className="cart" onClick={this.setCartVisible}></div>
+          <div className="cart-icon-wrapper" onClick={ this.setCartVisible }>
+            <span className="cart-icon"></span>
+            { total > 0 && <span className="cart-icon-total">{ total }</span> }
+          </div>
         </div>
-        <CartMini isCartVisible={this.state.isCartVisible} setCartVisible={this.setCartVisible}/>
+        <CartMini
+          isCartVisible={ this.state.isCartVisible }
+          setCartVisible={ this.setCartVisible }
+          setCategoryName={ null }
+          setBlur={ setBlur }
+        />
       </header>
-    )
+    );
   }
 }
+
+Header.propTypes = {
+  setBlur: PropTypes.func,
+  setCategoryName: PropTypes.func,
+  changeCurrency: PropTypes.func,
+  categoryName: PropTypes.string,
+  symbols: PropTypes.array,
+  total: PropTypes.number,
+  addedItems: PropTypes.array,
+  currency: PropTypes.string
+};
+
+const mapStateToProps = (state) => {
+  return {
+    total: state.addedItems.length,
+    addedItems: state.addedItems,
+    symbols: state.symbols,
+    currency: state.currency
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeCurrency: (value) => {
+      dispatch(changeCurrency(value));
+    }
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

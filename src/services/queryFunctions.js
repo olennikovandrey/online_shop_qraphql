@@ -5,10 +5,10 @@ async function getAllShop() {
   try {
     await client.query({
       query: query.GET_SHOP
-    })
+    });
   } catch (err) {
-    console.log( "getAllShop error:", err)
+    console.log( "getAllShop error:", err);
   }
 }
 
-export { getAllShop }
+export { getAllShop };
