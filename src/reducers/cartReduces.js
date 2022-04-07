@@ -1,9 +1,10 @@
-import { GET_CATALOG, GET_SYMBOLS, ADD_TO_CART, REMOVE_ITEM, ADD_QUANTITY, REMOVE_QUANTITY, CHANGE_CURRENCY } from "../actions/action-types/cart-actions";
+import { GET_CATALOG, GET_SYMBOLS, GET_PRODUCT_AVAILABLE, NEW_TOTAL_PRICE, ADD_TO_CART, REMOVE_ITEM, ADD_QUANTITY, REMOVE_QUANTITY, CHANGE_CURRENCY } from "../actions/action-types/cart-actions";
 
 const initState = {
   catalog: [],
   symbols: [],
   addedItems: [],
+  availableProducts: [],
   currency: "$",
   totalPrice: 0
 };
@@ -26,22 +27,36 @@ const cartReducer = (state = initState, action) => {
       };
     }
 
+    case GET_PRODUCT_AVAILABLE: {
+      let downloadedData = action.payload;
+      return {
+        ...state,
+        availableProducts: downloadedData
+      };
+    }
+
+    case NEW_TOTAL_PRICE: {
+      return {
+        ...state
+      };
+    }
+
     case ADD_TO_CART: {
       let addedItem = state.catalog[0].products.find(item => item.id === action.id);
       let existedItem = state.addedItems.find(item => action.id === item.id);
       if (existedItem) {
         return {
           ...state,
-          totalPrice: state.totalPrice
+          totalPrice: state.totalPrice,
         };
        } else {
-         let newTotal = parseFloat((state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
-         return {
-           ...state,
-           addedItems: [...state.addedItems, addedItem],
-           totalPrice: newTotal
-         };
-       }
+        let newTotal = parseFloat((state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
+        return {
+          ...state,
+          addedItems: [...state.addedItems, addedItem],
+          totalPrice: newTotal
+        };
+      }
     }
 
     case REMOVE_ITEM: {
@@ -56,17 +71,17 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_QUANTITY: {
-      let addedItem = state.items.find(item => item.id === action.id); //
+      let addedItem = state.catalog[0].products.find(item => item.id === action.id);
       addedItem.quantity += 1;
-      let newTotal = state.total + addedItem.price; //
+      let newTotal = parseFloat((state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
       return {
         ...state,
-        total: newTotal
+        totalPrice: newTotal
       };
     }
 
     case REMOVE_QUANTITY: {
-      let addedItem = state.items.find(item => item.id === action.id); //
+      let addedItem = state.catalog[0].products.find(item => item.id === action.id);
       if (addedItem.quantity === 1) {
         let newItems = state.addedItems.filter(item => item.id !== action.id);
         let newTotal = state.total - addedItem.price; //

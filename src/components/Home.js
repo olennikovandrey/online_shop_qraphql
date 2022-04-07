@@ -4,7 +4,7 @@ import client from "../apollo";
 import { connect } from "react-redux";
 import CategoryWrapper from "./Category/CategoryWrapper";
 import Header from "./Header/Header";
-import { getCatalog, getSymbols } from "../actions/cart";
+import { getCatalog, getSymbols, getProductAvailable } from "../actions/cart";
 import { GET_SHOP } from "../services/queries";
 
 async function loadShopDataAsync() {
@@ -34,6 +34,10 @@ class Home extends Component {
     this.props.getSymbols(data);
   };
 
+  productsAvailableLoader = (data) => {
+    this.props.getProductAvailable(data);
+  };
+
   async loadShopData() {
     const data = await loadShopDataAsync();
     this.setState({
@@ -41,9 +45,9 @@ class Home extends Component {
       isLoaded: true
     });
     this.catalogLoader(data.categories);
+    localStorage.setItem("catalog", JSON.stringify(data.categories));
     this.symbolsLoader(data.categories[0].products[0].prices);
-    console.log("state.catalog from Home", this.props.catalog);
-    console.log("shopData from Home", this.state.shopData);
+    this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
   }
 
   setCategoryName(value) {
@@ -58,8 +62,8 @@ class Home extends Component {
     });
   }
 
-  componentDidMount() {
-    this.loadShopData();
+  async componentDidMount() {
+    await this.loadShopData();
   }
 
   render() {
@@ -86,7 +90,8 @@ Home.propTypes = {
   catalog: PropTypes.array,
   symbols: PropTypes.array,
   getCatalog: PropTypes.func,
-  getSymbols: PropTypes.func
+  getSymbols: PropTypes.func,
+  getProductAvailable: PropTypes.func
 };
 
 
@@ -105,7 +110,10 @@ const mapDispatchToProps = dispatch => {
     },
     getSymbols: (payload) => {
       dispatch(getSymbols(payload));
-    }
+    },
+    getProductAvailable: (payload) => {
+      dispatch(getProductAvailable(payload));
+    },
   };
 };
 

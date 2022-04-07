@@ -8,8 +8,7 @@ const CategoryWrapperBlur = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "space-between",
-
+  justifyContent: "space-between"
 };
 
 const CategoryWrapper = {
@@ -26,6 +25,7 @@ const CategoryWrapper = {
 
 const ProductPageWrapper = {
   height: "auto",
+  width: "100%",
   maxWidth: "1440px",
   margin: "0 auto",
   padding: "120px 8% 100px",
@@ -34,6 +34,7 @@ const ProductPageWrapper = {
 
 const ProductPageWrapperBlur = {
   height: "auto",
+  width: "100%",
   maxWidth: "1440px",
   margin: "0 auto",
   padding: "120px 8% 100px",

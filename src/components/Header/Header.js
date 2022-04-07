@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { changeCurrency } from "../../actions/cart";
+import { changeCurrency, setNewTotalPrice } from "../../actions/cart";
 import CartMini from "../CartMini/CartMini";
 import "./header.css";
 
@@ -17,6 +17,7 @@ class Header extends Component {
 
   handleClick = (value) => {
     this.props.changeCurrency(value);
+    this.props.setNewTotalPrice(value);
   };
 
   setCartVisible() {
@@ -46,7 +47,7 @@ class Header extends Component {
                 key={ item.currency.symbol }
                 value={ item.currency.symbol }
               >
-                { item.currency.symbol }
+                { item.currency.symbol } { item.currency.label }
               </option>)
             }
           </select>
@@ -70,6 +71,7 @@ Header.propTypes = {
   setBlur: PropTypes.func,
   setCategoryName: PropTypes.func,
   changeCurrency: PropTypes.func,
+  setNewTotalPrice: PropTypes.setNewTotalPrice,
   categoryName: PropTypes.string,
   symbols: PropTypes.array,
   total: PropTypes.number,
@@ -90,6 +92,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeCurrency: (value) => {
       dispatch(changeCurrency(value));
+    },
+    setNewTotalPrice: (value) => {
+      dispatch(setNewTotalPrice(value));
     }
   };
 };

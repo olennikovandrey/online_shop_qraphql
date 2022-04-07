@@ -39,7 +39,6 @@ ol[class] {
 }
 
 img {
-  max-width: 100%;
   display: block;
   object-fit: scale-down;
 }

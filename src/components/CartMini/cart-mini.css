@@ -4,7 +4,7 @@
 
 .cart-mini-wrapper {
   position: absolute;
-  top: 79px;
+  top: 80px;
   right: 0;
   width: 30%;
   height: auto;
@@ -12,10 +12,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #fff;
+  background-color: #fff;
   padding: 8px 16px 20px;
   overflow-y: scroll;
   z-index: 2;
+  border: 1px solid #000;
 }
 
 .cart-mini-item-wrapper {
@@ -124,7 +125,7 @@
 
 .view-bag-btn {
   border: 1px solid black;
-  background: #fff;
+  background-color: #fff;
 }
 
 .view-bag-btn:hover {

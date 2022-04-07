@@ -28,8 +28,6 @@ class CategoryWrapper extends Component {
   render() {
     const { error, isOverflow, isShowMoreBtn } = this.state,
           { isLoaded, categoryName, shopData, currency, isBackgroundBlur } = this.props;
-          console.log("CW catalog", this.props.catalog);
-          console.log("CW shopData", this.props.shopData);
 
     if (error) {
       return (
@@ -78,13 +76,11 @@ CategoryWrapper.propTypes = {
   categoryName: PropTypes.string,
   shopData: PropTypes.array,
   currency: PropTypes.string,
-  items: PropTypes.array,
-  catalog: PropTypes.array
+  items: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
   return {
-    catalog: state.catalog,
     symbols: state.symbols,
     currency: state.currency
   };

@@ -19,7 +19,8 @@ class ProductCard extends Component {
   };
 
   render() {
-    const { image, name, amount, currency, id, addedItems } = this.props;
+    const { image, name, amount, currency, id, availableProducts, addedItems } = this.props,
+          available = availableProducts.find(item => item.id === id);
 
     return (
       <>
@@ -29,9 +30,17 @@ class ProductCard extends Component {
           <span>{ name }</span>
           <span>{ amount } { currency }</span>
           </Link>
-          { addedItems.find(item => item.id === id) === undefined ?
-            <div className="add-to-cart-btn" onClick={ () => this.addItemToCart(id) }></div> :
-            <div className="remove-from-cart-btn" onClick={ () => this.removeItemFromCart(id) }></div>
+          { addedItems.find(item => item.id === id) === undefined?
+            <div
+              className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
+              onClick={ available !== undefined ? () => this.addItemToCart(id) : null }
+            >
+              <span className="tooltiptext">Is unavailable now</span>
+            </div> :
+            <div
+              className="remove-from-cart-btn"
+              onClick={ () => this.removeItemFromCart(id) }
+            />
           }
         </div>
       </>
@@ -47,12 +56,14 @@ ProductCard.propTypes = {
   id: PropTypes.string,
   addToCart: PropTypes.func,
   removeItem: PropTypes.func,
+  availableProducts: PropTypes.array,
   addedItems: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
+    availableProducts: state.availableProducts,
     addedItems: state.addedItems
   };
 };

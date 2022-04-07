@@ -45,9 +45,10 @@ class ProductPage extends Component {
 
   render() {
     const { isLoaded, isBackgroundBlur } = this.state,
-          { currency, addedItems, catalog } = this.props,
+          { currency, addedItems, catalog, availableProducts } = this.props,
           product = catalog[0].products.filter(item => item.id === this.props.match.params.id),
-          currentProduct = product[0];
+          currentProduct = product[0],
+          available = availableProducts.find(item => item.id === currentProduct.id);
 
     if (isLoaded && catalog.length !== 0) {
       return (
@@ -96,8 +97,17 @@ class ProductPage extends Component {
                 <p className="product-price-title">PRICE:</p>
                 <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
                 { addedItems.find(item => item.id === currentProduct.id) === undefined ?
-                  <button onClick={() => this.addItemToCart(this.props.match.params.id)}>ADD TO CART</button> :
-                  <button onClick={() => this.removeItemFromCart(this.props.match.params.id)}>REMOVE FROM CART</button>
+                  <div className="btn-toolkit-wrapper">
+                    <button
+                      className={ available !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
+                      onClick={ available !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null}>ADD TO CART
+                    </button>
+                    { available === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
+                  </div> :
+                  <button
+                    className="prod-page-add-btn"
+                    onClick={available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null}>REMOVE FROM CART
+                  </button>
                 }
                 <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
               </div>
@@ -121,14 +131,16 @@ ProductPage.propTypes = {
   currency: PropTypes.string,
   addedItems: PropTypes.array,
   catalog: PropTypes.array,
-  removeItem: PropTypes.func
+  removeItem: PropTypes.func,
+  availableProducts: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
     addedItems: state.addedItems,
-    catalog: state.catalog
+    catalog: state.catalog,
+    availableProducts: state.availableProducts
   };
 };
 

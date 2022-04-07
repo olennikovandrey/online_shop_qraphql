@@ -1,4 +1,14 @@
-import { GET_CATALOG, GET_SYMBOLS, ADD_TO_CART, REMOVE_ITEM, ADD_QUANTITY, REMOVE_QUANTITY, CHANGE_CURRENCY } from "./action-types/cart-actions";
+import {
+  GET_CATALOG,
+  GET_SYMBOLS,
+  GET_PRODUCT_AVAILABLE,
+  NEW_TOTAL_PRICE,
+  ADD_TO_CART,
+  REMOVE_ITEM,
+  ADD_QUANTITY,
+  REMOVE_QUANTITY,
+  CHANGE_CURRENCY,
+} from "./action-types/cart-actions";
 
 export const getSymbols = payload => {
   return {
@@ -11,6 +21,19 @@ export const getCatalog = payload => {
   return {
     type: GET_CATALOG,
     payload
+  };
+};
+
+export const getProductAvailable = payload => {
+  return {
+    type: GET_PRODUCT_AVAILABLE,
+    payload
+  };
+};
+
+export const setNewTotalPrice = () => {
+  return {
+    type: NEW_TOTAL_PRICE
   };
 };
 

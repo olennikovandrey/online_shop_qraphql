@@ -5,7 +5,7 @@
   padding: 0 6%;
   position: fixed;
   z-index: 2;
-  background: #fff;
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,8 +60,8 @@ nav {
   height: 100%;
   margin-right: 20px;
   border: none;
-  background: #fff;
-  width: 55px;
+  background-color: #fff;
+  width: 95px;
   font-size: calc(0.4em + 1.3vmin);
 }
 
@@ -84,7 +84,7 @@ nav {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #1d1f22;
+  background-color: #1d1f22;
   font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 14px;

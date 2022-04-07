@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { addQuantity } from "../../actions/cart";
 import { Link } from "react-router-dom";
 import "./cart-mini.css";
 
@@ -9,8 +10,12 @@ class CartMiniItem extends Component {
     super(props);
   }
 
+  addCurrentQuantity = (id) => {
+    this.props.addQuantity(id);
+  };
+
   render() {
-    const { addedItems, id, currency } = this.props;
+    const { addedItems, id, currency,  } = this.props;
     const currentItem = addedItems.find(item => id === item.id);
 
     return (
@@ -25,7 +30,7 @@ class CartMiniItem extends Component {
         </div>
         <div className="item-counter-img-wrapper">
           <div>
-            <div className="counter-btn">+</div>
+            <div className="counter-btn" onClick={() => this.addCurrentQuantity(id)}>+</div>
             <span>1</span>
             <div className="counter-btn">-</div>
           </div>
@@ -41,7 +46,8 @@ class CartMiniItem extends Component {
 CartMiniItem.propTypes = {
   addedItems: PropTypes.array,
   id: PropTypes.string,
-  currency: PropTypes.string
+  currency: PropTypes.string,
+  addQuantity: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -51,4 +57,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(CartMiniItem);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addQuantity: (id) => {
+      dispatch(addQuantity(id));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartMiniItem);

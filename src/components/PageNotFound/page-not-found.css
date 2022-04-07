@@ -3,7 +3,7 @@
   height: 100vh;
   margin: 0 auto;
   padding: 150px;
-  background: #fff;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
 }
