@@ -20,11 +20,11 @@ class CartMini extends Component {
             <span className="cart-mini-title"><b>My Bag</b>, { bagQuantity } items</span>
             <span className="close-btn" onClick={ setCartVisible }></span>
           </div>
-          {addedItems.map( item =>
+          { addedItems.map( item =>
             <CartMiniItem
-              key={item.id}
-              id={item.id}
-              setBlur={setBlur}
+              key={ item.id }
+              id={ item.id }
+              setBlur={ setBlur }
             />)
           }
           <div className="row-wrapper">
@@ -33,7 +33,7 @@ class CartMini extends Component {
           </div>
           <div className="bts-wrapper">
             <button className="view-bag-btn"><Link to="/cart">VIEW BAG</Link></button>
-            <button className="check-out-btn">CHECK OUT</button>
+            <button className={ addedItems.length > 0 ? "check-out-btn" : "check-out-btn-disabled" }>CHECK OUT</button>
           </div>
         </div>
       </>

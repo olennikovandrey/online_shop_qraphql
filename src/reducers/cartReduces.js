@@ -1,15 +1,27 @@
-import { GET_CATALOG, GET_SYMBOLS, GET_PRODUCT_AVAILABLE, NEW_TOTAL_PRICE, ADD_TO_CART, REMOVE_ITEM, ADD_QUANTITY, REMOVE_QUANTITY, CHANGE_CURRENCY } from "../actions/action-types/cart-actions";
+import {
+  GET_CATALOG,
+  GET_SYMBOLS,
+  GET_PRODUCT_AVAILABLE,
+  ADD_TO_CART,
+  REMOVE_ITEM,
+  ADD_QUANTITY,
+  REMOVE_QUANTITY,
+  CHANGE_CURRENCY,
+  ADD_FIRST_ATTRIBUTE
+} from "../actions/action-types/cart-actions";
 
 const initState = {
   catalog: [],
   symbols: [],
-  addedItems: [],
+  addedItems: JSON.parse(localStorage.getItem("Cart")) || [],
   availableProducts: [],
-  currency: "$",
-  totalPrice: 0
+  currency: JSON.parse(localStorage.getItem("Currency")) || "$",
+  totalPrice: JSON.parse(localStorage.getItem("TotalPrice")) || 0
 };
 
+let firstAttr = [];
 const cartReducer = (state = initState, action) => {
+
   switch (action.type) {
     case GET_SYMBOLS: {
       let downloadedData = action.payload;
@@ -35,26 +47,31 @@ const cartReducer = (state = initState, action) => {
       };
     }
 
-    case NEW_TOTAL_PRICE: {
-      return {
-        ...state
-      };
-    }
-
     case ADD_TO_CART: {
-      let addedItem = state.catalog[0].products.find(item => item.id === action.id);
+      const addedItem = state.catalog[0].products.find(item => item.id === action.id);
+      const copyAddedItem = Object.assign({}, addedItem);
       let existedItem = state.addedItems.find(item => action.id === item.id);
       if (existedItem) {
+        copyAddedItem.quantity += 1;
+        copyAddedItem.firstAttr = firstAttr;
+        firstAttr = [];
+        debugger
         return {
           ...state,
           totalPrice: state.totalPrice,
         };
        } else {
-        let newTotal = parseFloat((state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
+        copyAddedItem.quantity = 1;
+        copyAddedItem.firstAttr = firstAttr;
+        let newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+
+        localStorage.setItem("Cart", JSON.stringify([...state.addedItems, copyAddedItem]));
+        localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+
         return {
           ...state,
-          addedItems: [...state.addedItems, addedItem],
-          totalPrice: newTotal
+          addedItems: [...state.addedItems, copyAddedItem],
+          totalPrice: parseFloat(newTotal.toFixed(2))
         };
       }
     }
@@ -62,52 +79,102 @@ const cartReducer = (state = initState, action) => {
     case REMOVE_ITEM: {
       let itemToRemove = state.addedItems.find(item => action.id === item.id);
       let newItems = state.addedItems.filter(item => action.id !== item.id);
-      let newTotal = parseFloat((state.totalPrice - itemToRemove.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
+      let newTotal = state.totalPrice - (itemToRemove.prices.filter(item => item.currency.symbol === state.currency)[0].amount * itemToRemove.quantity);
+      itemToRemove.quantity = 0;
+      firstAttr = [];
+
+      localStorage.setItem("Cart", JSON.stringify(state.addedItems.filter(item => item.id !== action.id)));
+      localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+
       return {
         ...state,
         addedItems: newItems,
-        totalPrice: newTotal
+        totalPrice: parseFloat(newTotal.toFixed(2))
       };
     }
 
     case ADD_QUANTITY: {
-      let addedItem = state.catalog[0].products.find(item => item.id === action.id);
-      addedItem.quantity += 1;
-      let newTotal = parseFloat((state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount).toFixed(2));
+      let currentItem = state.addedItems.find(item => item.id === action.id);
+      currentItem.quantity += 1;
+      let priceToAdd = currentItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+
+      localStorage.setItem("TotalPrice", JSON.stringify(parseFloat((state.totalPrice + priceToAdd).toFixed(2))));
+
       return {
         ...state,
-        totalPrice: newTotal
+        totalPrice: parseFloat((state.totalPrice + priceToAdd).toFixed(2))
       };
     }
 
     case REMOVE_QUANTITY: {
-      let addedItem = state.catalog[0].products.find(item => item.id === action.id);
-      if (addedItem.quantity === 1) {
+      let currentItem = state.addedItems.find(item => item.id === action.id);
+      let priceToRemove = currentItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+
+      if (currentItem.quantity === 1) {
         let newItems = state.addedItems.filter(item => item.id !== action.id);
-        let newTotal = state.total - addedItem.price; //
+        let newTotal = state.totalPrice - priceToRemove;
+        currentItem.quantity = 0;
+
+        localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+
         return {
           ...state,
           addedItems: newItems,
-          total: newTotal
+          totalPrice: parseFloat(newTotal.toFixed(2))
         };
       } else {
-        addedItem.quantity -+ 1;
-        let newTotal = state.total - addedItem.price; //
+        currentItem.quantity -= 1;
+        let newTotal = parseFloat((state.totalPrice - priceToRemove).toFixed(2));
+
+        localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+
         return {
           ...state,
-          total: newTotal
+          totalPrice: parseFloat(newTotal.toFixed(2))
         };
       }
     }
 
     case CHANGE_CURRENCY: {
-      console.log(action.value);
-      let currency = action.value;
+      const addedItemsPrices = [];
+      (function () {
+        state.addedItems.forEach(
+          el => addedItemsPrices.push(
+            el.prices.filter(
+              item => (item.currency.symbol === action.value)
+            )[0].amount * el.quantity
+          )
+        )
+      }());
+      const newTotal = addedItemsPrices.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+        0
+      );
+
+      localStorage.setItem("Currency", JSON.stringify(action.value));
+      localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+
       return {
         ...state,
-        currency: currency
+        totalPrice: parseFloat(newTotal.toFixed(2)),
+        currency: action.value
       };
     }
+
+    case ADD_FIRST_ATTRIBUTE: {
+      if (firstAttr.find(item => item === action.id) === undefined) {
+        firstAttr.push( action.id);
+      }
+
+
+
+
+      console.log(firstAttr);
+      return {
+        ...state
+      };
+    }
+
 
     default: {
       return {
@@ -117,4 +184,5 @@ const cartReducer = (state = initState, action) => {
   }
 };
 
+console.log("2",firstAttr);
 export default cartReducer;

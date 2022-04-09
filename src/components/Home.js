@@ -45,7 +45,6 @@ class Home extends Component {
       isLoaded: true
     });
     this.catalogLoader(data.categories);
-    localStorage.setItem("catalog", JSON.stringify(data.categories));
     this.symbolsLoader(data.categories[0].products[0].prices);
     this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
   }

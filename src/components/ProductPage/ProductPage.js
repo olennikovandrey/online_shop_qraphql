@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
-import { addToCart, removeItem } from "../../actions/cart";
+import { addToCart, removeItem, addFirstAttribute } from "../../actions/cart";
 import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
 
@@ -26,6 +26,10 @@ class ProductPage extends Component {
   removeItemFromCart = (id) => {
     this.props.removeItem(id);
   };
+
+  addFirstAttr = (id) => {
+    this.props.addFirstAttribute(id);
+  }
 
   setBlur() {
     this.setState({
@@ -77,7 +81,11 @@ class ProductPage extends Component {
                     <p className="product-sizes-title">{ currentProduct.attributes.length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null}</p>
                     <div className="available-items-wrapper">{ currentProduct.attributes[0] ? currentProduct.attributes[0].items.map(
                       item =>
-                        <div className="available-size" style={ { background: item.value } } key={item.index}>
+                        <div
+                        className="size"
+                        style={ { background: item.value } }
+                        key={item.id}
+                        onClick={() => this.addFirstAttr(item.id)}>
                           { currentProduct.attributes[0].name.toLowerCase() !== "color" ? item.value : null }
                         </div>)
                       : null
@@ -86,8 +94,20 @@ class ProductPage extends Component {
                     { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].name.toUpperCase() + ":" }</p>}
                     <div className="available-items-wrapper">{ currentProduct.attributes[1] ? currentProduct.attributes[1].items.map(
                       item =>
-                        <div className="available-size" style={ { background: item.value } } key={item.id}>
+                        <div
+                        className="size"
+                        style={ { background: item.value } }
+                        key={item.id}>
                           { currentProduct.attributes[1].name.toLowerCase() !== "color" ? item.value : null }
+                        </div>)
+                      : null
+                    }
+                    </div>
+                    { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].name.toUpperCase() + ":" }</p>}
+                    <div className="available-items-wrapper">{ currentProduct.attributes[2] ? currentProduct.attributes[2].items.map(
+                      item =>
+                        <div className="size" key={item.id}>
+                          { currentProduct.attributes[2].name.toLowerCase() !== "color" ? item.value : null }
                         </div>)
                       : null
                     }
@@ -100,13 +120,13 @@ class ProductPage extends Component {
                   <div className="btn-toolkit-wrapper">
                     <button
                       className={ available !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                      onClick={ available !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null}>ADD TO CART
+                      onClick={ available !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
                     </button>
                     { available === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
                   </div> :
                   <button
                     className="prod-page-add-btn"
-                    onClick={available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null}>REMOVE FROM CART
+                    onClick={available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
                   </button>
                 }
                 <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
@@ -132,6 +152,7 @@ ProductPage.propTypes = {
   addedItems: PropTypes.array,
   catalog: PropTypes.array,
   removeItem: PropTypes.func,
+  addFirstAttribute: PropTypes.func,
   availableProducts: PropTypes.array
 };
 
@@ -151,7 +172,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     removeItem: (id) => {
       dispatch(removeItem(id));
-    }
+    },
+    addFirstAttribute: (id) => {
+      dispatch(addFirstAttribute(id));
+    },
   };
 };
 

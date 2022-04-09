@@ -5,8 +5,8 @@
 .cart-mini-wrapper {
   position: absolute;
   top: 80px;
-  right: 0;
-  width: 30%;
+  right: 7%;
+  width: 25%;
   height: auto;
   max-height: 656px;
   display: flex;
@@ -72,11 +72,25 @@
   cursor: pointer;
 }
 
+.remove-item-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: -0;
+  content: url("../../assets/images/product-card/delete-from-cart-black.svg");
+  cursor: pointer;
+  z-index: 1;
+  background-color: #fff;
+}
+
 .item-color-size {
   margin: 30px 8px 0 0;
 }
 
 .item-counter-img-wrapper {
+  position: relative;
   width: 76%;
   display: flex;
   flex-direction: row;
@@ -115,7 +129,8 @@
 }
 
 .view-bag-btn,
-.check-out-btn {
+.check-out-btn,
+.check-out-btn-disabled {
   height: 45px;
   width: 47%;
   font-weight: 600;
@@ -136,6 +151,13 @@
   border: none;
   color: #fff;
   background-color: #5ece7b;
+}
+
+.check-out-btn-disabled {
+  border: none;
+  color: #fff;
+  background-color: #a6a6a6;
+  cursor: not-allowed;
 }
 
 .check-out-btn:hover {

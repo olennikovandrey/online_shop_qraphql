@@ -8,6 +8,7 @@ import {
   ADD_QUANTITY,
   REMOVE_QUANTITY,
   CHANGE_CURRENCY,
+  ADD_FIRST_ATTRIBUTE
 } from "./action-types/cart-actions";
 
 export const getSymbols = payload => {
@@ -69,5 +70,12 @@ export const changeCurrency = value => {
   return {
     type: CHANGE_CURRENCY,
     value
+  };
+};
+
+export const addFirstAttribute = id => {
+  return {
+    type: ADD_FIRST_ATTRIBUTE,
+    id
   };
 };

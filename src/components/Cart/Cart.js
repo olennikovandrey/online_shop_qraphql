@@ -15,15 +15,20 @@ class Cart extends Component {
     return (
       <>
         <Header />
-        <section className="cart-wrapper">
-          <span className="cart-title">CART</span>
+        {this.props.addedItems.length > 0 ?
+          <section className="cart-wrapper">
+            <span className="cart-title">CART</span>
             {this.props.addedItems.map( item =>
               <CartItem
                 key={item.id}
                 id={item.id}
               />)
             }
-        </section>
+          </section> :
+          <section className="cart-wrapper">
+            <span className="cart-title">YOU HAVEN'T ADDED ANY ITEMS TO YOUR CART YET</span>
+          </section>
+        }
       </>
     );
   }

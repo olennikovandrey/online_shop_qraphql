@@ -4,7 +4,7 @@ const CategoryWrapperBlur = {
   height: "auto",
   padding: "0 8%",
   backgroundColor: "#fff",
-  filter: "brightness(0.8)",
+  filter: "brightness(0.8) blur(1px)",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

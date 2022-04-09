@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper/core";
+import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import "./styles/cart.css";
 
 SwiperCore.use([Navigation]);
@@ -12,6 +13,18 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
   }
+
+  addCurrentQuantity = (id) => {
+    this.props.addQuantity(id);
+  };
+
+  removeCurrentQuantity = (id) => {
+    this.props.removeQuantity(id);
+  }
+
+  removeItemFromCart = (id) => {
+    this.props.removeItem(id);
+  };
 
   render() {
     const { addedItems, id, currency } = this.props,
@@ -30,9 +43,9 @@ class CartItem extends Component {
           </div>
           <div className="cart-item-btns-img-wrapper">
             <div className="btns-wrapper">
-              <div className="cart-counter-btn">+</div>
-              <span>1</span>
-              <div className="cart-counter-btn">-</div>
+              <div className="cart-counter-btn" onClick={ () => this.addCurrentQuantity(id) }>+</div>
+              <span>{currentItem.quantity}</span>
+              <div className="cart-counter-btn" onClick={ () => this.removeCurrentQuantity(id) }>-</div>
             </div>
             { currentItem.gallery.length > 1 ?
               <Swiper
@@ -54,6 +67,9 @@ class CartItem extends Component {
                 <img className="cart-item-img" src={currentItem.gallery[0]} alt={currentItem.name}></img>
               </Link>
             }
+            <span className="remove-item-btn"
+              onClick={ () => this.removeItemFromCart(id) }>
+            </span>
           </div>
         </section>
       </>
@@ -64,7 +80,10 @@ class CartItem extends Component {
 CartItem.propTypes = {
   addedItems: PropTypes.array,
   id: PropTypes.string,
-  currency: PropTypes.string
+  currency: PropTypes.string,
+  addQuantity: PropTypes.func,
+  removeQuantity: PropTypes.func,
+  removeItem: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -78,6 +97,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addQuantity: (id) => {
       dispatch(addQuantity(id));
+    },
+    removeQuantity: (id) => {
+      dispatch(removeQuantity(id));
+    },
+    removeItem: (id) => {
+      dispatch(removeItem(id));
     }
   };
 };

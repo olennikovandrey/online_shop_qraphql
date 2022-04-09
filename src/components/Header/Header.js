@@ -29,7 +29,6 @@ class Header extends Component {
 
   render() {
     const { setCategoryName, setBlur, total, addedItems, currency } = this.props;
-    console.log("state.addedItems from Header", addedItems);
 
     return (
       <header className="header-wrapper">
