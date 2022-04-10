@@ -28,7 +28,7 @@ class Header extends Component {
   }
 
   render() {
-    const { setCategoryName, setBlur, total, addedItems, currency } = this.props;
+    const { setCategoryName, setBlur, total, currency } = this.props;
 
     return (
       <header className="header-wrapper">
@@ -59,7 +59,7 @@ class Header extends Component {
           isCartVisible={ this.state.isCartVisible }
           setCartVisible={ this.setCartVisible }
           setCategoryName={ null }
-          setBlur={ setBlur }
+          setBlur={ this.props.setBlur }
         />
       </header>
     );

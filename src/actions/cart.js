@@ -8,7 +8,9 @@ import {
   ADD_QUANTITY,
   REMOVE_QUANTITY,
   CHANGE_CURRENCY,
-  ADD_FIRST_ATTRIBUTE
+  ADD_FIRST_ATTRIBUTE,
+  ADD_SECOND_ATTRIBUTE,
+  ADD_THIRD_ATTRIBUTE
 } from "./action-types/cart-actions";
 
 export const getSymbols = payload => {
@@ -76,6 +78,20 @@ export const changeCurrency = value => {
 export const addFirstAttribute = id => {
   return {
     type: ADD_FIRST_ATTRIBUTE,
+    id
+  };
+};
+
+export const addSecondAttribute = id => {
+  return {
+    type: ADD_SECOND_ATTRIBUTE,
+    id
+  };
+};
+
+export const addThirdAttribute = id => {
+  return {
+    type: ADD_THIRD_ATTRIBUTE,
     id
   };
 };

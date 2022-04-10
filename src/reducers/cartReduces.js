@@ -7,10 +7,12 @@ import {
   ADD_QUANTITY,
   REMOVE_QUANTITY,
   CHANGE_CURRENCY,
-  ADD_FIRST_ATTRIBUTE
+  ADD_FIRST_ATTRIBUTE,
+  ADD_SECOND_ATTRIBUTE,
+  ADD_THIRD_ATTRIBUTE
 } from "../actions/action-types/cart-actions";
 
-const initState = {
+export const initState = {
   catalog: [],
   symbols: [],
   addedItems: JSON.parse(localStorage.getItem("Cart")) || [],
@@ -20,6 +22,8 @@ const initState = {
 };
 
 let firstAttr = [];
+let secondAttr = [];
+let thirdAttr = [];
 const cartReducer = (state = initState, action) => {
 
   switch (action.type) {
@@ -54,8 +58,11 @@ const cartReducer = (state = initState, action) => {
       if (existedItem) {
         copyAddedItem.quantity += 1;
         copyAddedItem.firstAttr = firstAttr;
+        copyAddedItem.secondAttr = secondAttr;
+        copyAddedItem.thirdAttr = thirdAttr;
         firstAttr = [];
-        debugger
+        secondAttr = [];
+        thirdAttr = [];
         return {
           ...state,
           totalPrice: state.totalPrice,
@@ -63,6 +70,11 @@ const cartReducer = (state = initState, action) => {
        } else {
         copyAddedItem.quantity = 1;
         copyAddedItem.firstAttr = firstAttr;
+        copyAddedItem.secondAttr = secondAttr;
+        copyAddedItem.thirdAttr = thirdAttr;
+        firstAttr = [];
+        secondAttr = [];
+        thirdAttr = [];
         let newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
 
         localStorage.setItem("Cart", JSON.stringify([...state.addedItems, copyAddedItem]));
@@ -82,6 +94,8 @@ const cartReducer = (state = initState, action) => {
       let newTotal = state.totalPrice - (itemToRemove.prices.filter(item => item.currency.symbol === state.currency)[0].amount * itemToRemove.quantity);
       itemToRemove.quantity = 0;
       firstAttr = [];
+      secondAttr = [];
+      thirdAttr = [];
 
       localStorage.setItem("Cart", JSON.stringify(state.addedItems.filter(item => item.id !== action.id)));
       localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
@@ -132,7 +146,7 @@ const cartReducer = (state = initState, action) => {
           ...state,
           totalPrice: parseFloat(newTotal.toFixed(2))
         };
-      }
+      };
     }
 
     case CHANGE_CURRENCY: {
@@ -162,19 +176,55 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_FIRST_ATTRIBUTE: {
-      if (firstAttr.find(item => item === action.id) === undefined) {
+      if (!firstAttr.includes(action.id) && !firstAttr.length) {
         firstAttr.push( action.id);
-      }
-
-
-
-
-      console.log(firstAttr);
-      return {
-        ...state
+        console.log("1 push",firstAttr);
+        return {
+          ...state
+        };
+      } else if (firstAttr.includes(action.id) && firstAttr.length) {
+        firstAttr.pop();
+        console.log("1 pop",firstAttr);
+        return {
+          ...state
+        };
       };
+      break;
     }
 
+    case ADD_SECOND_ATTRIBUTE: {
+      if (!secondAttr.includes(action.id) && !secondAttr.length) {
+        secondAttr.push( action.id);
+        console.log("2 push",secondAttr);
+        return {
+          ...state
+        };
+      } else if (secondAttr.includes(action.id) && secondAttr.length) {
+        secondAttr.pop();
+        console.log("2 pop",secondAttr);
+        return {
+          ...state
+        };
+      };
+      break;
+    }
+
+    case ADD_THIRD_ATTRIBUTE: {
+      if (!thirdAttr.includes(action.id) && !thirdAttr.length) {
+        thirdAttr.push( action.id);
+        console.log("3 push",thirdAttr);
+        return {
+          ...state
+        };
+      } else if (secondAttr.includes(action.id) && thirdAttr.length) {
+        thirdAttr.pop();
+        console.log("3 pop",thirdAttr);
+        return {
+          ...state
+        };
+      };
+      break;
+    }
 
     default: {
       return {
@@ -184,5 +234,4 @@ const cartReducer = (state = initState, action) => {
   }
 };
 
-console.log("2",firstAttr);
 export default cartReducer;

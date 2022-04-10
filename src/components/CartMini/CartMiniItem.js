@@ -34,8 +34,12 @@ class CartMiniItem extends Component {
             <span className="item-description">{ currentItem.brand }</span>
             <span className="item-description">{ currentItem.name }</span>
           </div>
-          <span className="item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span>
-          { <div className="item-color-size">{ currentItem.firstAttr[0] }</div> }
+          <span className="item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span><br/>
+          <div className="sizes-wrapper">
+            { currentItem.firstAttr.length > 0 ? <div className="item-color-size">{ currentItem.firstAttr[0].substring(0, 3) }</div>  : null }
+            { currentItem.secondAttr.length > 0 ? <div className="item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }></div> : null }
+            { currentItem.thirdAttr.length > 0  ? <div className="item-color-size">{ currentItem.thirdAttr[0].substring(0, 3) }</div> : null }
+          </div>
 
         </div>
         <div className="item-counter-img-wrapper">

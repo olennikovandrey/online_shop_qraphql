@@ -12,6 +12,9 @@ SwiperCore.use([Navigation]);
 class CartItem extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentItem: this.props.addedItems.find(item => this.props.id === item.id)
+    };
   }
 
   addCurrentQuantity = (id) => {
@@ -27,8 +30,8 @@ class CartItem extends Component {
   };
 
   render() {
-    const { addedItems, id, currency } = this.props,
-          currentItem = addedItems.find(item => id === item.id);
+    const { id, currency } = this.props,
+          { currentItem } = this.state;
 
     return (
       <>
@@ -39,7 +42,11 @@ class CartItem extends Component {
               <span className="cart-item-name">{ currentItem.name }</span>
             </div>
             <span className="cart-item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span>
-            <div className="cart-item-color-size">S</div>
+            <div className="sizes-wrapper">
+              { currentItem.firstAttr.length > 0 ? <div className="cart-item-color-size">{ currentItem.firstAttr[0].substring(0, 3) }</div>  : null }
+              { currentItem.secondAttr.length > 0 ? <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }></div> : null }
+              { currentItem.thirdAttr.length > 0  ? <div className="cart-item-color-size">{ currentItem.thirdAttr[0].substring(0, 3) }</div> : null }
+          </div>
           </div>
           <div className="cart-item-btns-img-wrapper">
             <div className="btns-wrapper">

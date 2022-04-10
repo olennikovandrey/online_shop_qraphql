@@ -57,19 +57,30 @@
 
 .item-item-price {
   font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.sizes-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
 }
 
 .item-color-size,
 .counter-btn {
   width: 24px;
   height: 24px;
-  display: block;
   text-align: center;
   border: 1px solid black;
   font-family: "Source Sans Pro", sans-serif;
   font-size: 14px;
   line-height: 20px;
   cursor: pointer;
+}
+
+.item-color-size {
+  cursor: auto;
+  margin: 30px 8px 0 0;
 }
 
 .remove-item-btn {
@@ -83,10 +94,6 @@
   cursor: pointer;
   z-index: 1;
   background-color: #fff;
-}
-
-.item-color-size {
-  margin: 30px 8px 0 0;
 }
 
 .item-counter-img-wrapper {

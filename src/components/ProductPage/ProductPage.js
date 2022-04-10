@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
-import { addToCart, removeItem, addFirstAttribute } from "../../actions/cart";
+import { addToCart, removeItem, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
 
@@ -27,8 +27,17 @@ class ProductPage extends Component {
     this.props.removeItem(id);
   };
 
-  addFirstAttr = (id) => {
+  addFirstAttr = (event, id) => {
     this.props.addFirstAttribute(id);
+    event.target.classList.toggle("selected-size");
+  }
+
+  addSecondtAttr = (id) => {
+    this.props.addSecondAttribute(id);
+  }
+
+  addThirdAttr = (id) => {
+    this.props.addThirdAttribute(id);
   }
 
   setBlur() {
@@ -50,8 +59,7 @@ class ProductPage extends Component {
   render() {
     const { isLoaded, isBackgroundBlur } = this.state,
           { currency, addedItems, catalog, availableProducts } = this.props,
-          product = catalog[0].products.filter(item => item.id === this.props.match.params.id),
-          currentProduct = product[0],
+          currentProduct = catalog[0].products.filter(item => item.id === this.props.match.params.id)[0],
           available = availableProducts.find(item => item.id === currentProduct.id);
 
     if (isLoaded && catalog.length !== 0) {
@@ -82,12 +90,13 @@ class ProductPage extends Component {
                     <div className="available-items-wrapper">{ currentProduct.attributes[0] ? currentProduct.attributes[0].items.map(
                       item =>
                         <div
-                        className="size"
+                        className={ currentProduct.firstAttr && currentProduct.firstAttr.find(el => el === item.value) !== undefined ? "selected-size" : "size" }
                         style={ { background: item.value } }
                         key={item.id}
-                        onClick={() => this.addFirstAttr(item.id)}>
+                        onClick={ (event) => this.addFirstAttr(event, item.id) }>
                           { currentProduct.attributes[0].name.toLowerCase() !== "color" ? item.value : null }
-                        </div>)
+                        </div>
+                      )
                       : null
                     }
                     </div>
@@ -97,7 +106,8 @@ class ProductPage extends Component {
                         <div
                         className="size"
                         style={ { background: item.value } }
-                        key={item.id}>
+                        key={item.id}
+                        onClick={ () => this.addSecondtAttr(item.id) }>
                           { currentProduct.attributes[1].name.toLowerCase() !== "color" ? item.value : null }
                         </div>)
                       : null
@@ -105,9 +115,12 @@ class ProductPage extends Component {
                     </div>
                     { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].name.toUpperCase() + ":" }</p>}
                     <div className="available-items-wrapper">{ currentProduct.attributes[2] ? currentProduct.attributes[2].items.map(
-                      item =>
-                        <div className="size" key={item.id}>
-                          { currentProduct.attributes[2].name.toLowerCase() !== "color" ? item.value : null }
+                      el =>
+                        <div
+                        className="size"
+                        key={el.id}
+                        onClick={ () => this.addThirdAttr(el.id) }>
+                          { currentProduct.attributes[2].name.toLowerCase() !== "color" ? el.value : null }
                         </div>)
                       : null
                     }
@@ -153,10 +166,12 @@ ProductPage.propTypes = {
   catalog: PropTypes.array,
   removeItem: PropTypes.func,
   addFirstAttribute: PropTypes.func,
+  addSecondAttribute: PropTypes.func,
   availableProducts: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
     currency: state.currency,
     addedItems: state.addedItems,
@@ -175,6 +190,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     addFirstAttribute: (id) => {
       dispatch(addFirstAttribute(id));
+    },
+    addSecondAttribute: (id) => {
+      dispatch(addSecondAttribute(id));
+    },
+    addThirdAttribute: (id) => {
+      dispatch(addThirdAttribute(id));
     },
   };
 };
