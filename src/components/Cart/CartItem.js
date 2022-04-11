@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper/core";
+import { store } from "../../index";
 import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import "./styles/cart.css";
 
@@ -13,8 +14,13 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentItem: this.props.addedItems.find(item => this.props.id === item.id)
+      quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
     };
+    store.subscribe(() => {
+      this.setState({
+        quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
+      })
+    });
   }
 
   addCurrentQuantity = (id) => {
@@ -30,8 +36,8 @@ class CartItem extends Component {
   };
 
   render() {
-    const { id, currency } = this.props,
-          { currentItem } = this.state;
+    const { id, currency, addedItems } = this.props,
+          currentItem = addedItems.find(item => id === item.id);
 
     return (
       <>
@@ -43,29 +49,34 @@ class CartItem extends Component {
             </div>
             <span className="cart-item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span>
             <div className="sizes-wrapper">
-              { currentItem.firstAttr.length > 0 ? <div className="cart-item-color-size">{ currentItem.firstAttr[0].substring(0, 3) }</div>  : null }
-              { currentItem.secondAttr.length > 0 ? <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }></div> : null }
-              { currentItem.thirdAttr.length > 0  ? <div className="cart-item-color-size">{ currentItem.thirdAttr[0].substring(0, 3) }</div> : null }
-          </div>
+              { currentItem.firstAttr.length > 0 ? <div className="cart-item-color-size">{ currentItem.firstAttr[0] }</div>  : null }
+              { currentItem.secondAttr.length > 0 ?
+              <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
+                { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
+              </div> : null }
+              { currentItem.thirdAttr.length > 0  ? <div className="cart-item-color-size">
+                { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
+              </div> : null }
+            </div>
           </div>
           <div className="cart-item-btns-img-wrapper">
             <div className="btns-wrapper">
               <div className="cart-counter-btn" onClick={ () => this.addCurrentQuantity(id) }>+</div>
-              <span>{currentItem.quantity}</span>
+              <span>{ this.state.quantity }</span>
               <div className="cart-counter-btn" onClick={ () => this.removeCurrentQuantity(id) }>-</div>
             </div>
             { currentItem.gallery.length > 1 ?
               <Swiper
-                navigation={true}
-                effect={"cube"}
-                slidesPerView={1}
-                loop={true}
-                mousewheel={true}
+                navigation={ true }
+                effect={ "cube" }
+                slidesPerView={ 1 }
+                loop={ true }
+                mousewheel={ true }
               >
                 {currentItem.gallery.map((item) =>
-                  <SwiperSlide key={item.index}>
+                  <SwiperSlide key={ item }>
                     <Link to={ `id=${ id }` }>
-                      <img className="cart-item-img" src={item} alt={currentItem.name}></img>
+                      <img className="cart-item-img" src={ item } alt={ currentItem.name }></img>
                     </Link>
                   </SwiperSlide>
                 )}

@@ -193,13 +193,14 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_SECOND_ATTRIBUTE: {
-      if (!secondAttr.includes(action.id) && !secondAttr.length) {
-        secondAttr.push( action.id);
+
+      if (!secondAttr.includes(action.value) && !secondAttr.length) {
+        secondAttr.push( action.value);
         console.log("2 push",secondAttr);
         return {
           ...state
         };
-      } else if (secondAttr.includes(action.id) && secondAttr.length) {
+      } else if (secondAttr.includes(action.value) && secondAttr.length) {
         secondAttr.pop();
         console.log("2 pop",secondAttr);
         return {
@@ -210,13 +211,13 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_THIRD_ATTRIBUTE: {
-      if (!thirdAttr.includes(action.id) && !thirdAttr.length) {
-        thirdAttr.push( action.id);
+      if (!thirdAttr.includes(action.value) && !thirdAttr.length) {
+        thirdAttr.push( action.value);
         console.log("3 push",thirdAttr);
         return {
           ...state
         };
-      } else if (secondAttr.includes(action.id) && thirdAttr.length) {
+      } else if (secondAttr.includes(action.value) && thirdAttr.length) {
         thirdAttr.pop();
         console.log("3 pop",thirdAttr);
         return {

@@ -6,6 +6,7 @@ import Loader from "../Loader/Loader";
 import { addToCart, removeItem, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
+import { isTypeNode } from "graphql";
 
 
 class ProductPage extends Component {
@@ -17,7 +18,7 @@ class ProductPage extends Component {
       isBackgroundBlur: false
     };
     this.setBlur = this.setBlur.bind(this);
-  }
+  };
 
   addItemToCart = (id) => {
     this.props.addToCart(id);
@@ -29,37 +30,47 @@ class ProductPage extends Component {
 
   addFirstAttr = (event, id) => {
     this.props.addFirstAttribute(id);
-    event.target.classList.toggle("selected-size");
-  }
+    if (event.target.classList.contains("size")) {
+      event.target.classList.toggle("selected-size")
+    }
+  };
 
-  addSecondtAttr = (id) => {
+  addSecondtAttr = (event, id) => {
     this.props.addSecondAttribute(id);
-  }
+    if (event.target.classList.contains("size")) {
+      event.target.classList.toggle("selected-size")
+    }
+    console.log(event.target)
+  };
 
-  addThirdAttr = (id) => {
+  addThirdAttr = (event, id) => {
     this.props.addThirdAttribute(id);
-  }
+    if (event.target.classList.contains("size")) {
+      event.target.classList.toggle("selected-size")
+    }
+  };
 
   setBlur() {
     this.setState({
       isBackgroundBlur: !this.state.isBackgroundBlur
     });
-  }
+  };
 
   createMarkup(value) {
     return { __html: value };
-  }
+  };
 
   componentDidMount() {
     this.setState({
       isLoaded: true
     });
-  }
+  };
 
   render() {
     const { isLoaded, isBackgroundBlur } = this.state,
           { currency, addedItems, catalog, availableProducts } = this.props,
           currentProduct = catalog[0].products.filter(item => item.id === this.props.match.params.id)[0],
+          currentAddedProduct = this.props.addedItems.filter( el => el.id === this.props.match.params.id)[0],
           available = availableProducts.find(item => item.id === currentProduct.id);
 
     if (isLoaded && catalog.length !== 0) {
@@ -73,7 +84,7 @@ class ProductPage extends Component {
             <div className="preview-img-wrapper">
               { currentProduct.gallery.slice(1, 6).map(
                 item =>
-                  <img className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } key={item.index}/>
+                  <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
                 )
               }
             </div>
@@ -87,12 +98,16 @@ class ProductPage extends Component {
                 { currentProduct.attributes ?
                   <div className="available-sizes-wrapper">
                     <p className="product-sizes-title">{ currentProduct.attributes.length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null}</p>
+
                     <div className="available-items-wrapper">{ currentProduct.attributes[0] ? currentProduct.attributes[0].items.map(
                       item =>
-                        <div
-                        className={ currentProduct.firstAttr && currentProduct.firstAttr.find(el => el === item.value) !== undefined ? "selected-size" : "size" }
+                        <div key={ item.id }
+                        className={
+                          (currentAddedProduct !== undefined &&
+                          currentAddedProduct.firstAttr.includes(item.id)) ?
+                          "selected-size" : "size"
+                        }
                         style={ { background: item.value } }
-                        key={item.id}
                         onClick={ (event) => this.addFirstAttr(event, item.id) }>
                           { currentProduct.attributes[0].name.toLowerCase() !== "color" ? item.value : null }
                         </div>
@@ -100,26 +115,34 @@ class ProductPage extends Component {
                       : null
                     }
                     </div>
+
                     { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].name.toUpperCase() + ":" }</p>}
                     <div className="available-items-wrapper">{ currentProduct.attributes[1] ? currentProduct.attributes[1].items.map(
                       item =>
-                        <div
-                        className="size"
+                        <div key={ item.id }
+                        className={
+                          (currentAddedProduct !== undefined &&
+                          currentAddedProduct.secondAttr.includes(item.id)) ?
+                          "selected-size" : "size"
+                        }
                         style={ { background: item.value } }
-                        key={item.id}
-                        onClick={ () => this.addSecondtAttr(item.id) }>
+                        onClick={ (event) => this.addSecondtAttr(event, item.value) }>
                           { currentProduct.attributes[1].name.toLowerCase() !== "color" ? item.value : null }
                         </div>)
                       : null
                     }
                     </div>
+
                     { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].name.toUpperCase() + ":" }</p>}
                     <div className="available-items-wrapper">{ currentProduct.attributes[2] ? currentProduct.attributes[2].items.map(
                       el =>
-                        <div
-                        className="size"
-                        key={el.id}
-                        onClick={ () => this.addThirdAttr(el.id) }>
+                        <div key={ el.id }
+                        className={
+                          (currentAddedProduct !== undefined &&
+                          currentAddedProduct.thirdAttr.includes(el.id)) ?
+                          "selected-size" : "size"
+                        }
+                        onClick={ (event) => this.addThirdAttr(event, el.value) }>
                           { currentProduct.attributes[2].name.toLowerCase() !== "color" ? el.value : null }
                         </div>)
                       : null
@@ -139,7 +162,7 @@ class ProductPage extends Component {
                   </div> :
                   <button
                     className="prod-page-add-btn"
-                    onClick={available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
+                    onClick={ available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
                   </button>
                 }
                 <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />

@@ -9,14 +9,26 @@ import "./styles/swiper.css"
 class Cart extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isBackgroundBlur: false
+    };
+    this.setBlur = this.setBlur.bind(this);
+  }
+
+  setBlur() {
+    this.setState({
+      isBackgroundBlur: !this.state.isBackgroundBlur
+    });
   }
 
   render() {
     return (
       <>
-        <Header />
+        <Header setBlur={this.setBlur} />
         {this.props.addedItems.length > 0 ?
-          <section className="cart-wrapper">
+          <section
+          style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
+          className="cart-wrapper">
             <span className="cart-title">CART</span>
             {this.props.addedItems.map( item =>
               <CartItem

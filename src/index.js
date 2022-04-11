@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { createStore } from "redux";
 import App from "./components/App";
 
-const store = createStore(
+export const store = createStore(
   cartReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

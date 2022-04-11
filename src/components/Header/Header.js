@@ -28,7 +28,7 @@ class Header extends Component {
   }
 
   render() {
-    const { setCategoryName, setBlur, total, currency } = this.props;
+    const { setCategoryName, total, currency } = this.props;
 
     return (
       <header className="header-wrapper">
@@ -39,7 +39,7 @@ class Header extends Component {
         </div>
         <Link to="/"><span className="logo"></span></Link>
         <div>
-          <select value={currency}>
+          <select defaultValue={currency}>
             {this.props.symbols.map(item =>
               <option
                 onClick={ (event) => { this.handleClick(event.target.value); } }
@@ -70,7 +70,6 @@ Header.propTypes = {
   setBlur: PropTypes.func,
   setCategoryName: PropTypes.func,
   changeCurrency: PropTypes.func,
-  setNewTotalPrice: PropTypes.setNewTotalPrice,
   categoryName: PropTypes.string,
   symbols: PropTypes.array,
   total: PropTypes.number,

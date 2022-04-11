@@ -82,16 +82,16 @@ export const addFirstAttribute = id => {
   };
 };
 
-export const addSecondAttribute = id => {
+export const addSecondAttribute = value => {
   return {
     type: ADD_SECOND_ATTRIBUTE,
-    id
+    value
   };
 };
 
-export const addThirdAttribute = id => {
+export const addThirdAttribute = value => {
   return {
     type: ADD_THIRD_ATTRIBUTE,
-    id
+    value
   };
 };
