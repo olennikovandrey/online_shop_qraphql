@@ -7,6 +7,7 @@ import SwiperCore, { Navigation } from "swiper/core";
 import { store } from "../../index";
 import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import "./styles/cart.css";
+import "./styles/swiper.css";
 
 SwiperCore.use([Navigation]);
 

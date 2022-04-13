@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Header from "../Header/Header";
 import CartItem from "./CartItem";
 import "./styles/cart.css";
@@ -22,23 +23,31 @@ class Cart extends Component {
   }
 
   render() {
+    const { totalPrice, currency, bagQuantity, addedItems } = this.props;
+
     return (
       <>
         <Header setBlur={this.setBlur} />
-        {this.props.addedItems.length > 0 ?
+        {addedItems.length > 0 ?
           <section
           style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
           className="cart-wrapper">
-            <span className="cart-title">CART</span>
-            {this.props.addedItems.map( item =>
+            <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
+            <h2>CART, { bagQuantity } { bagQuantity === 1 ? "item" : "items" } </h2>
+            {addedItems.map( item =>
               <CartItem
                 key={item.id}
                 id={item.id}
               />)
             }
+            <div className="row-wrapper">
+              <h2>Total</h2>
+              <h2>{ currency } { totalPrice }</h2>
+            </div>
+            <button className="cart-check-out-btn">CHECK OUT</button>
           </section> :
           <section className="cart-wrapper">
-            <span className="cart-title">YOU HAVEN'T ADDED ANY ITEMS TO YOUR CART YET</span>
+            <h2>YOU HAVEN'T ADDED ANY ITEMS TO YOUR CART YET</h2>
           </section>
         }
       </>
@@ -54,8 +63,10 @@ Cart.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    bagQuantity: state.addedItems.length,
     addedItems: state.addedItems,
-    currency: state.currency
+    currency: state.currency,
+    totalPrice: state.totalPrice
   };
 };
 

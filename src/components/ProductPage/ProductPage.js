@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
+import Attributes from "../Attributes/Attributes";
 import { addToCart, removeItem, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper/core";
 import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
-import { isTypeNode } from "graphql";
+import "../Cart/styles/swiper.css";
 
+SwiperCore.use([Navigation]);
 
 class ProductPage extends Component {
   constructor(props) {
@@ -18,6 +23,9 @@ class ProductPage extends Component {
       isBackgroundBlur: false
     };
     this.setBlur = this.setBlur.bind(this);
+    this.addFirstAttr = this.addFirstAttr.bind(this);
+    this.addSecondAttr = this.addSecondAttr.bind(this);
+    this.addThirdAttr = this.addThirdAttr.bind(this);
   };
 
   addItemToCart = (id) => {
@@ -30,27 +38,32 @@ class ProductPage extends Component {
 
   addFirstAttr = (event, id) => {
     this.props.addFirstAttribute(id);
-    if (event.target.classList.contains("size")) {
+    if (!id.includes("#") && event.target.classList.contains("size")) {
       event.target.classList.toggle("selected-size")
+    } else {
+      event.target.classList.toggle("selected-color")
     }
   };
 
-  addSecondtAttr = (event, id) => {
+  addSecondAttr = (event, id) => {
     this.props.addSecondAttribute(id);
-    if (event.target.classList.contains("size")) {
+    if (!id.includes("#") && event.target.classList.contains("size")) {
       event.target.classList.toggle("selected-size")
+    } else {
+      event.target.classList.toggle("selected-color")
     }
-    console.log(event.target)
   };
 
   addThirdAttr = (event, id) => {
     this.props.addThirdAttribute(id);
-    if (event.target.classList.contains("size")) {
+    if (!id.includes("#") && event.target.classList.contains("size")) {
       event.target.classList.toggle("selected-size")
+    } else {
+      event.target.classList.toggle("selected-color")
     }
   };
 
-  setBlur() {
+  setBlur = () => {
     this.setState({
       isBackgroundBlur: !this.state.isBackgroundBlur
     });
@@ -68,10 +81,11 @@ class ProductPage extends Component {
 
   render() {
     const { isLoaded, isBackgroundBlur } = this.state,
-          { currency, addedItems, catalog, availableProducts } = this.props,
-          currentProduct = catalog[0].products.filter(item => item.id === this.props.match.params.id)[0],
+          { currency, addedItems, availableProducts, shopData } = this.props,
+          catalog = JSON.parse(localStorage.getItem("shopData")),
+          currentProduct = catalog[0].products.filter(item => item.id === this.props.match.params.id)[0] || shopData[0].products.filter(item => item.id === this.props.match.params.id)[0],
           currentAddedProduct = this.props.addedItems.filter( el => el.id === this.props.match.params.id)[0],
-          available = availableProducts.find(item => item.id === currentProduct.id);
+          availableItem = availableProducts.find(item => item.id === currentProduct.id);
 
     if (isLoaded && catalog.length !== 0) {
       return (
@@ -80,9 +94,10 @@ class ProductPage extends Component {
             setCategoryName={ null }
             setBlur={ this.setBlur }
           />
+          <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
           <section style={ isBackgroundBlur ? styles.ProductPageWrapperBlur : styles.ProductPageWrapper }>
             <div className="preview-img-wrapper">
-              { currentProduct.gallery.slice(1, 6).map(
+              { currentProduct.gallery.slice(1, 5).map(
                 item =>
                   <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
                 )
@@ -90,79 +105,69 @@ class ProductPage extends Component {
             </div>
             <div className="product-info">
               <div className="product-img-wrapper">
-                <img className="product-img" src={ currentProduct.gallery[0] } alt={ currentProduct.name } />
+                { currentProduct.gallery.length > 1 ?
+                  <Swiper
+                    navigation={ true }
+                    effect={ "cube" }
+                    slidesPerView={ 1 }
+                    loop={ true }
+                    mousewheel={ true }
+                  >
+                    {currentProduct.gallery.map((item) =>
+                      <SwiperSlide key={ item }>
+                        <img className="product-img" src={ item } alt={ currentProduct.name } />
+                      </SwiperSlide>
+                    )}
+                  </Swiper> :
+                  <img className="product-img" src={currentProduct.gallery[0]} alt={currentProduct.name} />
+                }
               </div>
               <div className="product-details">
                 <p className="product-name">{ currentProduct.brand }</p>
                 <p className="product-brief-description">{ currentProduct.name }</p>
                 { currentProduct.attributes ?
-                  <div className="available-sizes-wrapper">
-                    <p className="product-sizes-title">{ currentProduct.attributes.length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null}</p>
-
-                    <div className="available-items-wrapper">{ currentProduct.attributes[0] ? currentProduct.attributes[0].items.map(
-                      item =>
-                        <div key={ item.id }
-                        className={
-                          (currentAddedProduct !== undefined &&
-                          currentAddedProduct.firstAttr.includes(item.id)) ?
-                          "selected-size" : "size"
-                        }
-                        style={ { background: item.value } }
-                        onClick={ (event) => this.addFirstAttr(event, item.id) }>
-                          { currentProduct.attributes[0].name.toLowerCase() !== "color" ? item.value : null }
-                        </div>
-                      )
-                      : null
-                    }
+                  <>
+                    <div className="available-sizes-wrapper">
+                      { currentProduct.attributes[0] && <p className="product-sizes-title">{ currentProduct.attributes[0].length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null }</p>}
+                      <Attributes
+                        attributes={ currentProduct.attributes[0] }
+                        currentAddedProduct={ currentAddedProduct }
+                        currentProduct={ currentProduct }
+                        addAttr={ this.addFirstAttr }
+                        attr={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+                      />
+                      { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].length !== 0 ? currentProduct.attributes[1].name.toUpperCase() + ":" : null }</p>}
+                      <Attributes
+                        attributes={ currentProduct.attributes[1] }
+                        currentAddedProduct={ currentAddedProduct }
+                        currentProduct={ currentProduct }
+                        addAttr={ this.addSecondAttr }
+                        attr={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+                      />
+                      { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].length !== 0 ? currentProduct.attributes[2].name.toUpperCase() + ":" : null }</p>}
+                      <Attributes
+                        attributes={ currentProduct.attributes[2] }
+                        currentAddedProduct={ currentAddedProduct }
+                        currentProduct={ currentProduct }
+                        addAttr={ this.addThirdAttr }
+                        attr={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+                      />
                     </div>
-
-                    { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].name.toUpperCase() + ":" }</p>}
-                    <div className="available-items-wrapper">{ currentProduct.attributes[1] ? currentProduct.attributes[1].items.map(
-                      item =>
-                        <div key={ item.id }
-                        className={
-                          (currentAddedProduct !== undefined &&
-                          currentAddedProduct.secondAttr.includes(item.id)) ?
-                          "selected-size" : "size"
-                        }
-                        style={ { background: item.value } }
-                        onClick={ (event) => this.addSecondtAttr(event, item.value) }>
-                          { currentProduct.attributes[1].name.toLowerCase() !== "color" ? item.value : null }
-                        </div>)
-                      : null
-                    }
-                    </div>
-
-                    { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].name.toUpperCase() + ":" }</p>}
-                    <div className="available-items-wrapper">{ currentProduct.attributes[2] ? currentProduct.attributes[2].items.map(
-                      el =>
-                        <div key={ el.id }
-                        className={
-                          (currentAddedProduct !== undefined &&
-                          currentAddedProduct.thirdAttr.includes(el.id)) ?
-                          "selected-size" : "size"
-                        }
-                        onClick={ (event) => this.addThirdAttr(event, el.value) }>
-                          { currentProduct.attributes[2].name.toLowerCase() !== "color" ? el.value : null }
-                        </div>)
-                      : null
-                    }
-                    </div>
-                  </div>
-                : null }
+                  </> : null
+                }
                 <p className="product-price-title">PRICE:</p>
                 <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
                 { addedItems.find(item => item.id === currentProduct.id) === undefined ?
                   <div className="btn-toolkit-wrapper">
                     <button
-                      className={ available !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                      onClick={ available !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
+                      className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
+                      onClick={ availableItem !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
                     </button>
-                    { available === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
+                    { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
                   </div> :
                   <button
                     className="prod-page-add-btn"
-                    onClick={ available !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
+                    onClick={ availableItem !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
                   </button>
                 }
                 <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
@@ -186,19 +191,17 @@ ProductPage.propTypes = {
   addToCart: PropTypes.func,
   currency: PropTypes.string,
   addedItems: PropTypes.array,
-  catalog: PropTypes.array,
   removeItem: PropTypes.func,
   addFirstAttribute: PropTypes.func,
   addSecondAttribute: PropTypes.func,
+  addThirdAttribute: PropTypes.func,
   availableProducts: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return {
     currency: state.currency,
     addedItems: state.addedItems,
-    catalog: state.catalog,
     availableProducts: state.availableProducts
   };
 };

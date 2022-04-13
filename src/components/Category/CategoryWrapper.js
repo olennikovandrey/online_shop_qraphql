@@ -57,6 +57,7 @@ class CategoryWrapper extends Component {
                   amount={item.prices.filter(current => current.currency.symbol === currency)[0].amount}
                   currency={currency}
                   id={item.id}
+                  shopData={shopData}
                 />
               </React.Fragment>
             )}

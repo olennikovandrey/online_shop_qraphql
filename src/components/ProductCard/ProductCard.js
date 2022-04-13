@@ -4,11 +4,24 @@ import { connect } from "react-redux";
 import { addToCart, removeItem } from "../../actions/cart";
 import "./product-card.css";
 import { Link } from "react-router-dom";
+import AttributeSelect from "../AttributeSelect/AttributeSelect";
 
 class ProductCard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isAtrributeSelectVisible: false,
+      isCardBlur: false
+    };
+    this.attributeSelectVisible = this.attributeSelectVisible.bind(this);
   }
+
+  attributeSelectVisible = () => {
+    this.setState({
+      isAtrributeSelectVisible: !this.state.isAtrributeSelectVisible,
+      isCardBlur: !this.state.isCardBlur,
+    })
+  };
 
   addItemToCart = (id) => {
     this.props.addToCart(id);
@@ -19,21 +32,22 @@ class ProductCard extends Component {
   };
 
   render() {
-    const { image, name, amount, currency, id, availableProducts, addedItems } = this.props,
-          available = availableProducts.find(item => item.id === id);
+    const { image, name, amount, currency, id, availableProducts, addedItems, shopData } = this.props,
+          available = availableProducts.find(item => item.id === id),
+          currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
 
     return (
       <>
-        <div className="product-card-wrapper">
+        <div className={ this.state.isCardBlur ? "product-card-wrapper-blur" : "product-card-wrapper" }>
           <Link to={ `id=${ id }` }>
-            <img className="product-card-img" src={ image } alt={ name } />
-          <span>{ name }</span>
-          <span>{ amount } { currency }</span>
+            <img className="product-card-img" src={ image } alt={ name } height="350" width="338"/>
+            <span className="product-card-name">{ name }</span>
+            <span className="product-card-price">{ amount } { currency }</span>
           </Link>
-          { addedItems.find(item => item.id === id) === undefined?
+          { addedItems.find(item => item.id === id) === undefined ?
             <div
               className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
-              onClick={ available !== undefined ? () => this.addItemToCart(id) : null }
+              onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() : () => this.addItemToCart(id) }
             >
               <span className="tooltiptext">Is unavailable now</span>
             </div> :
@@ -42,7 +56,13 @@ class ProductCard extends Component {
               onClick={ () => this.removeItemFromCart(id) }
             />
           }
+          {this.state.isAtrributeSelectVisible ?
+          <AttributeSelect
+            id={id}
+            attributeSelectVisible={this.attributeSelectVisible}
+          /> : null }
         </div>
+
       </>
     );
   }
@@ -57,14 +77,17 @@ ProductCard.propTypes = {
   addToCart: PropTypes.func,
   removeItem: PropTypes.func,
   availableProducts: PropTypes.array,
-  addedItems: PropTypes.array
+  addedItems: PropTypes.array,
+  shopData: PropTypes.array,
+  catalog: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
     availableProducts: state.availableProducts,
-    addedItems: state.addedItems
+    addedItems: state.addedItems,
+    catalog: state.catalog
   };
 };
 

@@ -28,18 +28,18 @@ const ProductPageWrapper = {
   width: "100%",
   maxWidth: "1440px",
   margin: "0 auto",
-  padding: "120px 8% 100px",
+  padding: "40px 8% 100px",
   display: "flex"
 };
 
 const ProductPageWrapperBlur = {
+  filter: "blur(1px)",
   height: "auto",
   width: "100%",
   maxWidth: "1440px",
   margin: "0 auto",
-  padding: "120px 8% 100px",
-  display: "flex",
-  filter: "brightness(0.8)"
+  padding: "40px 8% 100px",
+  display: "flex"
 };
 
 const CartWrapper = {

@@ -17,7 +17,7 @@ class CartMini extends Component {
       <>
         <div className={ isCartVisible ? "cart-mini-wrapper" : "hidden" } >
           <div className="row-wrapper">
-            <span className="cart-mini-title"><b>My Bag</b>, { bagQuantity } items</span>
+            <span className="cart-mini-title"><b>My Bag</b>, { bagQuantity } { bagQuantity === 1 ? "item" : "items" }</span>
             <span className="close-btn" onClick={ setCartVisible }></span>
           </div>
           { addedItems.map( item =>

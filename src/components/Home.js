@@ -48,6 +48,7 @@ class Home extends Component {
     localStorage.setItem("shopData", JSON.stringify(data.categories));
     this.symbolsLoader(data.categories[0].products[0].prices);
     this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
+    localStorage.setItem("availableProducts", JSON.stringify(data.categories[0].products.filter(item => item.inStock)));
   }
 
   setCategoryName(value) {

@@ -39,7 +39,7 @@ nav {
   color: inherit;
   margin-right: 5%;
   border-bottom: 2px solid transparent;
-  transition: all 0.2s ease-in;
+  transition: 0.2s ease-in;
 }
 
 .header-wrapper nav:nth-child(1):hover,

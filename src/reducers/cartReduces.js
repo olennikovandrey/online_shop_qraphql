@@ -13,10 +13,10 @@ import {
 } from "../actions/action-types/cart-actions";
 
 export const initState = {
-  catalog: [],
+  catalog: JSON.parse(localStorage.getItem("shopData")) || [],
   symbols: [],
   addedItems: JSON.parse(localStorage.getItem("Cart")) || [],
-  availableProducts: [],
+  availableProducts: JSON.parse(localStorage.getItem("availableProducts")) || [],
   currency: JSON.parse(localStorage.getItem("Currency")) || "$",
   totalPrice: JSON.parse(localStorage.getItem("TotalPrice")) || 0
 };

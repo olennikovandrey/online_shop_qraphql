@@ -35,8 +35,6 @@ class CartMiniItem extends Component {
     const { addedItems, id, currency } = this.props,
           currentItem = addedItems.find(item => id === item.id);
 
-    console.log("render");
-
     return (
       <div className="cart-mini-item-wrapper">
         <div className="item-description-price-size-wrapper">
