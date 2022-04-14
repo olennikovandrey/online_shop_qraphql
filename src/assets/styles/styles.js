@@ -52,7 +52,7 @@ const CartWrapper = {
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start"
-}
+};
 
 const CartWrapperBlur = {
   maxWidth: "1440px",
@@ -65,7 +65,7 @@ const CartWrapperBlur = {
   flexDirection: "column",
   alignItems: "flex-start",
   filter: "brightness(0.8)"
-}
+};
 
 export const styles = {
   CategoryWrapperBlur: CategoryWrapperBlur,

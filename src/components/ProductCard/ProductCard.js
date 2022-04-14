@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addToCart, removeItem } from "../../actions/cart";
-import "./product-card.css";
 import { Link } from "react-router-dom";
 import AttributeSelect from "../AttributeSelect/AttributeSelect";
+import { addToCart, removeItem } from "../../actions/cart";
+import "./product-card.css";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class ProductCard extends Component {
     this.setState({
       isAtrributeSelectVisible: !this.state.isAtrributeSelectVisible,
       isCardBlur: !this.state.isCardBlur,
-    })
+    });
   };
 
   addItemToCart = (id) => {
@@ -40,7 +40,7 @@ class ProductCard extends Component {
       <>
         <div className={ this.state.isCardBlur ? "product-card-wrapper-blur" : "product-card-wrapper" }>
           <Link to={ `id=${ id }` }>
-            <img className="product-card-img" src={ image } alt={ name } height="350" width="338"/>
+            <img className="product-card-img" src={ image } alt={ name } height="350" width="338" />
             <span className="product-card-name">{ name }</span>
             <span className="product-card-price">{ amount } { currency }</span>
           </Link>
@@ -58,11 +58,10 @@ class ProductCard extends Component {
           }
           {this.state.isAtrributeSelectVisible ?
           <AttributeSelect
-            id={id}
-            attributeSelectVisible={this.attributeSelectVisible}
+            id={ id }
+            attributeSelectVisible={ this.attributeSelectVisible }
           /> : null }
         </div>
-
       </>
     );
   }
@@ -78,16 +77,14 @@ ProductCard.propTypes = {
   removeItem: PropTypes.func,
   availableProducts: PropTypes.array,
   addedItems: PropTypes.array,
-  shopData: PropTypes.array,
-  catalog: PropTypes.array,
+  shopData: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
     availableProducts: state.availableProducts,
-    addedItems: state.addedItems,
-    catalog: state.catalog
+    addedItems: state.addedItems
   };
 };
 

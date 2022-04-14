@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper/core";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
 import Attributes from "../Attributes/Attributes";
 import { addToCart, removeItem, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper/core";
 import { styles } from "../../assets/styles/styles";
 import "./product-page.css";
 import "../Cart/styles/swiper.css";
@@ -23,10 +23,8 @@ class ProductPage extends Component {
       isBackgroundBlur: false
     };
     this.setBlur = this.setBlur.bind(this);
-    this.addFirstAttr = this.addFirstAttr.bind(this);
-    this.addSecondAttr = this.addSecondAttr.bind(this);
-    this.addThirdAttr = this.addThirdAttr.bind(this);
-  };
+    this.addAttrFnGeneral = this.addAttrFnGeneral.bind(this);
+  }
 
   addItemToCart = (id) => {
     this.props.addToCart(id);
@@ -36,30 +34,17 @@ class ProductPage extends Component {
     this.props.removeItem(id);
   };
 
-  addFirstAttr = (event, id) => {
-    this.props.addFirstAttribute(id);
+  addAttrFnGeneral = (event, id, addFunction) => {
+    addFunction(id);
     if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    } else {
-      event.target.classList.toggle("selected-color")
-    }
-  };
-
-  addSecondAttr = (event, id) => {
-    this.props.addSecondAttribute(id);
-    if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    } else {
-      event.target.classList.toggle("selected-color")
-    }
-  };
-
-  addThirdAttr = (event, id) => {
-    this.props.addThirdAttribute(id);
-    if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    } else {
-      event.target.classList.toggle("selected-color")
+      event.target.classList.toggle("selected-size");
+    } else if (id.includes("#") && event.target.classList.contains("size")) {
+      event.target.classList.toggle("selected-color");
+    } else if (event.target.classList.contains("disabled-size") ||
+               event.target.classList.contains("selected-size") ||
+               event.target.classList.contains("selected-color") ||
+               event.target.classList.contains("disabled-color")) {
+      return
     }
   };
 
@@ -71,13 +56,13 @@ class ProductPage extends Component {
 
   createMarkup(value) {
     return { __html: value };
-  };
+  }
 
   componentDidMount() {
     this.setState({
       isLoaded: true
     });
-  };
+  }
 
   render() {
     const { isLoaded, isBackgroundBlur } = this.state,
@@ -128,29 +113,47 @@ class ProductPage extends Component {
                 { currentProduct.attributes ?
                   <>
                     <div className="available-sizes-wrapper">
-                      { currentProduct.attributes[0] && <p className="product-sizes-title">{ currentProduct.attributes[0].length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null }</p>}
+                      { currentProduct.attributes[0] &&
+                      <p className="product-sizes-title">
+                        { currentProduct.attributes[0].length !== 0 ?
+                        currentProduct.attributes[0].name.toUpperCase() + ":" :
+                        null }
+                      </p>
+                      }
                       <Attributes
+                        currentAddedProduct={ currentAddedProduct }
                         attributes={ currentProduct.attributes[0] }
-                        currentAddedProduct={ currentAddedProduct }
-                        currentProduct={ currentProduct }
-                        addAttr={ this.addFirstAttr }
-                        attr={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+                        addAttrFnGeneral={ this.addAttrFnGeneral }
+                        addAttrFnCurrent={this.props.addFirstAttribute}
                       />
-                      { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].length !== 0 ? currentProduct.attributes[1].name.toUpperCase() + ":" : null }</p>}
+                      { currentProduct.attributes[1] &&
+                      <p className="product-sizes-title">
+                        { currentProduct.attributes[1].length !== 0 ?
+                        currentProduct.attributes[1].name.toUpperCase() + ":" :
+                        null }
+                      </p>
+                      }
                       <Attributes
+                        currentAddedProduct={ currentAddedProduct }
                         attributes={ currentProduct.attributes[1] }
-                        currentAddedProduct={ currentAddedProduct }
-                        currentProduct={ currentProduct }
-                        addAttr={ this.addSecondAttr }
-                        attr={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+                        addAttrFnGeneral={ this.addAttrFnGeneral }
+                        addAttrFnCurrent={this.props.addSecondAttribute}
                       />
-                      { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].length !== 0 ? currentProduct.attributes[2].name.toUpperCase() + ":" : null }</p>}
+                      { currentProduct.attributes[2] &&
+                      <p className="product-sizes-title">
+                        { currentProduct.attributes[2].length !== 0 ?
+                        currentProduct.attributes[2].name.toUpperCase() + ":" :
+                        null }
+                      </p>
+                      }
                       <Attributes
-                        attributes={ currentProduct.attributes[2] }
                         currentAddedProduct={ currentAddedProduct }
-                        currentProduct={ currentProduct }
-                        addAttr={ this.addThirdAttr }
-                        attr={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+                        attributes={ currentProduct.attributes[2] }
+                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+                        addAttrFnGeneral={ this.addAttrFnGeneral }
+                        addAttrFnCurrent={this.props.addThirdAttribute}
                       />
                     </div>
                   </> : null
@@ -188,14 +191,15 @@ class ProductPage extends Component {
 
 ProductPage.propTypes = {
   match: PropTypes.object,
-  addToCart: PropTypes.func,
-  currency: PropTypes.string,
+  shopData: PropTypes.object,
   addedItems: PropTypes.array,
+  availableProducts: PropTypes.array,
+  currency: PropTypes.string,
+  addToCart: PropTypes.func,
   removeItem: PropTypes.func,
   addFirstAttribute: PropTypes.func,
   addSecondAttribute: PropTypes.func,
-  addThirdAttribute: PropTypes.func,
-  availableProducts: PropTypes.array
+  addThirdAttribute: PropTypes.func
 };
 
 const mapStateToProps = (state) => {

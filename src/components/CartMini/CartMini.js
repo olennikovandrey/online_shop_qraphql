@@ -25,8 +25,8 @@ class CartMini extends Component {
               key={ item.id }
               id={ item.id }
               setBlur={ setBlur }
-            />)
-          }
+            />
+          )}
           <div className="row-wrapper">
             <span className="total-price-title">Total</span>
             <span className="total-price-value">{ currency } { totalPrice }</span>
@@ -45,11 +45,10 @@ CartMini.propTypes = {
   isCartVisible: PropTypes.bool,
   setCartVisible: PropTypes.func,
   setBlur: PropTypes.func,
+  totalPrice: PropTypes.number,
   addedItems: PropTypes.array,
-  symbols: PropTypes.array,
   bagQuantity: PropTypes.number,
-  currency: PropTypes.string,
-  totalPrice: PropTypes.number
+  currency: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

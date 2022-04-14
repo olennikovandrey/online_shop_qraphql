@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Header from "../Header/Header";
 import CartItem from "./CartItem";
 import "./styles/cart.css";
-import "./styles/swiper.css"
+import "./styles/swiper.css";
 
 class Cart extends Component {
   constructor(props) {
@@ -23,21 +23,23 @@ class Cart extends Component {
   }
 
   render() {
-    const { totalPrice, currency, bagQuantity, addedItems } = this.props;
+    const { addedItems, bagQuantity, currency, totalPrice } = this.props;
 
     return (
       <>
-        <Header setBlur={this.setBlur} />
-        {addedItems.length > 0 ?
+        <Header setBlur={ this.setBlur } />
+        { addedItems.length > 0 ?
           <section
           style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
           className="cart-wrapper">
-            <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
+            <Link to="/">
+              <span className="homelink">HOMEPAGE</span>
+            </Link>
             <h2>CART, { bagQuantity } { bagQuantity === 1 ? "item" : "items" } </h2>
-            {addedItems.map( item =>
+            { addedItems.map( item =>
               <CartItem
-                key={item.id}
-                id={item.id}
+                key={ item.id }
+                id={ item.id }
               />)
             }
             <div className="row-wrapper">
@@ -47,7 +49,7 @@ class Cart extends Component {
             <button className="cart-check-out-btn">CHECK OUT</button>
           </section> :
           <section className="cart-wrapper">
-            <h2>YOU HAVEN'T ADDED ANY ITEMS TO YOUR CART YET</h2>
+            <h2>YOU HAVEN&apos;T ADDED ANY ITEMS TO YOUR CART YET</h2>
           </section>
         }
       </>
@@ -57,16 +59,18 @@ class Cart extends Component {
 
 Cart.propTypes = {
   addedItems: PropTypes.array,
-  currency: PropTypes.string
+  bagQuantity: PropTypes.number,
+  currency: PropTypes.string,
+  totalPrice: PropTypes.number
 };
 
 
 const mapStateToProps = (state) => {
   return {
-    bagQuantity: state.addedItems.length,
     addedItems: state.addedItems,
-    currency: state.currency,
-    totalPrice: state.totalPrice
+    bagQuantity: state.addedItems.length,
+    totalPrice: state.totalPrice,
+    currency: state.currency
   };
 };
 

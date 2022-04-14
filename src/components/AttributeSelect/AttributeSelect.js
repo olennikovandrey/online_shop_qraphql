@@ -7,85 +7,94 @@ import "./attribute-select.css";
 
 class AttributeSelect extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   addItemToCart = (id) => {
     this.props.addToCart(id);
-    this.props.attributeSelectVisible()
+    this.props.attributeSelectVisible();
   };
 
-  addFirstAttr = (event, id) => {
-    this.props.addFirstAttribute(id);
-    if (event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    }
-  };
-
-  addSecondAttr = (event, id) => {
-    this.props.addSecondAttribute(id);
+  addAttrFnGeneral = (event, id, addFunction) => {
+    addFunction(id);
     if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    } else {
-      event.target.classList.toggle("selected-color")
-    }
-  };
-
-  addThirdAttr = (event, id) => {
-    this.props.addThirdAttribute(id);
-    if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size")
-    } else {
-      event.target.classList.toggle("selected-color")
+      event.target.classList.toggle("selected-size");
+    } else if (id.includes("#") && event.target.classList.contains("size")) {
+      event.target.classList.toggle("selected-color");
+    } else if (event.target.classList.contains("disabled-size") ||
+               event.target.classList.contains("selected-size") ||
+               event.target.classList.contains("selected-color") ||
+               event.target.classList.contains("disabled-color")) {
+      return
     }
   };
 
   render() {
-    const catalog = JSON.parse(localStorage.getItem("shopData")),
-          { id } = this.props,
+    const { id, addedItems, addFirstAttribute, addSecondAttribute, addThirdAttribute, attributeSelectVisible } = this.props,
+          catalog = JSON.parse(localStorage.getItem("shopData")),
           currentProduct = catalog[0].products.filter(item => item.id === id)[0],
-          currentAddedProduct = this.props.addedItems.filter( el => el.id === id)[0];
+          currentAddedProduct = addedItems.filter( el => el.id === id)[0];
 
     return (
       <div className="attribute-select-wrapper">
         <div className="row-wrapper">
           <p className="attribute-select-title">SELECT ATTRIBUTES:</p>
-          <span className="close-btn" onClick={ () => this.props.attributeSelectVisible() }></span>
+          <span className="close-btn" onClick={ () => attributeSelectVisible() }></span>
         </div>
 
         { currentProduct.attributes ?
           <div className="available-sizes-wrapper">
-            <p className="product-sizes-title">{ currentProduct.attributes.length !== 0 ? currentProduct.attributes[0].name.toUpperCase() + ":" : null}</p>
+            <p className="product-sizes-title">
+              { currentProduct.attributes.length !== 0 ?
+              currentProduct.attributes[0].name.toUpperCase() + ":" :
+              null }
+            </p>
             <Attributes
+              currentAddedProduct={ currentAddedProduct }
               attributes={ currentProduct.attributes[0] }
-              currentAddedProduct={ currentAddedProduct }
-              currentProduct={ currentProduct }
-              addAttr={ this.addFirstAttr }
-              attr={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+              addAttrFnGeneral={ this.addAttrFnGeneral }
+              addAttrFnCurrent={ addFirstAttribute }
             />
-            { currentProduct.attributes[1] && <p className="product-sizes-title">{ currentProduct.attributes[1].length !== 0 ? currentProduct.attributes[1].name.toUpperCase() + ":" : null }</p>}
+            { currentProduct.attributes[1] &&
+            <p className="product-sizes-title">
+              { currentProduct.attributes[1].length !== 0 ?
+              currentProduct.attributes[1].name.toUpperCase() + ":" :
+              null }
+            </p>
+            }
             <Attributes
+              currentAddedProduct={ currentAddedProduct }
               attributes={ currentProduct.attributes[1] }
-              currentAddedProduct={ currentAddedProduct }
-              currentProduct={ currentProduct }
-              addAttr={ this.addSecondAttr }
-              attr={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+              addAttrFnGeneral={ this.addAttrFnGeneral }
+              addAttrFnCurrent={ addSecondAttribute }
             />
-            { currentProduct.attributes[2] && <p className="product-sizes-title">{ currentProduct.attributes[2].length !== 0 ? currentProduct.attributes[2].name.toUpperCase() + ":" : null }</p>}
+            { currentProduct.attributes[2] &&
+            <p className="product-sizes-title">
+              { currentProduct.attributes[2].length !== 0 ?
+              currentProduct.attributes[2].name.toUpperCase() + ":" :
+              null }
+            </p>
+            }
             <Attributes
-              attributes={ currentProduct.attributes[2] }
               currentAddedProduct={ currentAddedProduct }
-              currentProduct={ currentProduct }
-              addAttr={ this.addThirdAttr }
-              attr={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+              attributes={ currentProduct.attributes[2] }
+              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+              addAttrFnGeneral={ this.addAttrFnGeneral }
+              addAttrFnCurrent={ addThirdAttribute }
             />
-            </div> : null }
+          </div> :
+          null
+        }
+        { currentProduct  ?
         <button
           className="attr-select-add-btn"
           onClick={ () => this.addItemToCart(id) }>ADD TO CART
-        </button>
+        </button> : null
+        }
       </div>
-    )
+    );
   }
 }
 
@@ -96,6 +105,7 @@ AttributeSelect.propTypes = {
   addFirstAttribute: PropTypes.func,
   addSecondAttribute: PropTypes.func,
   addThirdAttribute: PropTypes.func,
+  attributeSelectVisible: PropTypes.func
 };
 
 const mapStateToProps = (state) => {

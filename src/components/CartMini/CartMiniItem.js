@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import { Link } from "react-router-dom";
 import { store } from "../../index";
+import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import "./cart-mini.css";
 
 class CartMiniItem extends Component {
@@ -15,9 +15,9 @@ class CartMiniItem extends Component {
     store.subscribe(() => {
       this.setState({
         quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
-      })
+      });
     });
-  };
+  }
 
   addCurrentQuantity = (id) => {
     this.props.addQuantity(id);
@@ -44,14 +44,26 @@ class CartMiniItem extends Component {
           </div>
           <span className="item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span><br/>
           <div className="sizes-wrapper">
-            { currentItem.firstAttr.length > 0 ? <div className="item-color-size">{ currentItem.firstAttr[0].substring(0, 3) }</div>  : null }
-            { currentItem.secondAttr.length > 0 ? <div className="item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
-              { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
+            { currentItem.firstAttr.length > 0 ?
+              <div className="item-color-size">
+                { currentItem.firstAttr[0].substring(0, 3) }
+              </div> :
+              null
+            }
+            { currentItem.secondAttr.length > 0 ?
+              <div className="item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
+                { !currentItem.secondAttr[0].includes("#") ?
+                  currentItem.secondAttr[0] : null
+                }
               </div> : null
             }
-            { currentItem.thirdAttr.length > 0  ? <div className="item-color-size">{ currentItem.thirdAttr[0].substring(0, 3) }</div> : null }
+            { currentItem.thirdAttr.length > 0  ?
+              <div className="item-color-size">
+                { currentItem.thirdAttr[0].substring(0, 3) }
+              </div> :
+              null
+            }
           </div>
-
         </div>
         <div className="item-counter-img-wrapper">
           <div>

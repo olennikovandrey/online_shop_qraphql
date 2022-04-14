@@ -10,7 +10,6 @@ class CategoryWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
       isLoaded: false,
       isOverflow: true,
       isShowMoreBtn: true
@@ -26,17 +25,13 @@ class CategoryWrapper extends Component {
   }
 
   render() {
-    const { error, isOverflow, isShowMoreBtn } = this.state,
+    const { isOverflow, isShowMoreBtn } = this.state,
           { isLoaded, categoryName, shopData, currency, isBackgroundBlur } = this.props;
 
-    if (error) {
+  if (!isLoaded) {
       return (
-        <div>Error: {error.message}</div>
-      );
-    } else if (!isLoaded) {
-      return (
-        <section style={isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
-          <span className="category-name">{categoryName}</span>
+        <section style={ isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
+          <span className="category-name">{ categoryName }</span>
           <div className="category-items-wrapper">
             <Loader />
           </div>
@@ -44,27 +39,28 @@ class CategoryWrapper extends Component {
       );
     } else {
       return (
-        <section style={isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
-          <span className="category-name">{categoryName}</span>
-          <div className={`${isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper"}`}>
-          {shopData
+        <section style={ isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
+          <span className="category-name">{ categoryName }</span>
+          <div className={ `${ isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper" }` }>
+          { shopData
             .filter(item => item.name === categoryName.toLowerCase())[0].products
             .map(item =>
-              <React.Fragment key={item.id}>
+              <React.Fragment key={ item.id }>
                 <ProductCard
-                  image={item.gallery[0]}
-                  name={item.name}
-                  amount={item.prices.filter(current => current.currency.symbol === currency)[0].amount}
-                  currency={currency}
-                  id={item.id}
-                  shopData={shopData}
+                  image={ item.gallery[0] }
+                  name={ item.name }
+                  amount={ item.prices.filter(current => current.currency.symbol === currency)[0].amount }
+                  currency={ currency }
+                  id={ item.id }
+                  shopData={ shopData }
                 />
               </React.Fragment>
             )}
           </div>
-          {shopData
+          { shopData
             .filter(item => item.name === categoryName.toLowerCase())[0].products.length > 6 &&
-            <button className="show-more-btn" onClick={this.showMoreFn}>{isShowMoreBtn ? "SHOW MORE" : "HIDE"}</button>}
+            <button className="show-more-btn" onClick={this.showMoreFn}>{isShowMoreBtn ? "SHOW MORE" : "HIDE"}</button>
+          }
         </section>
       );
     }
@@ -76,13 +72,11 @@ CategoryWrapper.propTypes = {
   isBackgroundBlur: PropTypes.bool,
   categoryName: PropTypes.string,
   shopData: PropTypes.array,
-  currency: PropTypes.string,
-  items: PropTypes.array
+  currency: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
   return {
-    symbols: state.symbols,
     currency: state.currency
   };
 };

@@ -20,7 +20,7 @@ class CartItem extends Component {
     store.subscribe(() => {
       this.setState({
         quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
-      })
+      });
     });
   }
 
@@ -30,7 +30,7 @@ class CartItem extends Component {
 
   removeCurrentQuantity = (id) => {
     this.props.removeQuantity(id);
-  }
+  };
 
   removeItemFromCart = (id) => {
     this.props.removeItem(id);
@@ -48,16 +48,25 @@ class CartItem extends Component {
               <span className="cart-item-brand">{ currentItem.brand }</span>
               <span className="cart-item-name">{ currentItem.name }</span>
             </div>
-            <span className="cart-item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span>
+            <span className="cart-item-price">
+              { currency } { currentItem.prices.filter(item =>
+                item.currency.symbol === currency)[0].amount
+              }
+            </span>
             <div className="sizes-wrapper">
               { currentItem.firstAttr.length > 0 ? <div className="cart-item-color-size">{ currentItem.firstAttr[0] }</div>  : null }
               { currentItem.secondAttr.length > 0 ?
-              <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
-                { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
-              </div> : null }
-              { currentItem.thirdAttr.length > 0  ? <div className="cart-item-color-size">
-                { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
-              </div> : null }
+                <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
+                  { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
+                </div> :
+                null
+              }
+              { currentItem.thirdAttr.length > 0  ?
+                <div className="cart-item-color-size">
+                  { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
+                </div> :
+                null
+              }
             </div>
           </div>
           <div className="cart-item-btns-img-wrapper">
@@ -97,12 +106,12 @@ class CartItem extends Component {
 }
 
 CartItem.propTypes = {
-  addedItems: PropTypes.array,
   id: PropTypes.string,
   currency: PropTypes.string,
+  addedItems: PropTypes.array,
   addQuantity: PropTypes.func,
   removeQuantity: PropTypes.func,
-  removeItem: PropTypes.func,
+  removeItem: PropTypes.func
 };
 
 const mapStateToProps = (state) => {

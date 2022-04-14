@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 
-export default class Attributes extends Component {
+class Attributes extends Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    const { attributes, addAttr, currentAddedProduct, attr } = this.props;
-    console.log(attr)
+    const { currentAddedProduct, attributes, addedProductAttributes, addAttrFnGeneral, addAttrFnCurrent } = this.props;
 
     return (
       <>
@@ -18,11 +19,11 @@ export default class Attributes extends Component {
               key={ item.id }
               className={
                 currentAddedProduct === undefined ? "size" :
-                  attr[0][0] === "#" && attr.includes(item.value) ? "selected-color" :
-                    attr.includes(item.value) ? "selected-size" : "size"
+                  addedProductAttributes[0] && addedProductAttributes[0][0] === "#" && addedProductAttributes.includes(item.value) ? "selected-color" :
+                    addedProductAttributes.includes(item.value) ? "selected-size" : "disabled-color"
               }
               style={ { background: item.value } }
-              onClick={ (event) => addAttr(event, item.value) }>
+              onClick={ (event) => addAttrFnGeneral(event, item.value, addAttrFnCurrent) }>
               { !item.value.includes("#") ? item.value : null }
             </div>
           )
@@ -30,14 +31,30 @@ export default class Attributes extends Component {
         }
         </div>
       </>
-    )
+    );
   }
 }
 
 Attributes.propTypes = {
-  addAttr: PropTypes.func,
-  attributes: PropTypes.object,
   currentAddedProduct: PropTypes.object,
-  currentProduct: PropTypes.object,
-  addedItems: PropTypes.object
+  attributes: PropTypes.object,
+  addedProductAttributes: PropTypes.array,
+  addAttrFnGeneral: PropTypes.func,
+  addAttrFnCurrent: PropTypes.func
 };
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addFirstAttribute: (id) => {
+      dispatch(addFirstAttribute(id));
+    },
+    addSecondAttribute: (id) => {
+      dispatch(addSecondAttribute(id));
+    },
+    addThirdAttribute: (id) => {
+      dispatch(addThirdAttribute(id));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Attributes);

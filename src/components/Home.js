@@ -45,9 +45,9 @@ class Home extends Component {
       isLoaded: true
     });
     this.catalogLoader(data.categories);
-    localStorage.setItem("shopData", JSON.stringify(data.categories));
     this.symbolsLoader(data.categories[0].products[0].prices);
     this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
+    localStorage.setItem("shopData", JSON.stringify(data.categories));
     localStorage.setItem("availableProducts", JSON.stringify(data.categories[0].products.filter(item => item.inStock)));
   }
 
@@ -88,7 +88,6 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  catalog: PropTypes.array,
   symbols: PropTypes.array,
   getCatalog: PropTypes.func,
   getSymbols: PropTypes.func,
@@ -97,9 +96,8 @@ Home.propTypes = {
 
 
 const mapStateToProps = state => {
-  console.log("state", state);
+  console.log( {state});
   return {
-    catalog: state.catalog,
     symbols: state.symbols
   };
 };

@@ -146,20 +146,21 @@ const cartReducer = (state = initState, action) => {
           ...state,
           totalPrice: parseFloat(newTotal.toFixed(2))
         };
-      };
+      }
     }
 
     case CHANGE_CURRENCY: {
       const addedItemsPrices = [];
-      (function () {
+      function currencyChanger() {
         state.addedItems.forEach(
           el => addedItemsPrices.push(
             el.prices.filter(
               item => (item.currency.symbol === action.value)
             )[0].amount * el.quantity
           )
-        )
-      }());
+        );
+      }
+      currencyChanger();
       const newTotal = addedItemsPrices.reduce(
       (previousValue, currentValue) => previousValue + currentValue,
         0
@@ -178,52 +179,45 @@ const cartReducer = (state = initState, action) => {
     case ADD_FIRST_ATTRIBUTE: {
       if (!firstAttr.includes(action.id) && !firstAttr.length) {
         firstAttr.push( action.id);
-        console.log("1 push",firstAttr);
         return {
           ...state
         };
       } else if (firstAttr.includes(action.id) && firstAttr.length) {
         firstAttr.pop();
-        console.log("1 pop",firstAttr);
         return {
           ...state
         };
-      };
+      }
       break;
     }
 
     case ADD_SECOND_ATTRIBUTE: {
-
       if (!secondAttr.includes(action.value) && !secondAttr.length) {
         secondAttr.push( action.value);
-        console.log("2 push",secondAttr);
         return {
           ...state
         };
       } else if (secondAttr.includes(action.value) && secondAttr.length) {
         secondAttr.pop();
-        console.log("2 pop",secondAttr);
         return {
           ...state
         };
-      };
+      }
       break;
     }
 
     case ADD_THIRD_ATTRIBUTE: {
       if (!thirdAttr.includes(action.value) && !thirdAttr.length) {
         thirdAttr.push( action.value);
-        console.log("3 push",thirdAttr);
         return {
           ...state
         };
       } else if (secondAttr.includes(action.value) && thirdAttr.length) {
         thirdAttr.pop();
-        console.log("3 pop",thirdAttr);
         return {
           ...state
         };
-      };
+      }
       break;
     }
 

@@ -64,20 +64,4 @@ const GET_PRODUCT = gql`
 }
 `;
 
-const GET_PRICES = gql`
-  query Query {
-  categories {
-    products {
-      prices {
-        amount
-        currency {
-          symbol
-          label
-        }
-      }
-    }
-  }
-}
-`;
-
-export { GET_SHOP, GET_PRODUCT, GET_PRICES };
+export { GET_SHOP, GET_PRODUCT };

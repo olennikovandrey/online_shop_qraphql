@@ -20,7 +20,7 @@
   margin: 30px 25px 50px;
   transition: all 0.3s ease-in-out;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 60%);
+  background-color: #ffffff99;
 }
 
 .product-card-wrapper img:nth-child(1) {
