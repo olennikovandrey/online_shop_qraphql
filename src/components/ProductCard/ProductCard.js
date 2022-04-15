@@ -47,7 +47,10 @@ class ProductCard extends Component {
           { addedItems.find(item => item.id === id) === undefined ?
             <div
               className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
-              onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() : () => this.addItemToCart(id) }
+              onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() :
+                        available === undefined ? null :
+                        () => this.addItemToCart(id)
+              }
             >
               <span className="tooltiptext">Is unavailable now</span>
             </div> :
