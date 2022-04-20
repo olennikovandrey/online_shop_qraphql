@@ -8,16 +8,31 @@ import "./cart-mini.css";
 class CartMini extends Component {
   constructor(props) {
     super(props);
+    this.cartMiniCloser = this.cartMiniCloser.bind(this);
   }
 
+  cartMiniCloser(event) {
+    if(!event.target.matches(".cart-mini-wrapper, .remove-item-btn, .cart-mini-wrapper *")) {
+      this.props.setCartVisible(event);
+    };
+  };
+
+  componentDidMount() {
+    document.addEventListener("click", this.cartMiniCloser);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.cartMiniCloser);
+  };
+
   render() {
-    const { isCartVisible, setCartVisible, setBlur, totalPrice, addedItems, currency, bagQuantity } = this.props;
+    const { setCartVisible, setBlur, totalPrice, addedItems, currency, totalItemsInCart } = this.props;
 
     return (
       <>
-        <div className={ isCartVisible ? "cart-mini-wrapper" : "hidden" } >
+        <div className="cart-mini-wrapper">
           <div className="row-wrapper">
-            <span className="cart-mini-title"><b>My Bag</b>, { bagQuantity } { bagQuantity === 1 ? "item" : "items" }</span>
+            <span className="cart-mini-title"><b>My Bag</b>, { totalItemsInCart } { totalItemsInCart === 1 ? "item" : "items" }</span>
             <span className="close-btn" onClick={ setCartVisible }></span>
           </div>
           { addedItems.map( item =>
@@ -47,13 +62,13 @@ CartMini.propTypes = {
   setBlur: PropTypes.func,
   totalPrice: PropTypes.number,
   addedItems: PropTypes.array,
-  bagQuantity: PropTypes.number,
+  totalItemsInCart: PropTypes.number,
   currency: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
   return {
-    bagQuantity: state.addedItems.length,
+    totalItemsInCart: state.totalItemsInCart,
     addedItems: state.addedItems,
     currency: state.currency,
     totalPrice: state.totalPrice

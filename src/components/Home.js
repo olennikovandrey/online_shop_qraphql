@@ -4,7 +4,7 @@ import client from "../apollo";
 import { connect } from "react-redux";
 import CategoryWrapper from "./Category/CategoryWrapper";
 import Header from "./Header/Header";
-import { getCatalog, getSymbols, getProductAvailable } from "../actions/cart";
+import { getCatalog, getProductAvailable } from "../actions/cart";
 import { GET_SHOP } from "../services/queries";
 
 async function loadShopDataAsync() {
@@ -30,10 +30,6 @@ class Home extends Component {
     this.props.getCatalog(data);
   };
 
-  symbolsLoader = (data) => {
-    this.props.getSymbols(data);
-  };
-
   productsAvailableLoader = (data) => {
     this.props.getProductAvailable(data);
   };
@@ -45,7 +41,6 @@ class Home extends Component {
       isLoaded: true
     });
     this.catalogLoader(data.categories);
-    this.symbolsLoader(data.categories[0].products[0].prices);
     this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
     localStorage.setItem("shopData", JSON.stringify(data.categories));
     localStorage.setItem("availableProducts", JSON.stringify(data.categories[0].products.filter(item => item.inStock)));

@@ -1,8 +1,8 @@
 const CategoryWrapperBlur = {
-  maxWidth: "1440px",
-  width: "100%",
+  width: "100vw",
   height: "auto",
-  padding: "0 8%",
+  padding: "0 15%",
+  margin: "0 auto",
   backgroundColor: "#fff",
   filter: "brightness(0.8) blur(1px)",
   display: "flex",
@@ -12,10 +12,10 @@ const CategoryWrapperBlur = {
 };
 
 const CategoryWrapper = {
-  maxWidth: "1440px",
-  width: "100%",
+  width: "100vw",
   height: "auto",
-  padding: "0 8%",
+  padding: "0 15%",
+  margin: "0 auto",
   backgroundColor: "#fff",
   display: "flex",
   flexDirection: "column",
@@ -24,22 +24,22 @@ const CategoryWrapper = {
 };
 
 const ProductPageWrapper = {
+  width: "100vw",
   height: "auto",
-  width: "100%",
-  maxWidth: "1440px",
+  padding: "0 15%",
   margin: "0 auto",
-  padding: "40px 8% 100px",
-  display: "flex"
+  display: "flex",
+  flexDirection: "column"
 };
 
 const ProductPageWrapperBlur = {
   filter: "blur(1px)",
+  width: "100vw",
   height: "auto",
-  width: "100%",
-  maxWidth: "1440px",
+  padding: "0 15%",
   margin: "0 auto",
-  padding: "40px 8% 100px",
-  display: "flex"
+  display: "flex",
+  flexDirection: "column"
 };
 
 const CartWrapper = {

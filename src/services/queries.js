@@ -64,4 +64,13 @@ const GET_PRODUCT = gql`
 }
 `;
 
-export { GET_SHOP, GET_PRODUCT };
+const GET_CURRENCY = gql`
+  query {
+    currencies {
+      label
+      symbol
+    }
+  }
+`
+
+export { GET_SHOP, GET_PRODUCT, GET_CURRENCY };

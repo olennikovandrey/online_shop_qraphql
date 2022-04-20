@@ -79,101 +79,105 @@ class ProductPage extends Component {
             setCategoryName={ null }
             setBlur={ this.setBlur }
           />
-          <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
           <section style={ isBackgroundBlur ? styles.ProductPageWrapperBlur : styles.ProductPageWrapper }>
-            <div className="preview-img-wrapper">
-              { currentProduct.gallery.slice(1, 5).map(
-                item =>
-                  <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
-                )
-              }
-            </div>
-            <div className="product-info">
-              <div className="product-img-wrapper">
-                { currentProduct.gallery.length > 1 ?
-                  <Swiper
-                    navigation={ true }
-                    effect={ "cube" }
-                    slidesPerView={ 1 }
-                    loop={ true }
-                    mousewheel={ true }
-                  >
-                    {currentProduct.gallery.map((item) =>
-                      <SwiperSlide key={ item }>
-                        <img className="product-img" src={ item } alt={ currentProduct.name } />
-                      </SwiperSlide>
-                    )}
-                  </Swiper> :
-                  <img className="product-img" src={currentProduct.gallery[0]} alt={currentProduct.name} />
+            <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
+            <div className="product-page-content-wrapper">
+              <div className="preview-img-wrapper">
+                { currentProduct.gallery.slice(1, 5).map(
+                  item =>
+                    <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
+                  )
                 }
               </div>
-              <div className="product-details">
-                <p className="product-name">{ currentProduct.brand }</p>
-                <p className="product-brief-description">{ currentProduct.name }</p>
-                { currentProduct.attributes ?
-                  <>
-                    <div className="available-sizes-wrapper">
-                      { currentProduct.attributes[0] &&
-                      <p className="product-sizes-title">
-                        { currentProduct.attributes[0].length !== 0 ?
-                        currentProduct.attributes[0].name.toUpperCase() + ":" :
-                        null }
-                      </p>
-                      }
-                      <Attributes
-                        currentAddedProduct={ currentAddedProduct }
-                        attributes={ currentProduct.attributes[0] }
-                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
-                        addAttrFnGeneral={ this.addAttrFnGeneral }
-                        addAttrFnCurrent={this.props.addFirstAttribute}
-                      />
-                      { currentProduct.attributes[1] &&
-                      <p className="product-sizes-title">
-                        { currentProduct.attributes[1].length !== 0 ?
-                        currentProduct.attributes[1].name.toUpperCase() + ":" :
-                        null }
-                      </p>
-                      }
-                      <Attributes
-                        currentAddedProduct={ currentAddedProduct }
-                        attributes={ currentProduct.attributes[1] }
-                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
-                        addAttrFnGeneral={ this.addAttrFnGeneral }
-                        addAttrFnCurrent={this.props.addSecondAttribute}
-                      />
-                      { currentProduct.attributes[2] &&
-                      <p className="product-sizes-title">
-                        { currentProduct.attributes[2].length !== 0 ?
-                        currentProduct.attributes[2].name.toUpperCase() + ":" :
-                        null }
-                      </p>
-                      }
-                      <Attributes
-                        currentAddedProduct={ currentAddedProduct }
-                        attributes={ currentProduct.attributes[2] }
-                        addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
-                        addAttrFnGeneral={ this.addAttrFnGeneral }
-                        addAttrFnCurrent={this.props.addThirdAttribute}
-                      />
-                    </div>
-                  </> : null
-                }
-                <p className="product-price-title">PRICE:</p>
-                <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
-                { addedItems.find(item => item.id === currentProduct.id) === undefined ?
-                  <div className="btn-toolkit-wrapper">
+              <div className="product-info">
+                <div className="product-img-wrapper">
+                  { currentProduct.gallery.length > 1 ?
+                    <Swiper
+                      navigation={ true }
+                      effect={ "cube" }
+                      loop={ true }
+                      mousewheel={ true }
+                      slidesPerView={ "auto" }
+                      spaceBetween={ 150 }
+                      centeredSlides={ true }
+                    >
+                      {currentProduct.gallery.map((item) =>
+                        <SwiperSlide key={ item }>
+                          <img className="product-img" src={ item } alt={ currentProduct.name } />
+                        </SwiperSlide>
+                      )}
+                    </Swiper> :
+                    <img className="product-img" src={currentProduct.gallery[0]} alt={currentProduct.name} />
+                  }
+                </div>
+                <div className="product-details">
+                  <p className="product-name">{ currentProduct.brand }</p>
+                  <p className="product-brief-description">{ currentProduct.name }</p>
+                  { currentProduct.attributes ?
+                    <>
+                      <div className="available-sizes-wrapper">
+                        { currentProduct.attributes[0] &&
+                        <p className="product-sizes-title">
+                          { currentProduct.attributes[0].length !== 0 ?
+                          currentProduct.attributes[0].name.toUpperCase() + ":" :
+                          null }
+                        </p>
+                        }
+                        <Attributes
+                          currentAddedProduct={ currentAddedProduct }
+                          attributes={ currentProduct.attributes[0] }
+                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
+                          addAttrFnGeneral={ this.addAttrFnGeneral }
+                          addAttrFnCurrent={this.props.addFirstAttribute}
+                        />
+                        { currentProduct.attributes[1] &&
+                        <p className="product-sizes-title">
+                          { currentProduct.attributes[1].length !== 0 ?
+                          currentProduct.attributes[1].name.toUpperCase() + ":" :
+                          null }
+                        </p>
+                        }
+                        <Attributes
+                          currentAddedProduct={ currentAddedProduct }
+                          attributes={ currentProduct.attributes[1] }
+                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
+                          addAttrFnGeneral={ this.addAttrFnGeneral }
+                          addAttrFnCurrent={this.props.addSecondAttribute}
+                        />
+                        { currentProduct.attributes[2] &&
+                        <p className="product-sizes-title">
+                          { currentProduct.attributes[2].length !== 0 ?
+                          currentProduct.attributes[2].name.toUpperCase() + ":" :
+                          null }
+                        </p>
+                        }
+                        <Attributes
+                          currentAddedProduct={ currentAddedProduct }
+                          attributes={ currentProduct.attributes[2] }
+                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
+                          addAttrFnGeneral={ this.addAttrFnGeneral }
+                          addAttrFnCurrent={this.props.addThirdAttribute}
+                        />
+                      </div>
+                    </> : null
+                  }
+                  <p className="product-price-title">PRICE:</p>
+                  <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
+                  { addedItems.find(item => item.id === currentProduct.id) === undefined ?
+                    <div className="btn-toolkit-wrapper">
+                      <button
+                        className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
+                        onClick={ availableItem !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
+                      </button>
+                      { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
+                    </div> :
                     <button
-                      className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                      onClick={ availableItem !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
+                      className="prod-page-add-btn"
+                      onClick={ availableItem !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
                     </button>
-                    { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
-                  </div> :
-                  <button
-                    className="prod-page-add-btn"
-                    onClick={ availableItem !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
-                  </button>
-                }
-                <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
+                  }
+                  <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
+                </div>
               </div>
             </div>
           </section>

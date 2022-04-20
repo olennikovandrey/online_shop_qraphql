@@ -32,8 +32,10 @@ class AttributeSelect extends Component {
   render() {
     const { id, addedItems, addFirstAttribute, addSecondAttribute, addThirdAttribute, attributeSelectVisible } = this.props,
           catalog = JSON.parse(localStorage.getItem("shopData")),
-          currentProduct = catalog[0].products.filter(item => item.id === id)[0],
+          currentProductUnfreeze = Object.assign( {}, catalog[0].products.filter(item => item.id === id)[0]),
+          currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [] },
           currentAddedProduct = addedItems.filter( el => el.id === id)[0];
+          console.log({currentProduct})
 
     return (
       <div className="attribute-select-wrapper">

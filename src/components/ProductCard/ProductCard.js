@@ -32,7 +32,7 @@ class ProductCard extends Component {
   };
 
   render() {
-    const { image, name, amount, currency, id, availableProducts, addedItems, shopData } = this.props,
+    const { image, name, brand, amount, currency, id, availableProducts, addedItems, shopData } = this.props,
           available = availableProducts.find(item => item.id === id),
           currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
 
@@ -41,7 +41,7 @@ class ProductCard extends Component {
         <div className={ this.state.isCardBlur ? "product-card-wrapper-blur" : "product-card-wrapper" }>
           <Link to={ `id=${ id }` }>
             <img className="product-card-img" src={ image } alt={ name } height="350" width="338" />
-            <span className="product-card-name">{ name }</span>
+            <span className="product-card-name">{brand} { name }</span>
             <span className="product-card-price">{ amount } { currency }</span>
           </Link>
           { addedItems.find(item => item.id === id) === undefined ?
@@ -73,6 +73,7 @@ class ProductCard extends Component {
 ProductCard.propTypes = {
   image: PropTypes.string,
   name: PropTypes.string,
+  brand: PropTypes.string,
   amount: PropTypes.number,
   currency: PropTypes.string,
   id: PropTypes.string,

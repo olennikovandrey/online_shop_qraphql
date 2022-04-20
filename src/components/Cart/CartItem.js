@@ -54,16 +54,29 @@ class CartItem extends Component {
               }
             </span>
             <div className="sizes-wrapper">
-              { currentItem.firstAttr.length > 0 ? <div className="cart-item-color-size">{ currentItem.firstAttr[0] }</div>  : null }
+              { currentItem.firstAttr.length > 0 ?
+                <div className="cart-item-attribute-wrapper">
+                  <label className="cart-item-attribute-label">{ currentItem.attributes[0].name }</label>
+                  <div className="cart-item-color-size">
+                    { currentItem.firstAttr[0] }
+                  </div>
+                </div> :
+                null }
               { currentItem.secondAttr.length > 0 ?
-                <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
-                  { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
+                <div className="cart-item-attribute-wrapper">
+                  <label className="cart-item-attribute-label">{ currentItem.attributes[1].name }</label>
+                  <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
+                    { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
+                  </div>
                 </div> :
                 null
               }
               { currentItem.thirdAttr.length > 0  ?
-                <div className="cart-item-color-size">
-                  { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
+                <div className="cart-item-attribute-wrapper">
+                  <label className="cart-item-attribute-label">{ currentItem.attributes[2].name }</label>
+                  <div className="cart-item-color-size">
+                    { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
+                  </div>
                 </div> :
                 null
               }

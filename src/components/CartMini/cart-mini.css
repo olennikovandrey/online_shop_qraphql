@@ -1,12 +1,8 @@
-.hidden {
-  display: none;
-}
-
 .cart-mini-wrapper {
   position: absolute;
   top: 80px;
-  right: 7%;
-  width: 25%;
+  right: 15%;
+  width: 20%;
   height: auto;
   max-height: 656px;
   display: flex;

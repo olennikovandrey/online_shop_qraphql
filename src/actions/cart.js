@@ -1,6 +1,6 @@
 import {
   GET_CATALOG,
-  GET_SYMBOLS,
+  GET_CURRENCY,
   GET_PRODUCT_AVAILABLE,
   NEW_TOTAL_PRICE,
   ADD_TO_CART,
@@ -13,9 +13,9 @@ import {
   ADD_THIRD_ATTRIBUTE
 } from "./action-types/cart-actions";
 
-export const getSymbols = payload => {
+export const getCurrency = payload => {
   return {
-    type: GET_SYMBOLS,
+    type: GET_CURRENCY,
     payload
   };
 };

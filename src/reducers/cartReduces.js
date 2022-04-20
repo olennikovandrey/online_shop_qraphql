@@ -1,6 +1,6 @@
 import {
   GET_CATALOG,
-  GET_SYMBOLS,
+  GET_CURRENCY,
   GET_PRODUCT_AVAILABLE,
   ADD_TO_CART,
   REMOVE_ITEM,
@@ -18,7 +18,8 @@ export const initState = {
   addedItems: JSON.parse(localStorage.getItem("Cart")) || [],
   availableProducts: JSON.parse(localStorage.getItem("availableProducts")) || [],
   currency: JSON.parse(localStorage.getItem("Currency")) || "$",
-  totalPrice: JSON.parse(localStorage.getItem("TotalPrice")) || 0
+  totalPrice: JSON.parse(localStorage.getItem("TotalPrice")) || 0,
+  totalItemsInCart: JSON.parse(localStorage.getItem("totalItemsInCart")) || 0
 };
 
 let firstAttr = [];
@@ -27,7 +28,7 @@ let thirdAttr = [];
 const cartReducer = (state = initState, action) => {
 
   switch (action.type) {
-    case GET_SYMBOLS: {
+    case GET_CURRENCY: {
       let downloadedData = action.payload;
       return {
         ...state,
@@ -66,6 +67,7 @@ const cartReducer = (state = initState, action) => {
         return {
           ...state,
           totalPrice: state.totalPrice,
+          totalItemsInCart: state.totalItemsInCart + 1
         };
        } else {
         copyAddedItem.quantity = 1;
@@ -79,11 +81,13 @@ const cartReducer = (state = initState, action) => {
 
         localStorage.setItem("Cart", JSON.stringify([...state.addedItems, copyAddedItem]));
         localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+        localStorage.setItem("totalItemsInCart", state.totalItemsInCart + 1);
 
         return {
           ...state,
           addedItems: [...state.addedItems, copyAddedItem],
-          totalPrice: parseFloat(newTotal.toFixed(2))
+          totalPrice: parseFloat(newTotal.toFixed(2)),
+          totalItemsInCart: state.totalItemsInCart + 1
         };
       }
     }
@@ -92,6 +96,7 @@ const cartReducer = (state = initState, action) => {
       let itemToRemove = state.addedItems.find(item => action.id === item.id);
       let newItems = state.addedItems.filter(item => action.id !== item.id);
       let newTotal = state.totalPrice - (itemToRemove.prices.filter(item => item.currency.symbol === state.currency)[0].amount * itemToRemove.quantity);
+      let newTotalItemsInCart = state.totalItemsInCart - itemToRemove.quantity;
       itemToRemove.quantity = 0;
       firstAttr = [];
       secondAttr = [];
@@ -99,11 +104,13 @@ const cartReducer = (state = initState, action) => {
 
       localStorage.setItem("Cart", JSON.stringify(state.addedItems.filter(item => item.id !== action.id)));
       localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+      localStorage.setItem("totalItemsInCart", state.totalItemsInCart - itemToRemove.quantity);
 
       return {
         ...state,
         addedItems: newItems,
-        totalPrice: parseFloat(newTotal.toFixed(2))
+        totalPrice: parseFloat(newTotal.toFixed(2)),
+        totalItemsInCart: newTotalItemsInCart
       };
     }
 
@@ -113,10 +120,12 @@ const cartReducer = (state = initState, action) => {
       let priceToAdd = currentItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
 
       localStorage.setItem("TotalPrice", JSON.stringify(parseFloat((state.totalPrice + priceToAdd).toFixed(2))));
+      localStorage.setItem("totalItemsInCart", state.totalItemsInCart + 1);
 
       return {
         ...state,
-        totalPrice: parseFloat((state.totalPrice + priceToAdd).toFixed(2))
+        totalPrice: parseFloat((state.totalPrice + priceToAdd).toFixed(2)),
+        totalItemsInCart: state.totalItemsInCart + 1
       };
     }
 
@@ -127,24 +136,31 @@ const cartReducer = (state = initState, action) => {
       if (currentItem.quantity === 1) {
         let newItems = state.addedItems.filter(item => item.id !== action.id);
         let newTotal = state.totalPrice - priceToRemove;
+        let newTotalItemsInCart = state.totalItemsInCart - 1;
         currentItem.quantity = 0;
 
         localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+        localStorage.setItem("totalItemsInCart", state.totalItemsInCart - 1);
 
         return {
           ...state,
           addedItems: newItems,
-          totalPrice: parseFloat(newTotal.toFixed(2))
+          totalPrice: parseFloat(newTotal.toFixed(2)),
+          totalItemsInCart: newTotalItemsInCart
         };
       } else {
         currentItem.quantity -= 1;
+        let newTotalItemsInCart = state.totalItemsInCart - 1;
         let newTotal = parseFloat((state.totalPrice - priceToRemove).toFixed(2));
 
         localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+        localStorage.setItem("totalItemsInCart", state.totalItemsInCart - currentItem.quantity);
+        localStorage.setItem("totalItemsInCart", state.totalItemsInCart - 1);
 
         return {
           ...state,
-          totalPrice: parseFloat(newTotal.toFixed(2))
+          totalPrice: parseFloat(newTotal.toFixed(2)),
+          totalItemsInCart: newTotalItemsInCart
         };
       }
     }

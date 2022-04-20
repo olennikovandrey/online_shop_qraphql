@@ -1,5 +1,5 @@
 export const GET_CATALOG = "GET_CATALOG";
-export const GET_SYMBOLS = "GET_SYMBOLS";
+export const GET_CURRENCY = "GET_CURRENCY";
 export const GET_PRODUCT_AVAILABLE = "GET_PRODUCT_AVAILABLE";
 export const NEW_TOTAL_PRICE = "NEW_TOTAL_PRICE";
 export const ADD_TO_CART = "ADD_TO_CART";

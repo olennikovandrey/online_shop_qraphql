@@ -48,8 +48,9 @@ class CategoryWrapper extends Component {
               <React.Fragment key={ item.id }>
                 <ProductCard
                   image={ item.gallery[0] }
+                  brand={item.brand}
                   name={ item.name }
-                  amount={ item.prices.filter(current => current.currency.symbol === currency)[0].amount }
+
                   currency={ currency }
                   id={ item.id }
                   shopData={ shopData }

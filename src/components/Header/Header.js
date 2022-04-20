@@ -3,14 +3,22 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import CartMini from "../CartMini/CartMini";
-import { changeCurrency, setNewTotalPrice } from "../../actions/cart";
+import client from "../../apollo";
+import { changeCurrency, setNewTotalPrice, getCurrency } from "../../actions/cart";
+import { GET_CURRENCY } from "../../services/queries";
 import "./header.css";
+
+async function currencyLoader() {
+  const { data } = await client.query({query: GET_CURRENCY} );
+  return data;
+}
 
 class Header extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isCartVisible: false
+      isCartVisible: false,
+      symbols: []
     };
     this.setCartVisible = this.setCartVisible.bind(this);
   }
@@ -20,15 +28,28 @@ class Header extends Component {
     this.props.setNewTotalPrice(value);
   };
 
-  setCartVisible() {
+  setCartVisible(event) {
+    event.stopPropagation();
     this.setState({
       isCartVisible: !this.state.isCartVisible
     });
     this.props.setBlur();
-  }
+  };
+
+  async loadCurrency() {
+    const data = await currencyLoader();
+    this.setState({
+      symbols: data.currencies
+    });
+  };
+
+  async componentDidMount() {
+    await this.loadCurrency();
+  };
 
   render() {
-    const { setCategoryName, total, currency, symbols, setBlur } = this.props;
+    const { setCategoryName, totalItemsInCart, currency, setBlur } = this.props,
+          { symbols } = this.state;
 
     return (
       <header className="header-wrapper">
@@ -39,28 +60,29 @@ class Header extends Component {
         </div>
         <Link to="/"><span className="logo"></span></Link>
         <div>
-          <select defaultValue={currency}>
+          <select defaultValue={ currency }>
             { symbols.map(item =>
               <option
                 onClick={ (event) => { this.handleClick(event.target.value); } }
-                key={ item.currency.symbol }
-                value={ item.currency.symbol }
+                key={ item.symbol }
+                value={ item.symbol }
               >
-                { item.currency.symbol } { item.currency.label }
+                { item.symbol } { item.label }
               </option>
             )}
           </select>
           <div className="cart-icon-wrapper" onClick={ (event) => this.setCartVisible(event) }>
             <span className="cart-icon"></span>
-            { total > 0 && <span className="cart-icon-total">{ total }</span> }
+            { totalItemsInCart > 0 && <span className="cart-icon-total">{ totalItemsInCart }</span> }
           </div>
         </div>
-        <CartMini
-          isCartVisible={ this.state.isCartVisible }
-          setCartVisible={ this.setCartVisible }
-          setCategoryName={ null }
-          setBlur={ setBlur }
-        />
+        { this.state.isCartVisible ?
+          <CartMini
+            setCartVisible={ this.setCartVisible }
+            setCategoryName={ null }
+            setBlur={ setBlur }
+          /> : null
+        }
       </header>
     );
   }
@@ -72,14 +94,15 @@ Header.propTypes = {
   changeCurrency: PropTypes.func,
   categoryName: PropTypes.string,
   symbols: PropTypes.array,
-  total: PropTypes.number,
+  totalItemsInCart: PropTypes.number,
   currency: PropTypes.string,
   setNewTotalPrice: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
+
   return {
-    total: state.addedItems.length,
+    totalItemsInCart: state.totalItemsInCart,
     symbols: state.symbols,
     currency: state.currency
   };
@@ -92,7 +115,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     setNewTotalPrice: (value) => {
       dispatch(setNewTotalPrice(value));
-    }
+    },
+    getCurrency: (value) => {
+      dispatch(getCurrency(value));
+    },
   };
 };
 
