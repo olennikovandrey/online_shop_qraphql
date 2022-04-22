@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import AttributeSelect from "../AttributeSelect/AttributeSelect";
-import { addToCart, removeItem } from "../../actions/cart";
+import { addToCart } from "../../actions/cart";
 import "./product-card.css";
 
 class ProductCard extends Component {
@@ -23,16 +23,13 @@ class ProductCard extends Component {
     });
   };
 
-  addItemToCart = (id) => {
-    this.props.addToCart(id);
-  };
-
-  removeItemFromCart = (id) => {
-    this.props.removeItem(id);
+  addItemToCart = (payload) => {
+    this.props.addToCart(payload);
   };
 
   render() {
-    const { image, name, brand, amount, currency, id, availableProducts, addedItems, shopData } = this.props,
+    const { image, name, brand, amount, currency, id, availableProducts, shopData } = this.props,
+          currentProduct = shopData[0].products.filter(item => item.id === id)[0],
           available = availableProducts.find(item => item.id === id),
           currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
 
@@ -44,21 +41,15 @@ class ProductCard extends Component {
             <span className="product-card-name">{brand} { name }</span>
             <span className="product-card-price">{ amount } { currency }</span>
           </Link>
-          { addedItems.find(item => item.id === id) === undefined ?
-            <div
-              className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
-              onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() :
-                        available === undefined ? null :
-                        () => this.addItemToCart(id)
-              }
-            >
-              <span className="tooltiptext">Is unavailable now</span>
-            </div> :
-            <div
-              className="remove-from-cart-btn"
-              onClick={ () => this.removeItemFromCart(id) }
-            />
-          }
+          <div
+            className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
+            onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() :
+                      available === undefined ? null :
+                      () => this.addItemToCart(currentProduct)
+            }
+          >
+            <span className="tooltiptext">Is unavailable now</span>
+          </div>
           {this.state.isAtrributeSelectVisible ?
           <AttributeSelect
             id={ id }
@@ -80,25 +71,20 @@ ProductCard.propTypes = {
   addToCart: PropTypes.func,
   removeItem: PropTypes.func,
   availableProducts: PropTypes.array,
-  addedItems: PropTypes.array,
   shopData: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
-    availableProducts: state.availableProducts,
-    addedItems: state.addedItems
+    availableProducts: state.availableProducts
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (id) => {
-      dispatch(addToCart(id));
-    },
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    addToCart: (payload) => {
+      dispatch(addToCart(payload));
     }
   };
 };

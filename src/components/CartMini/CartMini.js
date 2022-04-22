@@ -12,18 +12,18 @@ class CartMini extends Component {
   }
 
   cartMiniCloser(event) {
-    if(!event.target.matches(".cart-mini-wrapper, .remove-item-btn, .cart-mini-wrapper *")) {
+    if(!event.target.matches(".cart-mini-wrapper, .remove-item-btn, .cart-mini-wrapper *, header-wrapper, header-wrapper *")) {
       this.props.setCartVisible(event);
-    };
-  };
+    }
+  }
 
   componentDidMount() {
     document.addEventListener("click", this.cartMiniCloser);
-  };
+  }
 
   componentWillUnmount() {
     document.removeEventListener("click", this.cartMiniCloser);
-  };
+  }
 
   render() {
     const { setCartVisible, setBlur, totalPrice, addedItems, currency, totalItemsInCart } = this.props;
@@ -37,7 +37,8 @@ class CartMini extends Component {
           </div>
           { addedItems.map( item =>
             <CartMiniItem
-              key={ item.id }
+              key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
+              finder={ item.id + item.firstAttr }
               id={ item.id }
               setBlur={ setBlur }
             />

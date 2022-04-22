@@ -38,7 +38,8 @@ class Cart extends Component {
             <h2>CART, { bagQuantity } { bagQuantity === 1 ? "item" : "items" } </h2>
             { addedItems.map( item =>
               <CartItem
-                key={ item.id }
+                key={ item.id + item.firstAttr }
+                finder={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
                 id={ item.id }
               />)
             }

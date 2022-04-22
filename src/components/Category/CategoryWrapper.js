@@ -45,12 +45,13 @@ class CategoryWrapper extends Component {
           { shopData
             .filter(item => item.name === categoryName.toLowerCase())[0].products
             .map(item =>
-              <React.Fragment key={ item.id }>
+              <React.Fragment key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }>
                 <ProductCard
+                  finder={ item.id + item.firstAttr }
                   image={ item.gallery[0] }
                   brand={item.brand}
                   name={ item.name }
-
+                  amount={ item.prices.filter(el => el.currency.symbol === currency)[0].amount }
                   currency={ currency }
                   id={ item.id }
                   shopData={ shopData }

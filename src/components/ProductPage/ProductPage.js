@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper/core";
+import client from "../../apollo";
+import { GET_PRODUCT } from "../../services/queries";
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
 import Attributes from "../Attributes/Attributes";
@@ -20,14 +22,30 @@ class ProductPage extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      isBackgroundBlur: false
+      isBackgroundBlur: false,
+      currentProduct: []
     };
     this.setBlur = this.setBlur.bind(this);
     this.addAttrFnGeneral = this.addAttrFnGeneral.bind(this);
   }
 
-  addItemToCart = (id) => {
-    this.props.addToCart(id);
+  async productLoader() {
+    const id = this.props.match.params.id;
+    const { data } = await client.query({
+      query: GET_PRODUCT,
+      variables: { productId: id }
+    } );
+    return data;
+  }
+
+  addItemToCart = (payload) => {
+    this.props.addToCart(payload);
+    document.querySelectorAll(".selected-size").forEach(element => {
+      element.classList.remove("selected-size");
+    });
+    document.querySelectorAll(".selected-color").forEach(element => {
+      element.classList.remove("selected-color");
+    });
   };
 
   removeItemFromCart = (id) => {
@@ -40,11 +58,9 @@ class ProductPage extends Component {
       event.target.classList.toggle("selected-size");
     } else if (id.includes("#") && event.target.classList.contains("size")) {
       event.target.classList.toggle("selected-color");
-    } else if (event.target.classList.contains("disabled-size") ||
-               event.target.classList.contains("selected-size") ||
-               event.target.classList.contains("selected-color") ||
-               event.target.classList.contains("disabled-color")) {
-      return
+    } else if (event.target.classList.contains("selected-size") ||
+               event.target.classList.contains("selected-color")) {
+      return;
     }
   };
 
@@ -58,21 +74,22 @@ class ProductPage extends Component {
     return { __html: value };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const data = await this.productLoader();
     this.setState({
-      isLoaded: true
+      isLoaded: true,
+      currentProduct: data.product
     });
   }
 
   render() {
-    const { isLoaded, isBackgroundBlur } = this.state,
-          { currency, addedItems, availableProducts, shopData } = this.props,
-          catalog = JSON.parse(localStorage.getItem("shopData")),
-          currentProduct = catalog[0].products.filter(item => item.id === this.props.match.params.id)[0] || shopData[0].products.filter(item => item.id === this.props.match.params.id)[0],
-          currentAddedProduct = this.props.addedItems.filter( el => el.id === this.props.match.params.id)[0],
+
+    const { isLoaded, isBackgroundBlur, currentProduct } = this.state,
+          { currency, availableProducts } = this.props,
           availableItem = availableProducts.find(item => item.id === currentProduct.id);
 
-    if (isLoaded && catalog.length !== 0) {
+    if (isLoaded && currentProduct.length !== 0) {
       return (
         <>
           <Header
@@ -124,9 +141,7 @@ class ProductPage extends Component {
                         </p>
                         }
                         <Attributes
-                          currentAddedProduct={ currentAddedProduct }
                           attributes={ currentProduct.attributes[0] }
-                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
                           addAttrFnGeneral={ this.addAttrFnGeneral }
                           addAttrFnCurrent={this.props.addFirstAttribute}
                         />
@@ -138,9 +153,7 @@ class ProductPage extends Component {
                         </p>
                         }
                         <Attributes
-                          currentAddedProduct={ currentAddedProduct }
                           attributes={ currentProduct.attributes[1] }
-                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
                           addAttrFnGeneral={ this.addAttrFnGeneral }
                           addAttrFnCurrent={this.props.addSecondAttribute}
                         />
@@ -152,9 +165,7 @@ class ProductPage extends Component {
                         </p>
                         }
                         <Attributes
-                          currentAddedProduct={ currentAddedProduct }
                           attributes={ currentProduct.attributes[2] }
-                          addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
                           addAttrFnGeneral={ this.addAttrFnGeneral }
                           addAttrFnCurrent={this.props.addThirdAttribute}
                         />
@@ -163,19 +174,13 @@ class ProductPage extends Component {
                   }
                   <p className="product-price-title">PRICE:</p>
                   <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
-                  { addedItems.find(item => item.id === currentProduct.id) === undefined ?
-                    <div className="btn-toolkit-wrapper">
-                      <button
-                        className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                        onClick={ availableItem !== undefined ? () => this.addItemToCart(this.props.match.params.id) : null }>ADD TO CART
-                      </button>
-                      { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
-                    </div> :
+                  <div className="btn-toolkit-wrapper">
                     <button
-                      className="prod-page-add-btn"
-                      onClick={ availableItem !== undefined ? () => this.removeItemFromCart(this.props.match.params.id) : null }>REMOVE FROM CART
+                      className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
+                      onClick={ availableItem !== undefined ? () => this.addItemToCart(currentProduct) : null }>ADD TO CART
                     </button>
-                  }
+                    { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
+                  </div>
                   <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
                 </div>
               </div>
@@ -195,8 +200,6 @@ class ProductPage extends Component {
 
 ProductPage.propTypes = {
   match: PropTypes.object,
-  shopData: PropTypes.object,
-  addedItems: PropTypes.array,
   availableProducts: PropTypes.array,
   currency: PropTypes.string,
   addToCart: PropTypes.func,
@@ -209,18 +212,17 @@ ProductPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
-    addedItems: state.addedItems,
     availableProducts: state.availableProducts
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (id) => {
-      dispatch(addToCart(id));
+    addToCart: (payload) => {
+      dispatch(addToCart(payload));
     },
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    removeItem: (payload) => {
+      dispatch(removeItem(payload));
     },
     addFirstAttribute: (id) => {
       dispatch(addFirstAttribute(id));
@@ -234,4 +236,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);
+export default (connect(mapStateToProps, mapDispatchToProps)(ProductPage));

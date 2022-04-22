@@ -10,8 +10,8 @@ class AttributeSelect extends Component {
     super(props);
   }
 
-  addItemToCart = (id) => {
-    this.props.addToCart(id);
+  addItemToCart = (payload) => {
+    this.props.addToCart(payload);
     this.props.attributeSelectVisible();
   };
 
@@ -21,21 +21,17 @@ class AttributeSelect extends Component {
       event.target.classList.toggle("selected-size");
     } else if (id.includes("#") && event.target.classList.contains("size")) {
       event.target.classList.toggle("selected-color");
-    } else if (event.target.classList.contains("disabled-size") ||
-               event.target.classList.contains("selected-size") ||
-               event.target.classList.contains("selected-color") ||
-               event.target.classList.contains("disabled-color")) {
-      return
+    } else if (event.target.classList.contains("selected-size") ||
+               event.target.classList.contains("selected-color")) {
+      return;
     }
   };
 
   render() {
-    const { id, addedItems, addFirstAttribute, addSecondAttribute, addThirdAttribute, attributeSelectVisible } = this.props,
+    const { id, addFirstAttribute, addSecondAttribute, addThirdAttribute, attributeSelectVisible } = this.props,
           catalog = JSON.parse(localStorage.getItem("shopData")),
           currentProductUnfreeze = Object.assign( {}, catalog[0].products.filter(item => item.id === id)[0]),
-          currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [] },
-          currentAddedProduct = addedItems.filter( el => el.id === id)[0];
-          console.log({currentProduct})
+          currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
 
     return (
       <div className="attribute-select-wrapper">
@@ -52,9 +48,7 @@ class AttributeSelect extends Component {
               null }
             </p>
             <Attributes
-              currentAddedProduct={ currentAddedProduct }
               attributes={ currentProduct.attributes[0] }
-              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.firstAttr : undefined }
               addAttrFnGeneral={ this.addAttrFnGeneral }
               addAttrFnCurrent={ addFirstAttribute }
             />
@@ -66,9 +60,7 @@ class AttributeSelect extends Component {
             </p>
             }
             <Attributes
-              currentAddedProduct={ currentAddedProduct }
               attributes={ currentProduct.attributes[1] }
-              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.secondAttr : undefined }
               addAttrFnGeneral={ this.addAttrFnGeneral }
               addAttrFnCurrent={ addSecondAttribute }
             />
@@ -80,9 +72,7 @@ class AttributeSelect extends Component {
             </p>
             }
             <Attributes
-              currentAddedProduct={ currentAddedProduct }
               attributes={ currentProduct.attributes[2] }
-              addedProductAttributes={ currentAddedProduct ? currentAddedProduct.thirdAttr : undefined }
               addAttrFnGeneral={ this.addAttrFnGeneral }
               addAttrFnCurrent={ addThirdAttribute }
             />
@@ -92,7 +82,7 @@ class AttributeSelect extends Component {
         { currentProduct  ?
         <button
           className="attr-select-add-btn"
-          onClick={ () => this.addItemToCart(id) }>ADD TO CART
+          onClick={ () => this.addItemToCart(currentProduct) }>ADD TO CART
         </button> : null
         }
       </div>
@@ -118,8 +108,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (id) => {
-      dispatch(addToCart(id));
+    addToCart: (payload) => {
+      dispatch(addToCart(payload));
     },
     addFirstAttribute: (id) => {
       dispatch(addFirstAttribute(id));

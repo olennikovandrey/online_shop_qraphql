@@ -19,21 +19,21 @@ class CartMiniItem extends Component {
     });
   }
 
-  addCurrentQuantity = (id) => {
-    this.props.addQuantity(id);
+  addCurrentQuantity = (payload) => {
+    this.props.addQuantity(payload);
   };
 
-  removeCurrentQuantity = (id) => {
-    this.props.removeQuantity(id);
+  removeCurrentQuantity = (payload) => {
+    this.props.removeQuantity(payload);
   };
 
-  removeItemFromCart = (id) => {
-    this.props.removeItem(id);
+  removeItemFromCart = (payload) => {
+    this.props.removeItem(payload);
   };
 
   render() {
-    const { addedItems, id, currency } = this.props,
-          currentItem = addedItems.find(item => id === item.id);
+    const { addedItems, id, currency, finder } = this.props,
+          currentItem = addedItems.filter(item => finder === item.id + item.firstAttr)[0];
 
     return (
       <div className="cart-mini-item-wrapper">
@@ -67,9 +67,9 @@ class CartMiniItem extends Component {
         </div>
         <div className="item-counter-img-wrapper">
           <div>
-            <div className="counter-btn" onClick={ () => this.addCurrentQuantity(id) }>+</div>
-            <span>{ this.state.quantity }</span>
-            <div className="counter-btn" onClick={ () => this.removeCurrentQuantity(id) }>-</div>
+            <div className="counter-btn" onClick={ () => this.addCurrentQuantity(currentItem) }>+</div>
+            <span>{ currentItem.quantity }</span>
+            <div className="counter-btn" onClick={ () => this.removeCurrentQuantity(currentItem) }>-</div>
           </div>
           <Link to={ `id=${ id }` }>
             <img
@@ -79,7 +79,7 @@ class CartMiniItem extends Component {
               alt={ currentItem.name } />
           </Link>
           <span className="remove-item-btn"
-            onClick={ () => this.removeItemFromCart(id) }>
+            onClick={ () => this.removeItemFromCart(currentItem) }>
           </span>
         </div>
       </div>
@@ -91,6 +91,7 @@ CartMiniItem.propTypes = {
   addedItems: PropTypes.array,
   id: PropTypes.string,
   currency: PropTypes.string,
+  finder: PropTypes.string,
   addQuantity: PropTypes.func,
   removeQuantity: PropTypes.func,
   removeItem: PropTypes.func,
@@ -106,14 +107,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addQuantity: (id) => {
-      dispatch(addQuantity(id));
+    addQuantity: (payload) => {
+      dispatch(addQuantity(payload));
     },
-    removeQuantity: (id) => {
-      dispatch(removeQuantity(id));
+    removeQuantity: (payload) => {
+      dispatch(removeQuantity(payload));
     },
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    removeItem: (payload) => {
+      dispatch(removeItem(payload));
     }
   };
 };

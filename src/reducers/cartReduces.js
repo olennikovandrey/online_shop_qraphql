@@ -53,39 +53,46 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_TO_CART: {
-      const addedItem = state.catalog[0].products.find(item => item.id === action.id);
-      const copyAddedItem = Object.assign({}, addedItem);
-      let existedItem = state.addedItems.find(item => action.id === item.id);
-      if (existedItem) {
-        copyAddedItem.quantity += 1;
-        copyAddedItem.firstAttr = firstAttr;
-        copyAddedItem.secondAttr = secondAttr;
-        copyAddedItem.thirdAttr = thirdAttr;
-        firstAttr = [];
-        secondAttr = [];
-        thirdAttr = [];
-        return {
-          ...state,
-          totalPrice: state.totalPrice,
-          totalItemsInCart: state.totalItemsInCart + 1
-        };
-       } else {
-        copyAddedItem.quantity = 1;
-        copyAddedItem.firstAttr = firstAttr;
-        copyAddedItem.secondAttr = secondAttr;
-        copyAddedItem.thirdAttr = thirdAttr;
-        firstAttr = [];
-        secondAttr = [];
-        thirdAttr = [];
-        let newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+      const addedItem = Object.assign({}, action.payload);
+      let existedItem = state.addedItems.find(item => item.workID  === action.payload.id + firstAttr + secondAttr + thirdAttr);
 
-        localStorage.setItem("Cart", JSON.stringify([...state.addedItems, copyAddedItem]));
+      if (existedItem) {
+        let newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+        existedItem.quantity += 1;
+        addedItem.firstAttr = firstAttr;
+        addedItem.secondAttr = secondAttr;
+        addedItem.thirdAttr = thirdAttr;
+        firstAttr = [];
+        secondAttr = [];
+        thirdAttr = [];
+
         localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
         localStorage.setItem("totalItemsInCart", state.totalItemsInCart + 1);
 
         return {
           ...state,
-          addedItems: [...state.addedItems, copyAddedItem],
+          totalPrice: parseFloat(newTotal.toFixed(2)),
+          totalItemsInCart: state.totalItemsInCart + 1
+        };
+      } else {
+        console.log(2);
+        addedItem.quantity = 1;
+        addedItem.firstAttr = firstAttr;
+        addedItem.secondAttr = secondAttr;
+        addedItem.thirdAttr = thirdAttr;
+        addedItem.workID = addedItem.id + addedItem.firstAttr + addedItem.secondAttr + addedItem.thirdAttr;
+        firstAttr = [];
+        secondAttr = [];
+        thirdAttr = [];
+        let newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
+
+        localStorage.setItem("Cart", JSON.stringify([...state.addedItems, addedItem]));
+        localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
+        localStorage.setItem("totalItemsInCart", state.totalItemsInCart + 1);
+
+        return {
+          ...state,
+          addedItems: [...state.addedItems, addedItem],
           totalPrice: parseFloat(newTotal.toFixed(2)),
           totalItemsInCart: state.totalItemsInCart + 1
         };
@@ -93,16 +100,12 @@ const cartReducer = (state = initState, action) => {
     }
 
     case REMOVE_ITEM: {
-      let itemToRemove = state.addedItems.find(item => action.id === item.id);
-      let newItems = state.addedItems.filter(item => action.id !== item.id);
+      let itemToRemove = state.addedItems.find(item => JSON.stringify(action.payload) === JSON.stringify(item));
+      let newItems = state.addedItems.filter(item => action.payload !== item);
       let newTotal = state.totalPrice - (itemToRemove.prices.filter(item => item.currency.symbol === state.currency)[0].amount * itemToRemove.quantity);
       let newTotalItemsInCart = state.totalItemsInCart - itemToRemove.quantity;
-      itemToRemove.quantity = 0;
-      firstAttr = [];
-      secondAttr = [];
-      thirdAttr = [];
 
-      localStorage.setItem("Cart", JSON.stringify(state.addedItems.filter(item => item.id !== action.id)));
+      localStorage.setItem("Cart", JSON.stringify(newItems));
       localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
       localStorage.setItem("totalItemsInCart", state.totalItemsInCart - itemToRemove.quantity);
 
@@ -115,10 +118,11 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_QUANTITY: {
-      let currentItem = state.addedItems.find(item => item.id === action.id);
+      let currentItem = action.payload;
       currentItem.quantity += 1;
       let priceToAdd = currentItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
 
+      localStorage.setItem("Cart", JSON.stringify(state.addedItems));
       localStorage.setItem("TotalPrice", JSON.stringify(parseFloat((state.totalPrice + priceToAdd).toFixed(2))));
       localStorage.setItem("totalItemsInCart", state.totalItemsInCart + 1);
 
@@ -130,11 +134,11 @@ const cartReducer = (state = initState, action) => {
     }
 
     case REMOVE_QUANTITY: {
-      let currentItem = state.addedItems.find(item => item.id === action.id);
+      let currentItem = state.addedItems.find(item => JSON.stringify(item) === JSON.stringify(action.payload));
       let priceToRemove = currentItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;
 
       if (currentItem.quantity === 1) {
-        let newItems = state.addedItems.filter(item => item.id !== action.id);
+        let newItems = state.addedItems.filter(item => JSON.stringify(item) !== JSON.stringify(action.payload));
         let newTotal = state.totalPrice - priceToRemove;
         let newTotalItemsInCart = state.totalItemsInCart - 1;
         currentItem.quantity = 0;
@@ -193,48 +197,30 @@ const cartReducer = (state = initState, action) => {
     }
 
     case ADD_FIRST_ATTRIBUTE: {
-      if (!firstAttr.includes(action.id) && !firstAttr.length) {
-        firstAttr.push( action.id);
-        return {
-          ...state
-        };
-      } else if (firstAttr.includes(action.id) && firstAttr.length) {
-        firstAttr.pop();
-        return {
-          ...state
-        };
-      }
-      break;
+      firstAttr.pop();
+      firstAttr.push( action.id);
+      console.log(firstAttr);
+      return {
+        ...state
+      };
     }
 
     case ADD_SECOND_ATTRIBUTE: {
-      if (!secondAttr.includes(action.value) && !secondAttr.length) {
-        secondAttr.push( action.value);
-        return {
-          ...state
-        };
-      } else if (secondAttr.includes(action.value) && secondAttr.length) {
-        secondAttr.pop();
-        return {
-          ...state
-        };
-      }
-      break;
+      secondAttr = [];
+      secondAttr.push( action.value);
+      console.log(secondAttr);
+      return {
+        ...state
+      };
     }
 
     case ADD_THIRD_ATTRIBUTE: {
-      if (!thirdAttr.includes(action.value) && !thirdAttr.length) {
-        thirdAttr.push( action.value);
-        return {
-          ...state
-        };
-      } else if (secondAttr.includes(action.value) && thirdAttr.length) {
-        thirdAttr.pop();
-        return {
-          ...state
-        };
-      }
-      break;
+      thirdAttr = [];
+      thirdAttr.push( action.value);
+      console.log(thirdAttr);
+      return {
+        ...state
+      };
     }
 
     default: {

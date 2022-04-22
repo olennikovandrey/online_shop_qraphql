@@ -9,7 +9,7 @@ class Attributes extends Component {
   }
 
   render() {
-    const { currentAddedProduct, attributes, addedProductAttributes, addAttrFnGeneral, addAttrFnCurrent } = this.props;
+    const { attributes, addAttrFnGeneral, addAttrFnCurrent } = this.props;
 
     return (
       <>
@@ -17,11 +17,7 @@ class Attributes extends Component {
           item =>
             <div
               key={ item.id }
-              className={
-                currentAddedProduct === undefined ? "size" :
-                  addedProductAttributes[0] && addedProductAttributes[0][0] === "#" && addedProductAttributes.includes(item.value) ? "selected-color" :
-                    addedProductAttributes.includes(item.value) ? "selected-size" : "disabled-color"
-              }
+              className="size"
               style={ { background: item.value } }
               onClick={ (event) => addAttrFnGeneral(event, item.value, addAttrFnCurrent) }>
               { !item.value.includes("#") ? item.value : null }
@@ -36,9 +32,7 @@ class Attributes extends Component {
 }
 
 Attributes.propTypes = {
-  currentAddedProduct: PropTypes.object,
   attributes: PropTypes.object,
-  addedProductAttributes: PropTypes.array,
   addAttrFnGeneral: PropTypes.func,
   addAttrFnCurrent: PropTypes.func
 };

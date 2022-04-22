@@ -102,9 +102,6 @@ const mapDispatchToProps = dispatch => {
     getCatalog: (payload) => {
       dispatch(getCatalog(payload));
     },
-    getSymbols: (payload) => {
-      dispatch(getSymbols(payload));
-    },
     getProductAvailable: (payload) => {
       dispatch(getProductAvailable(payload));
     },

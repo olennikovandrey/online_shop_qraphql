@@ -34,18 +34,18 @@ class Header extends Component {
       isCartVisible: !this.state.isCartVisible
     });
     this.props.setBlur();
-  };
+  }
 
   async loadCurrency() {
     const data = await currencyLoader();
     this.setState({
       symbols: data.currencies
     });
-  };
+  }
 
   async componentDidMount() {
     await this.loadCurrency();
-  };
+  }
 
   render() {
     const { setCategoryName, totalItemsInCart, currency, setBlur } = this.props,

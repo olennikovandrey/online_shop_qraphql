@@ -4,6 +4,7 @@ const endPointURL = "http://localhost:4000/graphql";
 const client = new ApolloClient({
   uri: endPointURL,
   cache: new InMemoryCache(),
+  connectToDevTools: true
 });
 
 export default client;

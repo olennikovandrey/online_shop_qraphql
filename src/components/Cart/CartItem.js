@@ -15,30 +15,30 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
+      quantity: this.props.addedItems.find(item => this.props.finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr).quantity
     };
     store.subscribe(() => {
       this.setState({
-        quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
+        quantity: this.props.addedItems.find(item => this.props.finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr).quantity
       });
     });
   }
 
-  addCurrentQuantity = (id) => {
-    this.props.addQuantity(id);
+  addCurrentQuantity = (payload) => {
+    this.props.addQuantity(payload);
   };
 
-  removeCurrentQuantity = (id) => {
-    this.props.removeQuantity(id);
+  removeCurrentQuantity = (payload) => {
+    this.props.removeQuantity(payload);
   };
 
-  removeItemFromCart = (id) => {
-    this.props.removeItem(id);
+  removeItemFromCart = (payload) => {
+    this.props.removeItem(payload);
   };
 
   render() {
-    const { id, currency, addedItems } = this.props,
-          currentItem = addedItems.find(item => id === item.id);
+    const { id, currency, addedItems, finder } = this.props,
+          currentItem = addedItems.find(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr);
 
     return (
       <>
@@ -84,9 +84,9 @@ class CartItem extends Component {
           </div>
           <div className="cart-item-btns-img-wrapper">
             <div className="btns-wrapper">
-              <div className="cart-counter-btn" onClick={ () => this.addCurrentQuantity(id) }>+</div>
+              <div className="cart-counter-btn" onClick={ () => this.addCurrentQuantity(currentItem) }>+</div>
               <span>{ this.state.quantity }</span>
-              <div className="cart-counter-btn" onClick={ () => this.removeCurrentQuantity(id) }>-</div>
+              <div className="cart-counter-btn" onClick={ () => this.removeCurrentQuantity(currentItem) }>-</div>
             </div>
             { currentItem.gallery.length > 1 ?
               <Swiper
@@ -109,7 +109,7 @@ class CartItem extends Component {
               </Link>
             }
             <span className="remove-item-btn"
-              onClick={ () => this.removeItemFromCart(id) }>
+              onClick={ () => this.removeItemFromCart(currentItem) }>
             </span>
           </div>
         </section>
@@ -121,6 +121,7 @@ class CartItem extends Component {
 CartItem.propTypes = {
   id: PropTypes.string,
   currency: PropTypes.string,
+  finder: PropTypes.string,
   addedItems: PropTypes.array,
   addQuantity: PropTypes.func,
   removeQuantity: PropTypes.func,
@@ -136,14 +137,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addQuantity: (id) => {
-      dispatch(addQuantity(id));
+    addQuantity: (payload) => {
+      dispatch(addQuantity(payload));
     },
-    removeQuantity: (id) => {
-      dispatch(removeQuantity(id));
+    removeQuantity: (payload) => {
+      dispatch(removeQuantity(payload));
     },
-    removeItem: (id) => {
-      dispatch(removeItem(id));
+    removeItem: (payload) => {
+      dispatch(removeItem(payload));
     }
   };
 };

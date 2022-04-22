@@ -40,31 +40,31 @@ export const setNewTotalPrice = () => {
   };
 };
 
-export const addToCart = id => {
+export const addToCart = payload => {
   return {
     type: ADD_TO_CART,
-    id
+    payload
   };
 };
 
-export const removeItem = id => {
+export const removeItem = payload => {
   return {
     type: REMOVE_ITEM,
-    id
+    payload
   };
 };
 
-export const addQuantity = id => {
+export const addQuantity = payload => {
   return {
     type: ADD_QUANTITY,
-    id
+    payload
   };
 };
 
-export const removeQuantity = id => {
+export const removeQuantity = payload => {
   return {
     type: REMOVE_QUANTITY,
-    id
+    payload
   };
 };
 
