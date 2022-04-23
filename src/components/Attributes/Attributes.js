@@ -1,12 +1,10 @@
+import { addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
+
 
 class Attributes extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { attributes, addAttrFnGeneral, addAttrFnCurrent } = this.props;
@@ -22,8 +20,7 @@ class Attributes extends Component {
               onClick={ (event) => addAttrFnGeneral(event, item.value, addAttrFnCurrent) }>
               { !item.value.includes("#") ? item.value : null }
             </div>
-          )
-          : null
+        ) : null
         }
         </div>
       </>

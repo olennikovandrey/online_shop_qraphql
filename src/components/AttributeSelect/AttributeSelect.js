@@ -1,15 +1,11 @@
+import Attributes from "../Attributes/Attributes";
+import { addToCart, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Attributes from "../Attributes/Attributes";
-import { addToCart, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import "./attribute-select.css";
 
 class AttributeSelect extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   addItemToCart = (payload) => {
     this.props.addToCart(payload);
     this.props.attributeSelectVisible();
@@ -29,9 +25,9 @@ class AttributeSelect extends Component {
 
   render() {
     const { id, addFirstAttribute, addSecondAttribute, addThirdAttribute, attributeSelectVisible } = this.props,
-          catalog = JSON.parse(localStorage.getItem("shopData")),
-          currentProductUnfreeze = Object.assign( {}, catalog[0].products.filter(item => item.id === id)[0]),
-          currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
+      catalog = JSON.parse(localStorage.getItem("shopData")),
+      currentProductUnfreeze = Object.assign( {}, catalog[0].products.filter(item => item.id === id)[0]),
+      currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
 
     return (
       <div className="attribute-select-wrapper">
@@ -43,9 +39,10 @@ class AttributeSelect extends Component {
         { currentProduct.attributes ?
           <div className="available-sizes-wrapper">
             <p className="product-sizes-title">
-              { currentProduct.attributes.length !== 0 ?
-              currentProduct.attributes[0].name.toUpperCase() + ":" :
-              null }
+              { currentProduct.attributes[0].length !== 0 ?
+                currentProduct.attributes[0].name.toUpperCase() + ":" :
+                null
+              }
             </p>
             <Attributes
               attributes={ currentProduct.attributes[0] }
@@ -55,8 +52,9 @@ class AttributeSelect extends Component {
             { currentProduct.attributes[1] &&
             <p className="product-sizes-title">
               { currentProduct.attributes[1].length !== 0 ?
-              currentProduct.attributes[1].name.toUpperCase() + ":" :
-              null }
+                currentProduct.attributes[1].name.toUpperCase() + ":" :
+                null
+              }
             </p>
             }
             <Attributes
@@ -67,8 +65,9 @@ class AttributeSelect extends Component {
             { currentProduct.attributes[2] &&
             <p className="product-sizes-title">
               { currentProduct.attributes[2].length !== 0 ?
-              currentProduct.attributes[2].name.toUpperCase() + ":" :
-              null }
+                currentProduct.attributes[2].name.toUpperCase() + ":" :
+                null
+              }
             </p>
             }
             <Attributes
@@ -80,10 +79,10 @@ class AttributeSelect extends Component {
           null
         }
         { currentProduct  ?
-        <button
-          className="attr-select-add-btn"
-          onClick={ () => this.addItemToCart(currentProduct) }>ADD TO CART
-        </button> : null
+          <button
+            className="attr-select-add-btn"
+            onClick={ () => this.addItemToCart(currentProduct) }>ADD TO CART
+          </button> : null
         }
       </div>
     );

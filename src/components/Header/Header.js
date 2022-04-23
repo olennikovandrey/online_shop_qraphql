@@ -1,15 +1,15 @@
+import CartMini from "../CartMini/CartMini";
+import client from "../../apollo";
+import { changeCurrency, setNewTotalPrice, getCurrency, setCategory } from "../../actions/cart";
+import { GET_CURRENCY_CATEGORY } from "../../services/queries";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import CartMini from "../CartMini/CartMini";
-import client from "../../apollo";
-import { changeCurrency, setNewTotalPrice, getCurrency } from "../../actions/cart";
-import { GET_CURRENCY } from "../../services/queries";
 import "./header.css";
 
 async function currencyLoader() {
-  const { data } = await client.query({query: GET_CURRENCY} );
+  const { data } = await client.query({query: GET_CURRENCY_CATEGORY} );
   return data;
 }
 
@@ -18,7 +18,8 @@ class Header extends Component {
     super(props);
     this.state = {
       isCartVisible: false,
-      symbols: []
+      symbols: [],
+      categories: []
     };
     this.setCartVisible = this.setCartVisible.bind(this);
   }
@@ -28,6 +29,10 @@ class Header extends Component {
     this.props.setNewTotalPrice(value);
   };
 
+  setCategoryName(value) {
+    this.props.setCategory(value);
+  }
+
   setCartVisible(event) {
     event.stopPropagation();
     this.setState({
@@ -36,27 +41,33 @@ class Header extends Component {
     this.props.setBlur();
   }
 
-  async loadCurrency() {
+  async loadData() {
     const data = await currencyLoader();
     this.setState({
-      symbols: data.currencies
+      symbols: data.currencies,
+      categories: data.categories
     });
   }
 
   async componentDidMount() {
-    await this.loadCurrency();
+    await this.loadData();
   }
 
   render() {
-    const { setCategoryName, totalItemsInCart, currency, setBlur } = this.props,
-          { symbols } = this.state;
+    const { totalItemsInCart, currency, setBlur } = this.props,
+      { symbols, categories } = this.state;
 
     return (
       <header className="header-wrapper">
         <div>
-          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>ALL</nav>
-          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>CLOTHES</nav>
-          <nav onClick={ (event) => { setCategoryName(event.target.textContent); } }>TECH</nav>
+          { categories.map(item =>
+            <nav
+              key={ item.name }
+              onClick={ (event) => { this.setCategoryName(event.target.textContent); } }
+            >
+              <Link to="/">{ item.name.toUpperCase() }</Link>
+            </nav>
+          ) }
         </div>
         <Link to="/"><span className="logo"></span></Link>
         <div>
@@ -67,9 +78,9 @@ class Header extends Component {
                 key={ item.symbol }
                 value={ item.symbol }
               >
-                { item.symbol } { item.label }
+                { item.symbol }
               </option>
-            )}
+            ) }
           </select>
           <div className="cart-icon-wrapper" onClick={ (event) => this.setCartVisible(event) }>
             <span className="cart-icon"></span>
@@ -96,7 +107,8 @@ Header.propTypes = {
   symbols: PropTypes.array,
   totalItemsInCart: PropTypes.number,
   currency: PropTypes.string,
-  setNewTotalPrice: PropTypes.func
+  setNewTotalPrice: PropTypes.func,
+  setCategory: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -104,7 +116,8 @@ const mapStateToProps = (state) => {
   return {
     totalItemsInCart: state.totalItemsInCart,
     symbols: state.symbols,
-    currency: state.currency
+    currency: state.currency,
+
   };
 };
 
@@ -118,6 +131,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     getCurrency: (value) => {
       dispatch(getCurrency(value));
+    },
+    setCategory: (value) => {
+      dispatch(setCategory(value));
     },
   };
 };

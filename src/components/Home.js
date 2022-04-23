@@ -18,10 +18,8 @@ class Home extends Component {
     this.state ={
       isLoaded: false,
       isBackgroundBlur: false,
-      categoryName: "ALL",
       shopData: [],
     };
-    this.setCategoryName = this.setCategoryName.bind(this);
     this.loadShopData = this.loadShopData.bind(this);
     this.setBlur = this.setBlur.bind(this);
   }
@@ -46,12 +44,6 @@ class Home extends Component {
     localStorage.setItem("availableProducts", JSON.stringify(data.categories[0].products.filter(item => item.inStock)));
   }
 
-  setCategoryName(value) {
-    this.setState({
-      categoryName: value
-    });
-  }
-
   setBlur() {
     this.setState({
       isBackgroundBlur: !this.state.isBackgroundBlur
@@ -63,7 +55,7 @@ class Home extends Component {
   }
 
   render() {
-    const { categoryName, shopData, isLoaded, isBackgroundBlur } = this.state;
+    const { shopData, isLoaded, isBackgroundBlur } = this.state;
 
     return (
       <div>
@@ -72,7 +64,6 @@ class Home extends Component {
           setBlur={this.setBlur}
         />
         <CategoryWrapper
-          categoryName={categoryName}
           shopData={shopData}
           isLoaded={isLoaded}
           isBackgroundBlur={isBackgroundBlur}

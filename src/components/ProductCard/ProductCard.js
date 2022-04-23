@@ -1,9 +1,9 @@
+import AttributeSelect from "../AttributeSelect/AttributeSelect";
+import { addToCart } from "../../actions/cart";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import AttributeSelect from "../AttributeSelect/AttributeSelect";
-import { addToCart } from "../../actions/cart";
 import "./product-card.css";
 
 class ProductCard extends Component {
@@ -29,9 +29,9 @@ class ProductCard extends Component {
 
   render() {
     const { image, name, brand, amount, currency, id, availableProducts, shopData } = this.props,
-          currentProduct = shopData[0].products.filter(item => item.id === id)[0],
-          available = availableProducts.find(item => item.id === id),
-          currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
+      currentProduct = shopData[0].products.filter(item => item.id === id)[0],
+      available = availableProducts.find(item => item.id === id),
+      currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
 
     return (
       <>
@@ -44,17 +44,18 @@ class ProductCard extends Component {
           <div
             className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
             onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() :
-                      available === undefined ? null :
-                      () => this.addItemToCart(currentProduct)
+              available === undefined ? null :
+                () => this.addItemToCart(currentProduct)
             }
           >
-            <span className="tooltiptext">Is unavailable now</span>
+            { available !== undefined ? null : <span className="out-label">Out of stock</span> }
           </div>
-          {this.state.isAtrributeSelectVisible ?
-          <AttributeSelect
-            id={ id }
-            attributeSelectVisible={ this.attributeSelectVisible }
-          /> : null }
+          { this.state.isAtrributeSelectVisible ?
+            <AttributeSelect
+              id={ id }
+              attributeSelectVisible={ this.attributeSelectVisible }
+            /> : null
+          }
         </div>
       </>
     );

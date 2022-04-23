@@ -1,11 +1,14 @@
+import CartAttributes from "./CartAttributes";
+import { store } from "../../index";
+import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation } from "swiper/core";
-import { store } from "../../index";
-import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
+
+
 import "./styles/cart.css";
 import "./styles/swiper.css";
 
@@ -38,7 +41,7 @@ class CartItem extends Component {
 
   render() {
     const { id, currency, addedItems, finder } = this.props,
-          currentItem = addedItems.find(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr);
+      currentItem = addedItems.find(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr);
 
     return (
       <>
@@ -55,30 +58,25 @@ class CartItem extends Component {
             </span>
             <div className="sizes-wrapper">
               { currentItem.firstAttr.length > 0 ?
-                <div className="cart-item-attribute-wrapper">
-                  <label className="cart-item-attribute-label">{ currentItem.attributes[0].name }</label>
-                  <div className="cart-item-color-size">
-                    { currentItem.firstAttr[0] }
-                  </div>
-                </div> :
-                null }
-              { currentItem.secondAttr.length > 0 ?
-                <div className="cart-item-attribute-wrapper">
-                  <label className="cart-item-attribute-label">{ currentItem.attributes[1].name }</label>
-                  <div className="cart-item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
-                    { !currentItem.secondAttr[0].includes("#") ? currentItem.secondAttr[0] : null }
-                  </div>
-                </div> :
-                null
+                <CartAttributes
+                  currentItem={currentItem}
+                  attr={currentItem.firstAttr}
+                  currentAttributes={ currentItem.attributes[0] }
+                /> : null
               }
-              { currentItem.thirdAttr.length > 0  ?
-                <div className="cart-item-attribute-wrapper">
-                  <label className="cart-item-attribute-label">{ currentItem.attributes[2].name }</label>
-                  <div className="cart-item-color-size">
-                    { !currentItem.thirdAttr[0].includes("#") ? currentItem.thirdAttr[0] : null }
-                  </div>
-                </div> :
-                null
+              { currentItem.secondAttr.length > 0 ?
+                <CartAttributes
+                  currentItem={currentItem}
+                  attr={currentItem.secondAttr}
+                  currentAttributes={ currentItem.attributes[1] }
+                /> : null
+              }
+              { currentItem.thirdAttr.length > 0 ?
+                <CartAttributes
+                  currentItem={currentItem}
+                  attr={currentItem.thirdAttr}
+                  currentAttributes={ currentItem.attributes[2] }
+                /> : null
               }
             </div>
           </div>
@@ -88,29 +86,33 @@ class CartItem extends Component {
               <span>{ this.state.quantity }</span>
               <div className="cart-counter-btn" onClick={ () => this.removeCurrentQuantity(currentItem) }>-</div>
             </div>
-            { currentItem.gallery.length > 1 ?
-              <Swiper
-                navigation={ true }
-                effect={ "cube" }
-                slidesPerView={ 1 }
-                loop={ true }
-                mousewheel={ true }
-              >
-                {currentItem.gallery.map((item) =>
-                  <SwiperSlide key={ item }>
-                    <Link to={ `id=${ id }` }>
-                      <img className="cart-item-img" src={ item } alt={ currentItem.name }></img>
-                    </Link>
-                  </SwiperSlide>
-                )}
-              </Swiper> :
-              <Link to={ `id=${ id }` }>
-                <img className="cart-item-img" src={currentItem.gallery[0]} alt={currentItem.name}></img>
-              </Link>
-            }
-            <span className="remove-item-btn"
-              onClick={ () => this.removeItemFromCart(currentItem) }>
-            </span>
+            <div className="cart-img-wrapper">
+              { currentItem.gallery.length > 1 ?
+                <Swiper
+                  navigation={ true }
+                  effect={ "cube" }
+                  loop={ true }
+                  mousewheel={ true }
+                  slidesPerView={ "auto" }
+                  spaceBetween={ 150 }
+                  centeredSlides={ true }
+                >
+                  {currentItem.gallery.map((item) =>
+                    <SwiperSlide key={ item }>
+                      <Link to={ `id=${ id }` }>
+                        <img className="cart-item-img" src={ item } alt={ currentItem.name }></img>
+                      </Link>
+                    </SwiperSlide>
+                  )}
+                </Swiper> :
+                <Link to={ `id=${ id }` }>
+                  <img className="cart-item-img" src={currentItem.gallery[0]} alt={currentItem.name}></img>
+                </Link>
+              }
+              <span className="cart-remove-item-btn"
+                onClick={ () => this.removeItemFromCart(currentItem) }>
+              </span>
+            </div>
           </div>
         </section>
       </>

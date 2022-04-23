@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../Loader/Loader";
 import { styles } from "../../assets/styles/styles";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import "./category.css";
 
 class CategoryWrapper extends Component {
@@ -26,9 +26,9 @@ class CategoryWrapper extends Component {
 
   render() {
     const { isOverflow, isShowMoreBtn } = this.state,
-          { isLoaded, categoryName, shopData, currency, isBackgroundBlur } = this.props;
+      { isLoaded, categoryName, shopData, currency, isBackgroundBlur } = this.props;
 
-  if (!isLoaded) {
+    if (!isLoaded) {
       return (
         <section style={ isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
           <span className="category-name">{ categoryName }</span>
@@ -42,22 +42,22 @@ class CategoryWrapper extends Component {
         <section style={ isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
           <span className="category-name">{ categoryName }</span>
           <div className={ `${ isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper" }` }>
-          { shopData
-            .filter(item => item.name === categoryName.toLowerCase())[0].products
-            .map(item =>
-              <React.Fragment key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }>
-                <ProductCard
-                  finder={ item.id + item.firstAttr }
-                  image={ item.gallery[0] }
-                  brand={item.brand}
-                  name={ item.name }
-                  amount={ item.prices.filter(el => el.currency.symbol === currency)[0].amount }
-                  currency={ currency }
-                  id={ item.id }
-                  shopData={ shopData }
-                />
-              </React.Fragment>
-            )}
+            { shopData
+              .filter(item => item.name === categoryName.toLowerCase())[0].products
+              .map(item =>
+                <React.Fragment key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }>
+                  <ProductCard
+                    finder={ item.id + item.firstAttr }
+                    image={ item.gallery[0] }
+                    brand={item.brand}
+                    name={ item.name }
+                    amount={ item.prices.filter(el => el.currency.symbol === currency)[0].amount }
+                    currency={ currency }
+                    id={ item.id }
+                    shopData={ shopData }
+                  />;
+                </React.Fragment>
+              )};;
           </div>
           { shopData
             .filter(item => item.name === categoryName.toLowerCase())[0].products.length > 6 &&
@@ -79,7 +79,8 @@ CategoryWrapper.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    currency: state.currency
+    currency: state.currency,
+    categoryName: state.categoryName
   };
 };
 

@@ -1,9 +1,9 @@
+import CartItem from "./CartItem";
+import Header from "../Header/Header";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import Header from "../Header/Header";
-import CartItem from "./CartItem";
 import "./styles/cart.css";
 import "./styles/swiper.css";
 
@@ -23,26 +23,31 @@ class Cart extends Component {
   }
 
   render() {
-    const { addedItems, bagQuantity, currency, totalPrice } = this.props;
+    const { addedItems, totalItemsInCart, currency, totalPrice } = this.props;
 
     return (
       <>
-        <Header setBlur={ this.setBlur } />
+        <Header
+          setBlur={ this.setBlur }
+        />
         { addedItems.length > 0 ?
           <section
-          style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
-          className="cart-wrapper">
+            style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
+            className="cart-wrapper"
+          >
             <Link to="/">
-              <span className="homelink">HOMEPAGE</span>
+              <span className="cart-homelink">HOMEPAGE</span>
             </Link>
-            <h2>CART, { bagQuantity } { bagQuantity === 1 ? "item" : "items" } </h2>
-            { addedItems.map( item =>
-              <CartItem
-                key={ item.id + item.firstAttr }
-                finder={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
-                id={ item.id }
-              />)
-            }
+            <h2>CART, { totalItemsInCart } { totalItemsInCart === 1 ? "item" : "items" } </h2>
+            <div>
+              { addedItems.map( item =>
+                <CartItem
+                  key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
+                  finder={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
+                  id={ item.id }
+                />)
+              }
+            </div>
             <div className="row-wrapper">
               <h2>Total</h2>
               <h2>{ currency } { totalPrice }</h2>
@@ -60,8 +65,9 @@ class Cart extends Component {
 
 Cart.propTypes = {
   addedItems: PropTypes.array,
-  bagQuantity: PropTypes.number,
+  totalItemsInCart: PropTypes.number,
   currency: PropTypes.string,
+  categoryName: PropTypes.string,
   totalPrice: PropTypes.number
 };
 
@@ -69,9 +75,10 @@ Cart.propTypes = {
 const mapStateToProps = (state) => {
   return {
     addedItems: state.addedItems,
-    bagQuantity: state.addedItems.length,
+    totalItemsInCart: state.totalItemsInCart,
     totalPrice: state.totalPrice,
-    currency: state.currency
+    currency: state.currency,
+    categoryName: state.categoryName
   };
 };
 

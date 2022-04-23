@@ -137,35 +137,6 @@
   content: "Selected";
 }
 
-.disabled-size {
-  width: 63px;
-  height: 45px;
-  line-height: 40px;
-  border: 1px solid #000;
-  background-color: #4d474780;
-  color: #000;
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: 400;
-  text-align: center;
-  margin: 0 12px 40px 0;
-  cursor: not-allowed;
-}
-
-.disabled-color {
-  width: 63px;
-  height: 45px;
-  line-height: 40px;
-  border: 1px solid #000;
-  background-color: #4d474780;
-  color: #000;
-  font-family: "Source Sans Pro", sans-serif;
-  font-weight: 400;
-  text-align: center;
-  margin: 0 12px 40px 0;
-  cursor: not-allowed;
-  filter: brightness(0.4);
-}
-
 .product-price-title {
   display: block;
   width: 100%;
@@ -215,26 +186,4 @@
   line-height: calc(0.6em + 1.3vmin);
   font-size: calc(0.2em + 1.3vmin);
   font-weight: 400;
-}
-
-.btn-toolkit-wrapper {
-  position: relative;
-}
-
-.tooltiptext-prod-page {
-  visibility: hidden;
-  width: 120px;
-  background-color: #5c615d;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute;
-  bottom: 43px;
-  right: -54px;
-  transition: all 0.3s ease-in-out;
-}
-
-.btn-toolkit-wrapper:hover .tooltiptext-prod-page {
-  visibility: visible;
 }

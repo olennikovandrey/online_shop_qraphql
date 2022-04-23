@@ -1,8 +1,9 @@
+import CartMiniItem from "./CartMiniItem";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import CartMiniItem from "./CartMiniItem";
+
 import "./cart-mini.css";
 
 class CartMini extends Component {
@@ -36,9 +37,8 @@ class CartMini extends Component {
             <span className="close-btn" onClick={ setCartVisible }></span>
           </div>
           { addedItems.map( item =>
-            <CartMiniItem
-              key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
-              finder={ item.id + item.firstAttr }
+            <CartMiniItem key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
+              finder={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }
               id={ item.id }
               setBlur={ setBlur }
             />

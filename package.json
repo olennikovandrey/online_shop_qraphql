@@ -23,13 +23,8 @@
     "es": "eslint --ext .js,.jsx .",
     "es:fix": "eslint --fix --ext .js,.jsx .",
     "style": "stylelint **/*.css",
-    "style:fix": "stylelint **/*.css --fix"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "style:fix": "stylelint **/*.css --fix",
+    "pretty": "prettier --write src/** --check"
   },
   "browserslist": {
     "production": [

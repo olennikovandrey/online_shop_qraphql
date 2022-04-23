@@ -1,9 +1,10 @@
+import CartMiniAttributes from "./CartMiniAttributes";
+import { store } from "../../index";
+import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { store } from "../../index";
-import { addQuantity, removeQuantity, removeItem } from "../../actions/cart";
 import "./cart-mini.css";
 
 class CartMiniItem extends Component {
@@ -33,35 +34,37 @@ class CartMiniItem extends Component {
 
   render() {
     const { addedItems, id, currency, finder } = this.props,
-          currentItem = addedItems.filter(item => finder === item.id + item.firstAttr)[0];
+      currentItem = addedItems.filter(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr)[0];
 
     return (
       <div className="cart-mini-item-wrapper">
         <div className="item-description-price-size-wrapper">
           <div>
-            <span className="item-description">{ currentItem.brand }</span>
-            <span className="item-description">{ currentItem.name }</span>
+            <span className="cart-mini-item-description">{ currentItem.brand }</span>
+            <span className="cart-mini-item-description">{ currentItem.name }</span>
           </div>
-          <span className="item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span><br/>
-          <div className="sizes-wrapper">
+          <span className="cart-mini-item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span><br/>
+          <div className="cart-mini-sizes-wrapper">
             { currentItem.firstAttr.length > 0 ?
-              <div className="item-color-size">
-                { currentItem.firstAttr[0].substring(0, 3) }
-              </div> :
-              null
+              <CartMiniAttributes
+                currentItem={currentItem}
+                attr={currentItem.firstAttr}
+                currentAttributes={ currentItem.attributes[0] }
+              /> : null
             }
             { currentItem.secondAttr.length > 0 ?
-              <div className="item-color-size" style={ { backgroundColor: currentItem.secondAttr[0] } }>
-                { !currentItem.secondAttr[0].includes("#") ?
-                  currentItem.secondAttr[0] : null
-                }
-              </div> : null
+              <CartMiniAttributes
+                currentItem={currentItem}
+                attr={currentItem.secondAttr}
+                currentAttributes={ currentItem.attributes[1] }
+              /> : null
             }
-            { currentItem.thirdAttr.length > 0  ?
-              <div className="item-color-size">
-                { currentItem.thirdAttr[0].substring(0, 3) }
-              </div> :
-              null
+            { currentItem.thirdAttr.length > 0 ?
+              <CartMiniAttributes
+                currentItem={currentItem}
+                attr={currentItem.thirdAttr}
+                currentAttributes={ currentItem.attributes[2] }
+              /> : null
             }
           </div>
         </div>

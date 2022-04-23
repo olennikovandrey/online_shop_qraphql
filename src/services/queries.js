@@ -66,8 +66,11 @@ const GET_PRODUCT = gql`
 
 `;
 
-const GET_CURRENCY = gql`
-  query {
+const GET_CURRENCY_CATEGORY = gql`
+  query Category {
+    categories {
+      name
+    }
     currencies {
       label
       symbol
@@ -75,4 +78,4 @@ const GET_CURRENCY = gql`
   }
 `;
 
-export { GET_SHOP, GET_PRODUCT, GET_CURRENCY };
+export { GET_SHOP, GET_PRODUCT, GET_CURRENCY_CATEGORY };

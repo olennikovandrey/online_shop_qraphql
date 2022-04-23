@@ -10,7 +10,8 @@ import {
   CHANGE_CURRENCY,
   ADD_FIRST_ATTRIBUTE,
   ADD_SECOND_ATTRIBUTE,
-  ADD_THIRD_ATTRIBUTE
+  ADD_THIRD_ATTRIBUTE,
+  SET_CATEGORY
 } from "./action-types/cart-actions";
 
 export const getCurrency = payload => {
@@ -92,6 +93,13 @@ export const addSecondAttribute = value => {
 export const addThirdAttribute = value => {
   return {
     type: ADD_THIRD_ATTRIBUTE,
+    value
+  };
+};
+
+export const setCategory = value => {
+  return {
+    type: SET_CATEGORY,
     value
   };
 };

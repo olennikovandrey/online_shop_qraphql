@@ -1,11 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import App from "./components/App";
 import client from "./apollo";
 import cartReducer from "./reducers/cartReduces";
+import React from "react";
+import ReactDOM from "react-dom";
 import { ApolloProvider } from "@apollo/client";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import App from "./components/App";
+
 
 export const store = createStore(
   cartReducer,

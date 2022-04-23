@@ -1,9 +1,3 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper/core";
 import client from "../../apollo";
 import { GET_PRODUCT } from "../../services/queries";
 import Header from "../Header/Header";
@@ -11,6 +5,12 @@ import Loader from "../Loader/Loader";
 import Attributes from "../Attributes/Attributes";
 import { addToCart, removeItem, addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
 import { styles } from "../../assets/styles/styles";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper/core";
+import React, { Component } from "react";
 import "./product-page.css";
 import "../Cart/styles/swiper.css";
 
@@ -86,8 +86,8 @@ class ProductPage extends Component {
   render() {
 
     const { isLoaded, isBackgroundBlur, currentProduct } = this.state,
-          { currency, availableProducts } = this.props,
-          availableItem = availableProducts.find(item => item.id === currentProduct.id);
+      { currency, availableProducts } = this.props,
+      availableItem = availableProducts.find(item => item.id === currentProduct.id);
 
     if (isLoaded && currentProduct.length !== 0) {
       return (
@@ -103,7 +103,7 @@ class ProductPage extends Component {
                 { currentProduct.gallery.slice(1, 5).map(
                   item =>
                     <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
-                  )
+                )
                 }
               </div>
               <div className="product-info">
@@ -136,8 +136,9 @@ class ProductPage extends Component {
                         { currentProduct.attributes[0] &&
                         <p className="product-sizes-title">
                           { currentProduct.attributes[0].length !== 0 ?
-                          currentProduct.attributes[0].name.toUpperCase() + ":" :
-                          null }
+                            currentProduct.attributes[0].name.toUpperCase() + ":" :
+                            null
+                          }
                         </p>
                         }
                         <Attributes
@@ -148,8 +149,9 @@ class ProductPage extends Component {
                         { currentProduct.attributes[1] &&
                         <p className="product-sizes-title">
                           { currentProduct.attributes[1].length !== 0 ?
-                          currentProduct.attributes[1].name.toUpperCase() + ":" :
-                          null }
+                            currentProduct.attributes[1].name.toUpperCase() + ":" :
+                            null
+                          }
                         </p>
                         }
                         <Attributes
@@ -160,8 +162,9 @@ class ProductPage extends Component {
                         { currentProduct.attributes[2] &&
                         <p className="product-sizes-title">
                           { currentProduct.attributes[2].length !== 0 ?
-                          currentProduct.attributes[2].name.toUpperCase() + ":" :
-                          null }
+                            currentProduct.attributes[2].name.toUpperCase() + ":" :
+                            null
+                          }
                         </p>
                         }
                         <Attributes
@@ -174,13 +177,12 @@ class ProductPage extends Component {
                   }
                   <p className="product-price-title">PRICE:</p>
                   <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
-                  <div className="btn-toolkit-wrapper">
-                    <button
-                      className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                      onClick={ availableItem !== undefined ? () => this.addItemToCart(currentProduct) : null }>ADD TO CART
-                    </button>
-                    { availableItem === undefined ? <span className="tooltiptext-prod-page">Is unavailable now</span> : null }
-                  </div>
+                  <p className="product-price-title">IN STOCK:</p>
+                  <p className="product-price">{ availableItem !== undefined ? "Yes" : "No" }</p>
+                  <button
+                    className={ availableItem ?? availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
+                    onClick={ availableItem !== undefined ? () => this.addItemToCart(currentProduct) : null }>ADD TO CART
+                  </button>
                   <div className="product-description" dangerouslySetInnerHTML={ this.createMarkup(currentProduct.description) } />
                 </div>
               </div>
