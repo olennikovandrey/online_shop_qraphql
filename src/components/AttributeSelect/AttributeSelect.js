@@ -6,21 +6,14 @@ import { connect } from "react-redux";
 import "./attribute-select.css";
 
 class AttributeSelect extends Component {
+
   addItemToCart = (payload) => {
     this.props.addToCart(payload);
     this.props.attributeSelectVisible();
   };
 
-  addAttrFnGeneral = (event, id, addFunction) => {
+  addAttrFnGeneral = (id, addFunction) => {
     addFunction(id);
-    if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size");
-    } else if (id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-color");
-    } else if (event.target.classList.contains("selected-size") ||
-               event.target.classList.contains("selected-color")) {
-      return;
-    }
   };
 
   render() {
@@ -28,6 +21,7 @@ class AttributeSelect extends Component {
       catalog = JSON.parse(localStorage.getItem("shopData")),
       currentProductUnfreeze = Object.assign( {}, catalog[0].products.filter(item => item.id === id)[0]),
       currentProduct = { ...currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
+    console.log({currentProduct});
 
     return (
       <div className="attribute-select-wrapper">
@@ -44,11 +38,14 @@ class AttributeSelect extends Component {
                 null
               }
             </p>
-            <Attributes
-              attributes={ currentProduct.attributes[0] }
-              addAttrFnGeneral={ this.addAttrFnGeneral }
-              addAttrFnCurrent={ addFirstAttribute }
-            />
+            <div className="first-attr-parent">
+              <Attributes
+                attributes={ currentProduct.attributes[0] }
+                addAttrFnGeneral={ this.addAttrFnGeneral }
+                addAttrFnCurrent={ addFirstAttribute }
+                parentClass={".first-attr-parent"}
+              />
+            </div>
             { currentProduct.attributes[1] &&
             <p className="product-sizes-title">
               { currentProduct.attributes[1].length !== 0 ?
@@ -57,11 +54,14 @@ class AttributeSelect extends Component {
               }
             </p>
             }
-            <Attributes
-              attributes={ currentProduct.attributes[1] }
-              addAttrFnGeneral={ this.addAttrFnGeneral }
-              addAttrFnCurrent={ addSecondAttribute }
-            />
+            <div className="second-attr-parent">
+              <Attributes
+                attributes={ currentProduct.attributes[1] }
+                addAttrFnGeneral={ this.addAttrFnGeneral }
+                addAttrFnCurrent={ addSecondAttribute }
+                parentClass={".second-attr-parent"}
+              />
+            </div>
             { currentProduct.attributes[2] &&
             <p className="product-sizes-title">
               { currentProduct.attributes[2].length !== 0 ?
@@ -70,11 +70,14 @@ class AttributeSelect extends Component {
               }
             </p>
             }
-            <Attributes
-              attributes={ currentProduct.attributes[2] }
-              addAttrFnGeneral={ this.addAttrFnGeneral }
-              addAttrFnCurrent={ addThirdAttribute }
-            />
+            <div className="third-attr-parent">
+              <Attributes
+                attributes={ currentProduct.attributes[2] }
+                addAttrFnGeneral={ this.addAttrFnGeneral }
+                addAttrFnCurrent={ addThirdAttribute }
+                parentClass={".third-attr-parent"}
+              />
+            </div>
           </div> :
           null
         }

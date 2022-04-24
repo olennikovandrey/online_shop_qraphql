@@ -40,28 +40,14 @@ class ProductPage extends Component {
 
   addItemToCart = (payload) => {
     this.props.addToCart(payload);
-    document.querySelectorAll(".selected-size").forEach(element => {
-      element.classList.remove("selected-size");
-    });
-    document.querySelectorAll(".selected-color").forEach(element => {
-      element.classList.remove("selected-color");
-    });
   };
 
   removeItemFromCart = (id) => {
     this.props.removeItem(id);
   };
 
-  addAttrFnGeneral = (event, id, addFunction) => {
+  addAttrFnGeneral = (id, addFunction) => {
     addFunction(id);
-    if (!id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-size");
-    } else if (id.includes("#") && event.target.classList.contains("size")) {
-      event.target.classList.toggle("selected-color");
-    } else if (event.target.classList.contains("selected-size") ||
-               event.target.classList.contains("selected-color")) {
-      return;
-    }
   };
 
   setBlur = () => {
@@ -88,7 +74,7 @@ class ProductPage extends Component {
     const { isLoaded, isBackgroundBlur, currentProduct } = this.state,
       { currency, availableProducts } = this.props,
       availableItem = availableProducts.find(item => item.id === currentProduct.id);
-
+    console.log({currentProduct});
     if (isLoaded && currentProduct.length !== 0) {
       return (
         <>
@@ -141,11 +127,14 @@ class ProductPage extends Component {
                           }
                         </p>
                         }
-                        <Attributes
-                          attributes={ currentProduct.attributes[0] }
-                          addAttrFnGeneral={ this.addAttrFnGeneral }
-                          addAttrFnCurrent={this.props.addFirstAttribute}
-                        />
+                        <div className="prod-page-first-attr-parent">
+                          <Attributes
+                            attributes={ currentProduct.attributes[0] }
+                            addAttrFnGeneral={ this.addAttrFnGeneral }
+                            addAttrFnCurrent={ this.props.addFirstAttribute }
+                            parentClass={".prod-page-first-attr-parent"}
+                          />
+                        </div>
                         { currentProduct.attributes[1] &&
                         <p className="product-sizes-title">
                           { currentProduct.attributes[1].length !== 0 ?
@@ -154,11 +143,14 @@ class ProductPage extends Component {
                           }
                         </p>
                         }
-                        <Attributes
-                          attributes={ currentProduct.attributes[1] }
-                          addAttrFnGeneral={ this.addAttrFnGeneral }
-                          addAttrFnCurrent={this.props.addSecondAttribute}
-                        />
+                        <div className="prod-page-second-attr-parent">
+                          <Attributes
+                            attributes={ currentProduct.attributes[1] }
+                            addAttrFnGeneral={ this.addAttrFnGeneral }
+                            addAttrFnCurrent={ this.props.addSecondAttribute }
+                            parentClass={".prod-page-second-attr-parent"}
+                          />
+                        </div>
                         { currentProduct.attributes[2] &&
                         <p className="product-sizes-title">
                           { currentProduct.attributes[2].length !== 0 ?
@@ -167,11 +159,14 @@ class ProductPage extends Component {
                           }
                         </p>
                         }
-                        <Attributes
-                          attributes={ currentProduct.attributes[2] }
-                          addAttrFnGeneral={ this.addAttrFnGeneral }
-                          addAttrFnCurrent={this.props.addThirdAttribute}
-                        />
+                        <div className="prod-page-third-attr-parent">
+                          <Attributes
+                            attributes={ currentProduct.attributes[2] }
+                            addAttrFnGeneral={ this.addAttrFnGeneral }
+                            addAttrFnCurrent={ this.props.addThirdAttribute }
+                            parentClass={".prod-page-third-attr-parent"}
+                          />
+                        </div>
                       </div>
                     </> : null
                   }

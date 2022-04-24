@@ -120,6 +120,7 @@
 }
 
 .selected-color {
+  position: relative;
   width: 63px;
   height: 45px;
   line-height: 40px;
@@ -134,7 +135,10 @@
 }
 
 .selected-color::after {
-  content: "Selected";
+  position: absolute;
+  top: 7px;
+  left: 16px;
+  content: url("../../assets/images/cart/selected_30x30.png");
 }
 
 .product-price-title {

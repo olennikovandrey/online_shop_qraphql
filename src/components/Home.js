@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import client from "../apollo";
-import { connect } from "react-redux";
 import CategoryWrapper from "./Category/CategoryWrapper";
 import Header from "./Header/Header";
-import { getCatalog, getProductAvailable } from "../actions/cart";
 import { GET_SHOP } from "../services/queries";
+import client from "../apollo";
+import { getCatalog, getProductAvailable } from "../actions/cart";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import React, { Component } from "react";
 
 async function loadShopDataAsync() {
   const { data } = await client.query({query: GET_SHOP} );

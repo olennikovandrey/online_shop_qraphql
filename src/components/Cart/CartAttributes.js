@@ -25,7 +25,7 @@ export default class CartAttributes extends Component {
                       "cart-unselected-size"
                 }
                 style={ { backgroundColor: item.value } }>
-                { !attr[0].includes("#") ? item.value.substring(0, 3) : null }
+                { !attr[0].includes("#") ? item.value : null }
               </div>
             </div>) }
         </div>
