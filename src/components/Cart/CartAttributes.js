@@ -38,5 +38,5 @@ CartAttributes.propTypes = {
   currentItem: PropTypes.object,
   currentAddedProduct: PropTypes.array,
   currentAttributes: PropTypes.object,
-  attr: PropTypes.array
+  attr: PropTypes.string
 };

@@ -50,11 +50,11 @@ class ProductCard extends Component {
           >
             { available !== undefined ? null : <span className="out-label">Out of stock</span> }
           </div>
-          { this.state.isAtrributeSelectVisible ?
+          { this.state.isAtrributeSelectVisible &&
             <AttributeSelect
               id={ id }
               attributeSelectVisible={ this.attributeSelectVisible }
-            /> : null
+            />
           }
         </div>
       </>

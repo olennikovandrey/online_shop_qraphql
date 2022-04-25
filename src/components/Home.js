@@ -1,16 +1,10 @@
 import CategoryWrapper from "./Category/CategoryWrapper";
 import Header from "./Header/Header";
-import { GET_SHOP } from "../services/queries";
-import client from "../apollo";
+import * as functions from "../services/functions";
 import { getCatalog, getProductAvailable } from "../actions/cart";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-
-async function loadShopDataAsync() {
-  const { data } = await client.query({query: GET_SHOP} );
-  return data;
-}
 
 class Home extends Component {
   constructor(props) {
@@ -33,15 +27,13 @@ class Home extends Component {
   };
 
   async loadShopData() {
-    const data = await loadShopDataAsync();
+    const data = await functions.loadShopDataAsync();
     this.setState({
       shopData: data.categories,
       isLoaded: true
     });
     this.catalogLoader(data.categories);
     this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
-    localStorage.setItem("shopData", JSON.stringify(data.categories));
-    localStorage.setItem("availableProducts", JSON.stringify(data.categories[0].products.filter(item => item.inStock)));
   }
 
   setBlur() {

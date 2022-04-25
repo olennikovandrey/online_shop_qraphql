@@ -45,26 +45,26 @@ class CartMiniItem extends Component {
           </div>
           <span className="cart-mini-item-price">{ currency } { currentItem.prices.filter(current => current.currency.symbol === currency)[0].amount }</span><br/>
           <div className="cart-mini-sizes-wrapper">
-            { currentItem.firstAttr.length > 0 ?
+            { currentItem.firstAttr.length > 0 &&
               <CartMiniAttributes
                 currentItem={currentItem}
                 attr={currentItem.firstAttr}
                 currentAttributes={ currentItem.attributes[0] }
-              /> : null
+              />
             }
-            { currentItem.secondAttr.length > 0 ?
+            { currentItem.secondAttr.length > 0 &&
               <CartMiniAttributes
                 currentItem={currentItem}
                 attr={currentItem.secondAttr}
                 currentAttributes={ currentItem.attributes[1] }
-              /> : null
+              />
             }
-            { currentItem.thirdAttr.length > 0 ?
+            { currentItem.thirdAttr.length > 0 &&
               <CartMiniAttributes
                 currentItem={currentItem}
                 attr={currentItem.thirdAttr}
                 currentAttributes={ currentItem.attributes[2] }
-              /> : null
+              />
             }
           </div>
         </div>

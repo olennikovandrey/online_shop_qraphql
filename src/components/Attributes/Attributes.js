@@ -1,33 +1,17 @@
-import { addFirstAttribute, addSecondAttribute, addThirdAttribute } from "../../actions/cart";
+import * as functions from "../../services/functions";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 
-class Attributes extends Component {
+
+export default class Attributes extends Component {
 
   componentDidMount() {
     const parent = document.querySelector(this.props.parentClass);
-
-    parent.addEventListener("click", (event) => {
-      const target = event.target;
-      const attributeItem = parent.querySelectorAll(".size");
-
-      if (target.attributes[0].value.includes("#") && target.classList.contains("size")) {
-        for (let i = 0; i < attributeItem.length; i++) {
-          attributeItem[i].classList.remove("selected-color");
-        }
-        target.classList.add("selected-color");
-      } else if (target.classList.contains("size")) {
-        for (let i = 0; i < attributeItem.length; i++) {
-          attributeItem[i].classList.remove("selected-size");
-        }
-        target.classList.add("selected-size");
-      }
-    });
+    parent.addEventListener("click", (event) => functions.classChanger(event, parent));
   }
 
   render() {
-    const { attributes, addAttrFnGeneral, addAttrFnCurrent, parentClass } = this.props;
+    const { attributes, addAttribute, parentClass } = this.props;
 
     return (
       <>
@@ -38,7 +22,7 @@ class Attributes extends Component {
               key={ item.id }
               className="size"
               style={ { background: item.value } }
-              onClick={ () => addAttrFnGeneral(item.value, addAttrFnCurrent ) }>
+              onClick={ () => addAttribute(item.value) }>
               { !item.value.includes("#") ? item.value : null }
             </div>
         ) : null
@@ -51,23 +35,6 @@ class Attributes extends Component {
 
 Attributes.propTypes = {
   attributes: PropTypes.object,
-  addAttrFnGeneral: PropTypes.func,
-  addAttrFnCurrent: PropTypes.func,
+  addAttribute: PropTypes.func,
   parentClass: PropTypes.string
 };
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addFirstAttribute: (id) => {
-      dispatch(addFirstAttribute(id));
-    },
-    addSecondAttribute: (id) => {
-      dispatch(addSecondAttribute(id));
-    },
-    addThirdAttribute: (id) => {
-      dispatch(addThirdAttribute(id));
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Attributes);

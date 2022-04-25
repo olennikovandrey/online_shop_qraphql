@@ -55,9 +55,9 @@ class CategoryWrapper extends Component {
                     currency={ currency }
                     id={ item.id }
                     shopData={ shopData }
-                  />;
+                  />
                 </React.Fragment>
-              )};;
+              )}
           </div>
           { shopData
             .filter(item => item.name === categoryName.toLowerCase())[0].products.length > 6 &&

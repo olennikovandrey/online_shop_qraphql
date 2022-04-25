@@ -56,6 +56,7 @@ class Header extends Component {
   render() {
     const { totalItemsInCart, currency, setBlur } = this.props,
       { symbols, categories } = this.state;
+    console.log({currency});
 
     return (
       <header className="header-wrapper">
@@ -78,7 +79,7 @@ class Header extends Component {
                 key={ item.symbol }
                 value={ item.symbol }
               >
-                { item.symbol }
+                { item.symbol } { item.label }
               </option>
             ) }
           </select>
@@ -87,12 +88,12 @@ class Header extends Component {
             { totalItemsInCart > 0 && <span className="cart-icon-total">{ totalItemsInCart }</span> }
           </div>
         </div>
-        { this.state.isCartVisible ?
+        { this.state.isCartVisible &&
           <CartMini
             setCartVisible={ this.setCartVisible }
             setCategoryName={ null }
             setBlur={ setBlur }
-          /> : null
+          />
         }
       </header>
     );

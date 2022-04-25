@@ -57,26 +57,26 @@ class CartItem extends Component {
               }
             </span>
             <div className="sizes-wrapper">
-              { currentItem.firstAttr.length > 0 ?
+              { currentItem.firstAttr.length > 0 &&
                 <CartAttributes
                   currentItem={currentItem}
                   attr={currentItem.firstAttr}
                   currentAttributes={ currentItem.attributes[0] }
-                /> : null
+                />
               }
-              { currentItem.secondAttr.length > 0 ?
+              { currentItem.secondAttr.length > 0 &&
                 <CartAttributes
                   currentItem={currentItem}
                   attr={currentItem.secondAttr}
                   currentAttributes={ currentItem.attributes[1] }
-                /> : null
+                />
               }
-              { currentItem.thirdAttr.length > 0 ?
+              { currentItem.thirdAttr.length > 0 &&
                 <CartAttributes
                   currentItem={currentItem}
                   attr={currentItem.thirdAttr}
                   currentAttributes={ currentItem.attributes[2] }
-                /> : null
+                />
               }
             </div>
           </div>
