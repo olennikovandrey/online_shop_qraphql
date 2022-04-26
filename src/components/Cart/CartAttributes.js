@@ -8,9 +8,9 @@ export default class CartAttributes extends Component {
 
     return (
       <>
-        <p className="cart-item-attribute-name">{ currentAttributes.name.toUpperCase() }:</p>
+        <p className="cart-item-attribute-name">{ currentAttributes === undefined ? null : currentAttributes.name.toUpperCase() + ":" }</p>
         <div className="cart-item-attributes-wrapper">
-          { currentAttributes.items.map(item =>
+          { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
             <div
               className="cart-item-color-size-wrapper"
               key={ item.value }

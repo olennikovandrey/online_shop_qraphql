@@ -73,6 +73,13 @@ class AttributeSelect extends Component {
                 parentClass={".first-attr-parent"}
               />
             </div>
+            { currentProduct.attributes[1] &&
+            <p className="product-sizes-title">
+              { this._currentProduct.attributes[1].length !== 0 &&
+                this._currentProduct.attributes[1].name.toUpperCase() + ":"
+              }
+            </p>
+            }
             <div className="second-attr-parent">
               <Attributes
                 attributes={ this._currentProduct.attributes[1] }
@@ -80,6 +87,13 @@ class AttributeSelect extends Component {
                 parentClass={".second-attr-parent"}
               />
             </div>
+            { currentProduct.attributes[2] &&
+            <p className="product-sizes-title">
+              { this._currentProduct.attributes[2].length !== 0 &&
+                this._currentProduct.attributes[2].name.toUpperCase() + ":"
+              }
+            </p>
+            }
             <div className="third-attr-parent">
               <Attributes
                 attributes={ this._currentProduct.attributes[2] }

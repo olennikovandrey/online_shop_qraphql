@@ -2,7 +2,6 @@ import {
   GET_CATALOG,
   GET_CURRENCY,
   GET_PRODUCT_AVAILABLE,
-  NEW_TOTAL_PRICE,
   ADD_TO_CART,
   REMOVE_ITEM,
   ADD_QUANTITY,
@@ -32,12 +31,6 @@ export const getProductAvailable = payload => {
   return {
     type: GET_PRODUCT_AVAILABLE,
     payload
-  };
-};
-
-export const setNewTotalPrice = () => {
-  return {
-    type: NEW_TOTAL_PRICE
   };
 };
 

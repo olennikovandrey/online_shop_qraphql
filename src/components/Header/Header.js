@@ -1,6 +1,6 @@
 import CartMini from "../CartMini/CartMini";
 import client from "../../apollo";
-import { changeCurrency, setNewTotalPrice, getCurrency, setCategory } from "../../actions/cart";
+import { changeCurrency, getCurrency, setCategory } from "../../actions/cart";
 import { GET_CURRENCY_CATEGORY } from "../../services/queries";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
@@ -24,9 +24,8 @@ class Header extends Component {
     this.setCartVisible = this.setCartVisible.bind(this);
   }
 
-  handleClick = (value) => {
+  popol = (value) => {
     this.props.changeCurrency(value);
-    this.props.setNewTotalPrice(value);
   };
 
   setCategoryName(value) {
@@ -56,7 +55,6 @@ class Header extends Component {
   render() {
     const { totalItemsInCart, currency, setBlur } = this.props,
       { symbols, categories } = this.state;
-    console.log({currency});
 
     return (
       <header className="header-wrapper">
@@ -75,7 +73,7 @@ class Header extends Component {
           <select defaultValue={ currency }>
             { symbols.map(item =>
               <option
-                onClick={ (event) => { this.handleClick(event.target.value); } }
+                onClick={ (event) => { this.popol(event.target.value); } }
                 key={ item.symbol }
                 value={ item.symbol }
               >
@@ -108,7 +106,6 @@ Header.propTypes = {
   symbols: PropTypes.array,
   totalItemsInCart: PropTypes.number,
   currency: PropTypes.string,
-  setNewTotalPrice: PropTypes.func,
   setCategory: PropTypes.func
 };
 
@@ -126,9 +123,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeCurrency: (value) => {
       dispatch(changeCurrency(value));
-    },
-    setNewTotalPrice: (value) => {
-      dispatch(setNewTotalPrice(value));
     },
     getCurrency: (value) => {
       dispatch(getCurrency(value));

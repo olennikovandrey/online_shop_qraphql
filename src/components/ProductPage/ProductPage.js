@@ -83,9 +83,8 @@ class ProductPage extends Component {
 
   render() {
 
-    const { isLoaded, isBackgroundBlur, currentProduct } = this.state,
-      { currency, availableProducts } = this.props,
-      availableItem = availableProducts.find(item => item.id === currentProduct.id);
+    const { isLoaded, isBackgroundBlur, currentProduct, firstAttr, secondAttr, thirdAttr } = this.state,
+      { currency } = this.props;
 
     if (isLoaded && currentProduct.length !== 0) {
       return (
@@ -179,11 +178,37 @@ class ProductPage extends Component {
                   <p className="product-price-title">PRICE:</p>
                   <p className="product-price">{ currency } { currentProduct.prices.filter(current => current.currency.symbol === currency)[0].amount }</p>
                   <p className="product-price-title">IN STOCK:</p>
-                  <p className="product-price">{ availableItem !== undefined ? "Yes" : "No" }</p>
+                  <p className="product-price">{ currentProduct.inStock ? "Yes" : "No" }</p>
                   <button
-                    className={ availableItem && availableItem !== undefined ? "prod-page-add-btn" : "unavailable-add-btn" }
-                    onClick={ availableItem && availableItem !== undefined ? () => this.addItemToCart(currentProduct) : null }>
-                    ADD TO CART
+                    className={ currentProduct.inStock ? "prod-page-add-btn" : "unavailable-add-btn" }
+                    onClick={
+                      typeof currentProduct.attributes[2] !== "undefined" && thirdAttr &&
+                      typeof currentProduct.attributes[1] !== "undefined" && secondAttr && firstAttr && currentProduct.inStock ?
+                        () => this.addItemToCart(currentProduct) :
+                        typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                        typeof currentProduct.attributes[1] !== "undefined" && secondAttr && firstAttr && currentProduct.inStock ?
+                          () => this.addItemToCart(currentProduct) :
+                          typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                          typeof currentProduct.attributes[1] === "undefined" && !secondAttr && firstAttr && currentProduct.inStock ?
+                            () => this.addItemToCart(currentProduct) :
+                            typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                            typeof currentProduct.attributes[1] === "undefined" && !secondAttr &&
+                            typeof currentProduct.attributes[1] === "undefined" && !firstAttr && currentProduct.inStock ?
+                              () => this.addItemToCart(currentProduct) :
+                              null
+                    }
+                  >
+                    { typeof currentProduct.attributes[2] !== "undefined" && thirdAttr &&
+                      typeof currentProduct.attributes[1] !== "undefined" && secondAttr && firstAttr ? "ADD TO CART" :
+                      typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                        typeof currentProduct.attributes[1] !== "undefined" && secondAttr && firstAttr ? "ADD TO CART" :
+                        typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                          typeof currentProduct.attributes[1] === "undefined" && !secondAttr && firstAttr ? "ADD TO CART" :
+                          typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
+                            typeof currentProduct.attributes[1] === "undefined" && !secondAttr &&
+                            typeof currentProduct.attributes[0] === "undefined" && !firstAttr ? "ADD TO CART" :
+                            "PLEASE, CHOOSE ATTRIBUTE"
+                    }
                   </button>
                   <div className="product-description" dangerouslySetInnerHTML={ functions.createMarkup(DOMPurify.sanitize(currentProduct.description)) } />
                 </div>
@@ -204,7 +229,6 @@ class ProductPage extends Component {
 
 ProductPage.propTypes = {
   match: PropTypes.object,
-  availableProducts: PropTypes.array,
   currency: PropTypes.string,
   addToCart: PropTypes.func,
   removeItem: PropTypes.func,
@@ -213,7 +237,6 @@ ProductPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
-    availableProducts: state.availableProducts
   };
 };
 

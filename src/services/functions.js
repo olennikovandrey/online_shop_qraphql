@@ -14,7 +14,12 @@ export const getAllAttributes = (attr0, firstAttr, attr1, secondAttr, attr2, thi
         attr1 && secondAttr.length !== 0 &&
         attr2 && thirdAttr.length !== 0) {
     return true;
-  } else {
+  } else if (!attr0 && !firstAttr.length !== 0 &&
+        !attr1 && !secondAttr.length !== 0 &&
+        !attr2 && !thirdAttr.length !== 0) {
+    return true;
+  }
+  else {
     return false;
   }
 };

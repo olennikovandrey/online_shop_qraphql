@@ -7,9 +7,9 @@ export default class CartMiniAttributes extends Component {
 
     return (
       <>
-        <p className="item-attribute-name">{ currentAttributes.name }:</p>
+        <p className="item-attribute-name">{ currentAttributes === undefined ? null : currentAttributes.name + ":"}</p>
         <div className="item-attributes-wrapper">
-          { currentAttributes.items.map(item =>
+          { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
             <div
               className="item-color-size-wrapper"
               key={ item.value }
@@ -37,5 +37,5 @@ CartMiniAttributes.propTypes = {
   currentItem: PropTypes.object,
   currentAddedProduct: PropTypes.array,
   currentAttributes: PropTypes.object,
-  attr: PropTypes.string
+  attr: PropTypes.array
 };

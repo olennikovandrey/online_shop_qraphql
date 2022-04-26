@@ -22,16 +22,7 @@ export const initState = {
 };
 
 const cartReducer = (state = initState, action) => {
-  const currencyChanger = (addedItems, addedItemsPrices, value) => {
-    addedItems.forEach(
-      el => addedItemsPrices.push(
-        el.prices.filter(
-          item => (item.currency.symbol === value)
-        )[0].amount * el.quantity
-      )
-    );
-  };
-
+  console.log(action);
   switch (action.type) {
   case GET_CURRENCY: {
     const downloadedData = action.payload;
@@ -163,19 +154,27 @@ const cartReducer = (state = initState, action) => {
 
   case CHANGE_CURRENCY: {
     const addedItemsPrices = [];
-    currencyChanger(state.addedItems, addedItemsPrices, action.value);
+    addedItemsPrices.push(state.addedItems.forEach(
+      el => addedItemsPrices.push(
+        el.prices.filter(
+          item => (item.currency.symbol === action.value)
+        )[0].amount * el.quantity
+      )
+    ));
+    addedItemsPrices.pop();
+
     const newTotal = addedItemsPrices.reduce(
       (previousValue, currentValue) => previousValue + currentValue,
       0
     );
-
+    const newCurrency = action.value;
     localStorage.setItem("Currency", JSON.stringify(action.value));
     localStorage.setItem("TotalPrice", JSON.stringify(parseFloat(newTotal.toFixed(2))));
 
     return {
       ...state,
       totalPrice: parseFloat(newTotal.toFixed(2)),
-      currency: action.value
+      currency: newCurrency
     };
   }
 
