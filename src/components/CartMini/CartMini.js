@@ -13,7 +13,7 @@ class CartMini extends Component {
   }
 
   cartMiniCloser(event) {
-    if(!event.target.matches(".cart-mini-wrapper, .remove-item-btn, .cart-mini-wrapper *, header-wrapper, header-wrapper *")) {
+    if(!event.target.matches(".cart-mini-wrapper, .counter-btn, .remove-item-btn, .cart-mini-wrapper *, .header-wrapper, .currency-select, .currency-select *")) {
       this.props.setCartVisible(event);
     }
   }

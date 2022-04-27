@@ -7,28 +7,31 @@ export default class CartAttributes extends Component {
     const { attr, currentAttributes } = this.props;
 
     return (
-      <>
-        <p className="cart-item-attribute-name">{ currentAttributes === undefined ? null : currentAttributes.name.toUpperCase() + ":" }</p>
-        <div className="cart-item-attributes-wrapper">
-          { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
-            <div
-              className="cart-item-color-size-wrapper"
-              key={ item.value }
-            >
+      <> { currentAttributes &&
+        <>
+          <p className="cart-item-attribute-name">{ currentAttributes.name.toUpperCase() + ":" }</p>
+          <div className="cart-item-attributes-wrapper">
+            { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
               <div
-                className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
+                className="cart-item-color-size-wrapper"
+                key={ item.value }
+              >
+                <div
+                  className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
                   attr[0].includes("#") && attr.includes(item.value) ? "cart-selected-color" :
-                  currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-selected-size" :
                     currentAttributes.items.find(el => el.value === item.value) !== undefined &&
+                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-selected-size" :
+                      currentAttributes.items.find(el => el.value === item.value) !== undefined &&
                       attr[0].includes("#") && !attr.includes(item.value) ? "cart-unselected-color" :
-                      "cart-unselected-size"
-                }
-                style={ { backgroundColor: item.value } }>
-                { !attr[0].includes("#") ? item.value : null }
-              </div>
-            </div>) }
-        </div>
+                        "cart-unselected-size"
+                  }
+                  style={ { backgroundColor: item.value } }>
+                  { !attr[0].includes("#") ? item.value : null }
+                </div>
+              </div>) }
+          </div>
+        </>
+      }
       </>
     );
   }

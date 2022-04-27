@@ -7,27 +7,32 @@ export default class CartMiniAttributes extends Component {
 
     return (
       <>
-        <p className="item-attribute-name">{ currentAttributes === undefined ? null : currentAttributes.name + ":"}</p>
-        <div className="item-attributes-wrapper">
-          { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
-            <div
-              className="item-color-size-wrapper"
-              key={ item.value }
-            >
+        { currentAttributes &&
+        <>
+          <p className="item-attribute-name">{ currentAttributes.name + ":" }</p>
+          <div className="item-attributes-wrapper">
+            { currentAttributes === undefined ? null : currentAttributes.items.map(item =>
               <div
-                className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
+                className="item-color-size-wrapper"
+                key={ item.value }
+              >
+                <div
+                  className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
                   attr[0].includes("#") && attr.includes(item.value) ? "cart-mini-selected-color" :
-                  currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-mini-selected-size" :
                     currentAttributes.items.find(el => el.value === item.value) !== undefined &&
+                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-mini-selected-size" :
+                      currentAttributes.items.find(el => el.value === item.value) !== undefined &&
                       attr[0].includes("#") && !attr.includes(item.value) ? "cart-mini-unselected-color" :
-                      "cart-mini-unselected-size"
-                }
-                style={ { backgroundColor: item.value } }>
-                { !attr[0].includes("#") ? item.value.substring(0, 3) : null }
-              </div>
-            </div>) }
-        </div>
+                        "cart-mini-unselected-size"
+                  }
+                  style={ { backgroundColor: item.value } }>
+                  { !attr[0].includes("#") ? item.value.substring(0, 3) : null }
+                </div>
+              </div>)
+            }
+          </div>
+        </>
+        }
       </>
     );
   }
@@ -37,5 +42,5 @@ CartMiniAttributes.propTypes = {
   currentItem: PropTypes.object,
   currentAddedProduct: PropTypes.array,
   currentAttributes: PropTypes.object,
-  attr: PropTypes.array
+  attr: PropTypes.string
 };

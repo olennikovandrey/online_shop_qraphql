@@ -47,22 +47,22 @@ class CartMiniItem extends Component {
           <div className="cart-mini-sizes-wrapper">
             { currentItem.firstAttr === undefined || currentItem.firstAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={currentItem}
-                attr={currentItem.firstAttr}
+                currentItem={ currentItem }
+                attr={ currentItem.firstAttr }
                 currentAttributes={ currentItem.attributes[0] }
               /> : null
             }
             { currentItem.secondAttr === undefined || currentItem.secondAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={currentItem}
-                attr={currentItem.secondAttr}
+                currentItem={ currentItem }
+                attr={ currentItem.secondAttr }
                 currentAttributes={ currentItem.attributes[1] }
               /> : null
             }
             { currentItem.thirddAttr === undefined || currentItem.thirdAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={currentItem}
-                attr={currentItem.thirdAttr}
+                currentItem={ currentItem }
+                attr={ currentItem.thirdAttr }
                 currentAttributes={ currentItem.attributes[2] }
               /> : null
             }

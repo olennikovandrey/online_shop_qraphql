@@ -1,9 +1,11 @@
 import ProductCard from "../ProductCard/ProductCard";
 import Loader from "../Loader/Loader";
 import { styles } from "../../assets/styles/styles";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import * as functions from "../../services/functions";
+import { getCatalog, getProductAvailable } from "../../actions/cart";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import React, { Component } from "react";
 import "./category.css";
 
 class CategoryWrapper extends Component {
@@ -12,10 +14,20 @@ class CategoryWrapper extends Component {
     this.state = {
       isLoaded: false,
       isOverflow: true,
-      isShowMoreBtn: true
+      isShowMoreBtn: true,
+      shopData: [],
     };
+    this.loadShopData = this.loadShopData.bind(this);
     this.showMoreFn = this.showMoreFn.bind(this);
   }
+
+  catalogLoader = (data) => {
+    this.props.getCatalog(data);
+  };
+
+  productsAvailableLoader = (data) => {
+    this.props.getProductAvailable(data);
+  };
 
   showMoreFn(){
     this.setState({
@@ -24,9 +36,23 @@ class CategoryWrapper extends Component {
     });
   }
 
+  async loadShopData() {
+    const data = await functions.loadShopDataAsync();
+    this.setState({
+      shopData: data.categories,
+      isLoaded: true
+    });
+    this.catalogLoader(data.categories);
+    this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
+  }
+
+  async componentDidMount() {
+    await this.loadShopData();
+  }
+
   render() {
-    const { isOverflow, isShowMoreBtn } = this.state,
-      { isLoaded, categoryName, shopData, currency, isBackgroundBlur } = this.props;
+    const { isOverflow, isShowMoreBtn, isLoaded, shopData } = this.state,
+      { categoryName, currency, isBackgroundBlur } = this.props;
 
     if (!isLoaded) {
       return (
@@ -47,7 +73,6 @@ class CategoryWrapper extends Component {
               .map(item =>
                 <React.Fragment key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }>
                   <ProductCard
-                    finder={ item.id + item.firstAttr }
                     image={ item.gallery[0] }
                     brand={item.brand}
                     name={ item.name }
@@ -74,7 +99,10 @@ CategoryWrapper.propTypes = {
   isBackgroundBlur: PropTypes.bool,
   categoryName: PropTypes.string,
   shopData: PropTypes.array,
-  currency: PropTypes.string
+  currency: PropTypes.string,
+  getCatalog: PropTypes.func,
+  getSymbols: PropTypes.func,
+  getProductAvailable: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -84,4 +112,15 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(CategoryWrapper);
+const mapDispatchToProps = dispatch => {
+  return {
+    getCatalog: (payload) => {
+      dispatch(getCatalog(payload));
+    },
+    getProductAvailable: (payload) => {
+      dispatch(getProductAvailable(payload));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryWrapper);

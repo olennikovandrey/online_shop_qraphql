@@ -24,7 +24,7 @@ class Header extends Component {
     this.setCartVisible = this.setCartVisible.bind(this);
   }
 
-  popol = (value) => {
+  currencyChanger = (value) => {
     this.props.changeCurrency(value);
   };
 
@@ -70,14 +70,17 @@ class Header extends Component {
         </div>
         <Link to="/"><span className="logo"></span></Link>
         <div>
-          <select defaultValue={ currency }>
+          <select
+            defaultValue={ currency }
+            className="currency-select"
+            onChange={ (event) => { this.currencyChanger(event.target.value); } }
+          >
             { symbols.map(item =>
               <option
-                onClick={ (event) => { this.popol(event.target.value); } }
                 key={ item.symbol }
                 value={ item.symbol }
               >
-                { item.symbol } { item.label }
+                { item.symbol }
               </option>
             ) }
           </select>

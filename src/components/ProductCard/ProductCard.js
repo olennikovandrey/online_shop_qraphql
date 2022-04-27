@@ -29,8 +29,10 @@ class ProductCard extends Component {
 
   render() {
     const { image, name, brand, amount, currency, id, availableProducts, shopData } = this.props,
-      currentProduct = shopData[0].products.filter(item => item.id === id)[0],
-      available = availableProducts.find(item => item.id === id),
+      currentProductWithoutWorkID = shopData[0].products.filter(item => item.id === id)[0];
+    const currentProduct = { ...currentProductWithoutWorkID, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
+
+    const available = availableProducts.find(item => item.id === id),
       currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
 
     return (

@@ -74,7 +74,7 @@ class ProductPage extends Component {
 
   async componentDidMount() {
     const data = await functions.productLoader(this._id);
-    const currentProduct = Object.assign({}, { ...data.product, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" } );
+    const currentProduct = Object.assign({}, { ...data.product, firstAttr: [], secondAttr: [], thirdAttr: [], workID: data.product.id } );
     this.setState({
       isLoaded: true,
       currentProduct: currentProduct

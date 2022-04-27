@@ -22,7 +22,6 @@ export const initState = {
 };
 
 const cartReducer = (state = initState, action) => {
-  console.log(action);
   switch (action.type) {
   case GET_CURRENCY: {
     const downloadedData = action.payload;
@@ -50,7 +49,7 @@ const cartReducer = (state = initState, action) => {
 
   case ADD_TO_CART: {
     const addedItem = Object.assign({}, action.payload);
-    const existedItem = state.addedItems.find(item => item.workID  === action.payload.id + action.payload.firstAttr + action.payload.secondAttr + action.payload.thirdAttr);
+    const existedItem = state.addedItems.find(item => item.workID === action.payload.id + action.payload.firstAttr + action.payload.secondAttr + action.payload.thirdAttr);
 
     if (existedItem) {
       const newTotal = state.totalPrice + addedItem.prices.filter(item => item.currency.symbol === state.currency)[0].amount;

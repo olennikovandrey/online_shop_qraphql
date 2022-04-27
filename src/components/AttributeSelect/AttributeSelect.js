@@ -38,6 +38,7 @@ class AttributeSelect extends Component {
       currentProduct: { ...this.state.currentProduct, secondAttr: value}
     });
   };
+
   addThirdAttribute = (value) => {
     this._currentProduct.thirdAttr = [];
     this.setState({
@@ -51,6 +52,7 @@ class AttributeSelect extends Component {
       allAttributes = functions.getAllAttributes(currentProduct.attributes[0], currentProduct.firstAttr,
         currentProduct.attributes[1], currentProduct.secondAttr,
         currentProduct.attributes[2], currentProduct.thirdAttr);
+    console.log(this._currentProduct);
 
     return (
       <div className="attribute-select-wrapper">
@@ -108,7 +110,6 @@ class AttributeSelect extends Component {
               }
             </p>
             }
-
           </div> :
           null
         }
@@ -134,6 +135,7 @@ AttributeSelect.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     addedItems: state.addedItems,
     catalog: state.catalog
