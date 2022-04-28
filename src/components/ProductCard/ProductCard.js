@@ -86,9 +86,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (payload) => {
-      dispatch(addToCart(payload));
-    }
+    addToCart: (payload) => { dispatch(addToCart(payload)); }
   };
 };
 

@@ -17,6 +17,10 @@
   margin-bottom: 20px;
 }
 
+.attributes-items-wrapper {
+  display: flex;
+}
+
 .attr-select-add-btn {
   width: 100%;
   height: 52px;

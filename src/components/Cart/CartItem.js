@@ -39,6 +39,15 @@ class CartItem extends Component {
     this.props.removeItem(payload);
   };
 
+  componentWillUnmount() {
+    const unsubscribe = store.subscribe(() => {
+      this.setState({
+        quantity: this.props.addedItems.find(item => this.props.finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr).quantity
+      });
+    });
+    unsubscribe();
+  }
+
   render() {
     const { id, currency, addedItems, finder } = this.props,
       currentItem = addedItems.find(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr);
@@ -139,15 +148,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addQuantity: (payload) => {
-      dispatch(addQuantity(payload));
-    },
-    removeQuantity: (payload) => {
-      dispatch(removeQuantity(payload));
-    },
-    removeItem: (payload) => {
-      dispatch(removeItem(payload));
-    }
+    addQuantity: (payload) => { dispatch(addQuantity(payload)); },
+    removeQuantity: (payload) => { dispatch(removeQuantity(payload)); },
+    removeItem: (payload) => { dispatch(removeItem(payload)); }
   };
 };
 

@@ -15,14 +15,14 @@ export default class Attributes extends Component {
 
     return (
       <>
-        <div className={ `available-items-wrapper ${ parentClass } `} >{ attributes ? attributes.items.map(
+        <div className={ `attributes-items-wrapper ${ parentClass } `} >{ attributes ? attributes.items.map(
           item =>
             <div
               value={ item.value }
               key={ item.id }
               className="size"
               style={ { background: item.value } }
-              onClick={ () => addAttribute(item.value) }>
+              onClick={ () => addAttribute(item.id) }>
               { !item.value.includes("#") ? item.value : null }
             </div>
         ) : null

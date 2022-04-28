@@ -17,16 +17,16 @@ export default class CartMiniAttributes extends Component {
                 key={ item.value }
               >
                 <div
-                  className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                  attr[0].includes("#") && attr.includes(item.value) ? "cart-mini-selected-color" :
-                    currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-mini-selected-size" :
-                      currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                      attr[0].includes("#") && !attr.includes(item.value) ? "cart-mini-unselected-color" :
+                  className={ currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                  item.value.includes("#") && attr.includes(item.id) ? "cart-mini-selected-color" :
+                    currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                    !item.value.includes("#") && attr === item.id ? "cart-mini-selected-size" :
+                      currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                      item.value.includes("#") && !attr.includes(item.id) ? "cart-mini-unselected-color" :
                         "cart-mini-unselected-size"
                   }
                   style={ { backgroundColor: item.value } }>
-                  { !attr[0].includes("#") ? item.value.substring(0, 3) : null }
+                  { !item.value.includes("#") ? item.value.substring(0, 3) : null }
                 </div>
               </div>)
             }
@@ -39,8 +39,9 @@ export default class CartMiniAttributes extends Component {
 }
 
 CartMiniAttributes.propTypes = {
-  currentItem: PropTypes.object,
-  currentAddedProduct: PropTypes.array,
   currentAttributes: PropTypes.object,
-  attr: PropTypes.string
+  attr: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ])
 };

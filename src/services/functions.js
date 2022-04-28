@@ -50,6 +50,7 @@ export const productLoader = async (id) => {
 };
 
 export const loadShopDataAsync = async () => {
+
   const { data } = await client.query({query: GET_SHOP} );
   return data;
 };

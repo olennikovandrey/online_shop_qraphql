@@ -23,7 +23,6 @@ class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
       isLoaded: false,
       isBackgroundBlur: false,
       currentProduct: {},
@@ -32,9 +31,6 @@ class ProductPage extends Component {
       thirdAttr: false
     };
     this.setBlur = this.setBlur.bind(this);
-    this.addFirstAttribute = this.addFirstAttribute.bind(this);
-    this.addSecondAttribute = this.addSecondAttribute.bind(this);
-    this.addThirdAttribute = this.addThirdAttribute.bind(this);
   }
 
   addFirstAttribute = (value) => {
@@ -193,7 +189,7 @@ class ProductPage extends Component {
                             () => this.addItemToCart(currentProduct) :
                             typeof currentProduct.attributes[2] === "undefined" && !thirdAttr &&
                             typeof currentProduct.attributes[1] === "undefined" && !secondAttr &&
-                            typeof currentProduct.attributes[1] === "undefined" && !firstAttr && currentProduct.inStock ?
+                            typeof currentProduct.attributes[0] === "undefined" && !firstAttr && currentProduct.inStock ?
                               () => this.addItemToCart(currentProduct) :
                               null
                     }
@@ -242,12 +238,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (payload) => {
-      dispatch(addToCart(payload));
-    },
-    removeItem: (payload) => {
-      dispatch(removeItem(payload));
-    }
+    addToCart: (payload) => { dispatch(addToCart(payload)); },
+    removeItem: (payload) => { dispatch(removeItem(payload)); }
   };
 };
 

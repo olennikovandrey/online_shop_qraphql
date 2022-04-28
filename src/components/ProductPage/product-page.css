@@ -89,10 +89,6 @@
   justify-content: flex-start;
 }
 
-.available-items-wrapper {
-  display: flex;
-}
-
 .size {
   width: 63px;
   height: 45px;

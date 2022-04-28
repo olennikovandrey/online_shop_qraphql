@@ -17,7 +17,6 @@ class CategoryWrapper extends Component {
       isShowMoreBtn: true,
       shopData: [],
     };
-    this.loadShopData = this.loadShopData.bind(this);
     this.showMoreFn = this.showMoreFn.bind(this);
   }
 
@@ -67,7 +66,7 @@ class CategoryWrapper extends Component {
       return (
         <section style={ isBackgroundBlur ? styles.CategoryWrapperBlur : styles.CategoryWrapper }>
           <span className="category-name">{ categoryName }</span>
-          <div className={ `${ isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper" }` }>
+          <div className={ isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper" }>
             { shopData
               .filter(item => item.name === categoryName.toLowerCase())[0].products
               .map(item =>
@@ -114,12 +113,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCatalog: (payload) => {
-      dispatch(getCatalog(payload));
-    },
-    getProductAvailable: (payload) => {
-      dispatch(getProductAvailable(payload));
-    },
+    getCatalog: (payload) => { dispatch(getCatalog(payload)); },
+    getProductAvailable: (payload) => { dispatch(getProductAvailable(payload)); }
   };
 };
 

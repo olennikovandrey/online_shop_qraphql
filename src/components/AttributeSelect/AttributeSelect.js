@@ -52,7 +52,6 @@ class AttributeSelect extends Component {
       allAttributes = functions.getAllAttributes(currentProduct.attributes[0], currentProduct.firstAttr,
         currentProduct.attributes[1], currentProduct.secondAttr,
         currentProduct.attributes[2], currentProduct.thirdAttr);
-    console.log(this._currentProduct);
 
     return (
       <div className="attribute-select-wrapper">
@@ -60,7 +59,6 @@ class AttributeSelect extends Component {
           <p className="attribute-select-title">SELECT ATTRIBUTES:</p>
           <span className="close-btn" onClick={ () => attributeSelectVisible() }></span>
         </div>
-
         { this._currentProduct.attributes ?
           <div className="available-sizes-wrapper">
             <p className="product-sizes-title">
@@ -70,7 +68,7 @@ class AttributeSelect extends Component {
             </p>
             <div className="first-attr-parent">
               <Attributes
-                attributes={ this._currentProduct.attributes[0] }
+                attributes={ currentProduct.attributes[0] }
                 addAttribute={ this.addFirstAttribute }
                 parentClass={".first-attr-parent"}
               />
@@ -103,13 +101,6 @@ class AttributeSelect extends Component {
                 parentClass={".third-attr-parent"}
               />
             </div>
-            { this._currentProduct.attributes[1] &&
-            <p className="product-sizes-title">
-              { this._currentProduct.attributes[1].length !== 0 &&
-                this._currentProduct.attributes[1].name.toUpperCase() + ":"
-              }
-            </p>
-            }
           </div> :
           null
         }
@@ -135,7 +126,6 @@ AttributeSelect.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     addedItems: state.addedItems,
     catalog: state.catalog
@@ -144,9 +134,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (payload) => {
-      dispatch(addToCart(payload));
-    },
+    addToCart: (payload) => { dispatch(addToCart(payload)); },
   };
 };
 

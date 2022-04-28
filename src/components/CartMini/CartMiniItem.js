@@ -32,6 +32,15 @@ class CartMiniItem extends Component {
     this.props.removeItem(payload);
   };
 
+  componentWillUnmount() {
+    const unsubscribe = store.subscribe(() => {
+      this.setState({
+        quantity: this.props.addedItems.find(item => this.props.id === item.id).quantity
+      });
+    });
+    unsubscribe();
+  }
+
   render() {
     const { addedItems, id, currency, finder } = this.props,
       currentItem = addedItems.filter(item => finder === item.id + item.firstAttr + item.secondAttr + item.thirdAttr)[0];
@@ -47,21 +56,18 @@ class CartMiniItem extends Component {
           <div className="cart-mini-sizes-wrapper">
             { currentItem.firstAttr === undefined || currentItem.firstAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={ currentItem }
                 attr={ currentItem.firstAttr }
                 currentAttributes={ currentItem.attributes[0] }
               /> : null
             }
             { currentItem.secondAttr === undefined || currentItem.secondAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={ currentItem }
                 attr={ currentItem.secondAttr }
                 currentAttributes={ currentItem.attributes[1] }
               /> : null
             }
             { currentItem.thirddAttr === undefined || currentItem.thirdAttr.length > 0 ?
               <CartMiniAttributes
-                currentItem={ currentItem }
                 attr={ currentItem.thirdAttr }
                 currentAttributes={ currentItem.attributes[2] }
               /> : null
@@ -97,8 +103,7 @@ CartMiniItem.propTypes = {
   finder: PropTypes.string,
   addQuantity: PropTypes.func,
   removeQuantity: PropTypes.func,
-  removeItem: PropTypes.func,
-  quantity: PropTypes.number
+  removeItem: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -110,15 +115,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addQuantity: (payload) => {
-      dispatch(addQuantity(payload));
-    },
-    removeQuantity: (payload) => {
-      dispatch(removeQuantity(payload));
-    },
-    removeItem: (payload) => {
-      dispatch(removeItem(payload));
-    }
+    addQuantity: (payload) => { dispatch(addQuantity(payload)); },
+    removeQuantity: (payload) => { dispatch(removeQuantity(payload)); },
+    removeItem: (payload) => { dispatch(removeItem(payload)); }
   };
 };
 

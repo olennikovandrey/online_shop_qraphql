@@ -17,16 +17,16 @@ export default class CartAttributes extends Component {
                 key={ item.value }
               >
                 <div
-                  className={ currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                  attr[0].includes("#") && attr.includes(item.value) ? "cart-selected-color" :
-                    currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                    !attr[0].includes("#") && attr.includes(item.value) ? "cart-selected-size" :
-                      currentAttributes.items.find(el => el.value === item.value) !== undefined &&
-                      attr[0].includes("#") && !attr.includes(item.value) ? "cart-unselected-color" :
+                  className={ currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                  item.value.includes("#") && attr.includes(item.id) ? "cart-selected-color" :
+                    currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                    !item.value.includes("#") && attr === item.id ? "cart-selected-size" :
+                      currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                      item.value.includes("#") && !attr.includes(item.id) ? "cart-unselected-color" :
                         "cart-unselected-size"
                   }
                   style={ { backgroundColor: item.value } }>
-                  { !attr[0].includes("#") ? item.value : null }
+                  { !item.value.includes("#") ? item.value : null }
                 </div>
               </div>) }
           </div>
@@ -38,8 +38,9 @@ export default class CartAttributes extends Component {
 }
 
 CartAttributes.propTypes = {
-  currentItem: PropTypes.object,
-  currentAddedProduct: PropTypes.array,
   currentAttributes: PropTypes.object,
-  attr: PropTypes.string
+  attr: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ])
 };

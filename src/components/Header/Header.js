@@ -124,17 +124,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeCurrency: (value) => {
-      dispatch(changeCurrency(value));
-    },
-    getCurrency: (value) => {
-      dispatch(getCurrency(value));
-    },
-    setCategory: (value) => {
-      dispatch(setCategory(value));
-    },
+    changeCurrency: (value) => { dispatch(changeCurrency(value)); },
+    getCurrency: (value) => { dispatch(getCurrency(value)); },
+    setCategory: (value) => { dispatch(setCategory(value)); },
   };
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
