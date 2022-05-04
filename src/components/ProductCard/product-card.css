@@ -23,11 +23,19 @@
   background-color: #fff9;
 }
 
-.product-card-wrapper img:nth-child(1) {
+.product-card-img {
   margin: 0 auto;
   height: 356px;
   max-width: 338px;
   width: auto;
+}
+
+.product-card-img-out {
+  margin: 0 auto;
+  height: 356px;
+  max-width: 338px;
+  width: auto;
+  opacity: 0.5;
 }
 
 .product-card-name {
@@ -74,8 +82,7 @@
   background-color: #399150;
 }
 
-.add-to-cart-btn::after,
-.add-to-cart-unavailable::after {
+.add-to-cart-btn::after {
   position: absolute;
   width: 25px;
   height: 16px;
@@ -98,31 +105,12 @@
   opacity: 1;
 }
 
-.add-to-cart-unavailable {
-  position: absolute;
-  top: 338px;
-  right: 30px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background-color: #5c615d;
-  transition: 0.3s ease-in-out;
-  opacity: 1;
-  cursor: not-allowed;
-}
-
 .out-label {
-  width: 80px;
-  background-color: #5c615d;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
   position: absolute;
-  top: 80px;
-  right: -12px;
-  z-index: 1;
-  transition: 0.3s ease-in-out;
-  cursor: default;
-  font-size: 12px;
+  color: #8d8f9a;
+  text-align: center;
+  top: 50%;
+  right: 50%;
+  font-size: 24px;
+  transform: translate(50%, -50%);
 }

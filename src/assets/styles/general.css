@@ -1,3 +1,16 @@
+@import "./fonts.css";
+@import "../../components/AttributeSelect/attribute-select.css";
+@import "../../components/Cart/styles/cart.css";
+@import "../../components/Cart/styles/cart-attributes.css";
+@import "../../components/Cart/styles/swiper.css";
+@import "../../components/CartMini/cart-mini.css";
+@import "../../components/Category/category.css";
+@import "../../components/Header/header.css";
+@import "../../components/Loader/loader.css";
+@import "../../components/PageNotFound/page-not-found.css";
+@import "../../components/ProductCard/product-card.css";
+@import "../../components/ProductPage/product-page.css";
+
 *,
 *::before,
 *::after {

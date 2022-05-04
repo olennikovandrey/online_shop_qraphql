@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import "./cart-mini.css";
-
 class CartMini extends Component {
   constructor(props) {
     super(props);

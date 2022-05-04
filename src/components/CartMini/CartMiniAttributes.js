@@ -16,17 +16,20 @@ export default class CartMiniAttributes extends Component {
                 className="item-color-size-wrapper"
                 key={ item.value }
               >
-                <div
-                  className={ currentAttributes.items.find(el => el.id === item.id) !== undefined &&
-                  item.value.includes("#") && attr.includes(item.id) ? "cart-mini-selected-color" :
-                    currentAttributes.items.find(el => el.id === item.id) !== undefined &&
-                    !item.value.includes("#") && attr === item.id ? "cart-mini-selected-size" :
+                <div className={ currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                    item.value.includes("#") && attr.includes(item.id) ? "cart-mini-selected-color-wrapper" : null }>
+                  <div
+                    className={ currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                    item.value.includes("#") && attr.includes(item.id) ? "cart-mini-selected-color" :
                       currentAttributes.items.find(el => el.id === item.id) !== undefined &&
-                      item.value.includes("#") && !attr.includes(item.id) ? "cart-mini-unselected-color" :
-                        "cart-mini-unselected-size"
-                  }
-                  style={ { backgroundColor: item.value } }>
-                  { !item.value.includes("#") ? item.value.substring(0, 3) : null }
+                      !item.value.includes("#") && attr === item.id ? "cart-mini-selected-size" :
+                        currentAttributes.items.find(el => el.id === item.id) !== undefined &&
+                        item.value.includes("#") && !attr.includes(item.id) ? "cart-mini-unselected-color" :
+                          "cart-mini-unselected-size"
+                    }
+                    style={ { backgroundColor: item.value } }>
+                    { !item.value.includes("#") ? item.value.substring(0, 3) : null }
+                  </div>
                 </div>
               </div>)
             }

@@ -17,13 +17,14 @@ export default class Attributes extends Component {
       <>
         <div className={ `attributes-items-wrapper ${ parentClass } `} >{ attributes ? attributes.items.map(
           item =>
-            <div
-              value={ item.value }
-              key={ item.id }
-              className="size"
-              style={ { background: item.value } }
-              onClick={ () => addAttribute(item.id) }>
-              { !item.value.includes("#") ? item.value : null }
+            <div key={ item.id } className={ item.value.includes("#") ? "color-wrapper" : null }>
+              <div
+                value={ item.value }
+                className={ item.value.includes("#") ? "color" : "size" }
+                style={ { background: item.value } }
+                onClick={ () => addAttribute(item.id) }>
+                { !item.value.includes("#") ? item.value : null }
+              </div>
             </div>
         ) : null
         }

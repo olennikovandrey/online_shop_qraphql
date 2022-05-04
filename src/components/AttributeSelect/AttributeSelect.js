@@ -4,10 +4,9 @@ import * as functions from "../../services/functions";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import "./attribute-select.css";
 
 class AttributeSelect extends Component {
-  _currentProductUnfreeze = Object.assign( {}, this.props.catalog[0].products.filter(item => item.id === this.props.id)[0]);
+  _currentProductUnfreeze = Object.assign( {}, this.props.catalog.filter(item => item.id === this.props.id)[0]);
   _currentProduct = { ...this._currentProductUnfreeze, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
 
   constructor(props) {

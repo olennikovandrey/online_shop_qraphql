@@ -1,4 +1,4 @@
-import { GET_PRODUCT, GET_SHOP } from "./queries";
+import { GET_PRODUCT, GET_PRODUCTS_BY_CATEGORY } from "./queries";
 import client from "../apollo";
 
 export const getAllAttributes = (attr0, firstAttr, attr1, secondAttr, attr2, thirdAttr) => {
@@ -26,16 +26,17 @@ export const getAllAttributes = (attr0, firstAttr, attr1, secondAttr, attr2, thi
 
 export const classChanger = (event, parent) => {
   const target = event.target;
-  const attributeItem = parent.querySelectorAll(".size");
+  const attributeItemSize = parent.querySelectorAll(".size");
+  const attributeItemColor = parent.querySelectorAll(".color-wrapper");
 
-  if (target.attributes[0].value.includes("#") && target.classList.contains("size")) {
-    for (let i = 0; i < attributeItem.length; i++) {
-      attributeItem[i].classList.remove("selected-color");
+  if (target.attributes[0].value.includes("#") && target.classList.contains("color")) {
+    for (let i = 0; i < attributeItemColor.length; i++) {
+      attributeItemColor[i].classList.remove("color-wrapper-selected");
     }
-    target.classList.add("selected-color");
+    target.parentNode.classList.add("color-wrapper-selected");
   } else if (target.classList.contains("size")) {
-    for (let i = 0; i < attributeItem.length; i++) {
-      attributeItem[i].classList.remove("selected-size");
+    for (let i = 0; i < attributeItemSize.length; i++) {
+      attributeItemSize[i].classList.remove("selected-size");
     }
     target.classList.add("selected-size");
   }
@@ -49,9 +50,11 @@ export const productLoader = async (id) => {
   return data;
 };
 
-export const loadShopDataAsync = async () => {
-
-  const { data } = await client.query({query: GET_SHOP} );
+export const loadCategoryDataAsync = async (categoryName) => {
+  const { data } = await client.query(
+    {query: GET_PRODUCTS_BY_CATEGORY,
+      variables: { input: { title: categoryName } }
+    } );
   return data;
 };
 

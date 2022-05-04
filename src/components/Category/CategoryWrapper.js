@@ -6,7 +6,6 @@ import { getCatalog, getProductAvailable } from "../../actions/cart";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import "./category.css";
 
 class CategoryWrapper extends Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class CategoryWrapper extends Component {
       isLoaded: false,
       isOverflow: true,
       isShowMoreBtn: true,
-      shopData: [],
+      shopData: []
     };
     this.showMoreFn = this.showMoreFn.bind(this);
   }
@@ -35,23 +34,29 @@ class CategoryWrapper extends Component {
     });
   }
 
-  async loadShopData() {
-    const data = await functions.loadShopDataAsync();
+  async loadShopData(categoryName) {
+    const data = await functions.loadCategoryDataAsync(categoryName);
     this.setState({
-      shopData: data.categories,
+      shopData: data.category.products,
       isLoaded: true
     });
-    this.catalogLoader(data.categories);
-    this.productsAvailableLoader(data.categories[0].products.filter(item => item.inStock));
+    this.catalogLoader(data.category.products);
+    this.productsAvailableLoader(data.category.products.filter(item => item.inStock));
+  }
+
+  async componentDidUpdate(prevProps) {
+    if(prevProps.categoryName !== this.props.categoryName) {
+      await this.loadShopData(this.props.categoryName.toLowerCase());
+    }
   }
 
   async componentDidMount() {
-    await this.loadShopData();
+    await this.loadShopData(this.props.categoryName.toLowerCase());
   }
 
   render() {
     const { isOverflow, isShowMoreBtn, isLoaded, shopData } = this.state,
-      { categoryName, currency, isBackgroundBlur } = this.props;
+      { currency, isBackgroundBlur, categoryName } = this.props;
 
     if (!isLoaded) {
       return (
@@ -68,7 +73,6 @@ class CategoryWrapper extends Component {
           <span className="category-name">{ categoryName }</span>
           <div className={ isOverflow ? "category-part-items-wrapper" : "category-all-items-wrapper" }>
             { shopData
-              .filter(item => item.name === categoryName.toLowerCase())[0].products
               .map(item =>
                 <React.Fragment key={ item.id + item.firstAttr + item.secondAttr + item.thirdAttr }>
                   <ProductCard
@@ -83,9 +87,8 @@ class CategoryWrapper extends Component {
                 </React.Fragment>
               )}
           </div>
-          { shopData
-            .filter(item => item.name === categoryName.toLowerCase())[0].products.length > 6 &&
-            <button className="show-more-btn" onClick={this.showMoreFn}>{isShowMoreBtn ? "SHOW MORE" : "HIDE"}</button>
+          { shopData.length > 6 &&
+            <button className="show-more-btn" onClick={this.showMoreFn}>{ isShowMoreBtn ? "SHOW MORE" : "HIDE" }</button>
           }
         </section>
       );
@@ -94,10 +97,8 @@ class CategoryWrapper extends Component {
 }
 
 CategoryWrapper.propTypes = {
-  isLoaded: PropTypes.bool,
   isBackgroundBlur: PropTypes.bool,
   categoryName: PropTypes.string,
-  shopData: PropTypes.array,
   currency: PropTypes.string,
   getCatalog: PropTypes.func,
   getSymbols: PropTypes.func,

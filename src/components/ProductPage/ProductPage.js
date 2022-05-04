@@ -1,4 +1,3 @@
-
 import Header from "../Header/Header";
 import Loader from "../Loader/Loader";
 import Attributes from "../Attributes/Attributes";
@@ -9,13 +8,7 @@ import { connect } from "react-redux";
 import DOMPurify from "dompurify";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper/core";
 import React, { Component } from "react";
-import "./product-page.css";
-import "../Cart/styles/swiper.css";
-
-SwiperCore.use([Navigation]);
 
 class ProductPage extends Component {
   _id = this.props.match.params.id;
@@ -92,33 +85,24 @@ class ProductPage extends Component {
           <section style={ isBackgroundBlur ? styles.ProductPageWrapperBlur : styles.ProductPageWrapper }>
             <Link to="/"><span className="homelink">HOMEPAGE</span></Link>
             <div className="product-page-content-wrapper">
-              <div className="preview-img-wrapper">
-                { currentProduct.gallery.slice(1, 5).map(
+              <div className={ currentProduct.gallery.length <= 5 ? "preview-img-wrapper" : "preview-imgs-wrapper"}>
+                { currentProduct.gallery.map(
                   item =>
-                    <img key={ item } className="preview-img" src={ item } width="80" height="auto" alt={ currentProduct.name } />
+                    <img
+                      key={ item }
+                      className="preview-img"
+                      src={ item }
+                      width="80"
+                      height="auto"
+                      alt={ currentProduct.name }
+                      onClick={ () => document.getElementById("generalImg").src = item }
+                    />
                 )
                 }
               </div>
               <div className="product-info">
                 <div className="product-img-wrapper">
-                  { currentProduct.gallery.length > 1 ?
-                    <Swiper
-                      navigation={ true }
-                      effect={ "cube" }
-                      loop={ true }
-                      mousewheel={ true }
-                      slidesPerView={ "auto" }
-                      spaceBetween={ 150 }
-                      centeredSlides={ true }
-                    >
-                      {currentProduct.gallery.map((item) =>
-                        <SwiperSlide key={ item }>
-                          <img className="product-img" src={ item } alt={ currentProduct.name } />
-                        </SwiperSlide>
-                      )}
-                    </Swiper> :
-                    <img className="product-img" src={ currentProduct.gallery[0] } alt={ currentProduct.name } />
-                  }
+                  <img className="product-img" src={ currentProduct.gallery[0] } alt={ currentProduct.name } id="generalImg"/>
                 </div>
                 <div className="product-details">
                   <p className="product-name">{ currentProduct.brand }</p>

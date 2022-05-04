@@ -6,7 +6,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import "./header.css";
 
 async function currencyLoader() {
   const { data } = await client.query({query: GET_CURRENCY_CATEGORY} );
@@ -80,7 +79,7 @@ class Header extends Component {
                 key={ item.symbol }
                 value={ item.symbol }
               >
-                { item.symbol }
+                { item.symbol } &nbsp; { item.label }
               </option>
             ) }
           </select>

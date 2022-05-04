@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "./product-card.css";
 
 class ProductCard extends Component {
   constructor(props) {
@@ -29,28 +28,35 @@ class ProductCard extends Component {
 
   render() {
     const { image, name, brand, amount, currency, id, availableProducts, shopData } = this.props,
-      currentProductWithoutWorkID = shopData[0].products.filter(item => item.id === id)[0];
+      currentProductWithoutWorkID = shopData.filter(item => item.id === id)[0];
     const currentProduct = { ...currentProductWithoutWorkID, firstAttr: [], secondAttr: [], thirdAttr: [], workID: "" };
 
     const available = availableProducts.find(item => item.id === id),
-      currentProductAttributes = shopData[0].products.filter(item => item.id === id)[0].attributes;
+      currentProductAttributes = shopData.filter(item => item.id === id)[0].attributes;
 
     return (
       <>
         <div className={ this.state.isCardBlur ? "product-card-wrapper-blur" : "product-card-wrapper" }>
           <Link to={ `id=${ id }` }>
-            <img className="product-card-img" src={ image } alt={ name } height="350" width="338" />
+            <img
+              className={ available !== undefined ? "product-card-img" : "product-card-img-out" }
+              src={ image }
+              alt={ name }
+              height="350"
+              width="338" />
+          </Link>
+          { available !== undefined ? null : <span className="out-label">OUT OF STOCK</span> }
+          <Link to={ `id=${ id }` }>
             <span className="product-card-name">{brand} { name }</span>
             <span className="product-card-price">{ amount } { currency }</span>
           </Link>
           <div
-            className={ available !== undefined ? "add-to-cart-btn" : "add-to-cart-unavailable" }
+            className={ available !== undefined ? "add-to-cart-btn" : null }
             onClick={ available !== undefined && currentProductAttributes.length !== 0 ? () => this.attributeSelectVisible() :
               available === undefined ? null :
                 () => this.addItemToCart(currentProduct)
             }
           >
-            { available !== undefined ? null : <span className="out-label">Out of stock</span> }
           </div>
           { this.state.isAtrributeSelectVisible &&
             <AttributeSelect

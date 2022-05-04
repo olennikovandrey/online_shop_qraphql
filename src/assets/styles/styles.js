@@ -8,7 +8,8 @@ const CategoryWrapperBlur = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  justifyContent: "space-between"
+  justifyContent: "space-between",
+  pointerEvents: "none"
 };
 
 const CategoryWrapper = {
@@ -39,39 +40,13 @@ const ProductPageWrapperBlur = {
   padding: "0 15%",
   margin: "0 auto",
   display: "flex",
-  flexDirection: "column"
-};
-
-const CartWrapper = {
-  maxWidth: "1440px",
-  width: "1100px",
-  minHeight: "745px",
-  height: "auto",
-  padding: "160px 8% 60px",
-  backgroundColor: "#fff",
-  display: "flex",
   flexDirection: "column",
-  alignItems: "flex-start"
-};
-
-const CartWrapperBlur = {
-  maxWidth: "1440px",
-  width: "1100px",
-  minHeight: "745px",
-  height: "auto",
-  padding: "160px 8% 60px",
-  backgroundColor: "#fff",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  filter: "brightness(0.8)"
+  pointerEvents: "none"
 };
 
 export const styles = {
   CategoryWrapperBlur: CategoryWrapperBlur,
   CategoryWrapper: CategoryWrapper,
   ProductPageWrapper: ProductPageWrapper,
-  ProductPageWrapperBlur: ProductPageWrapperBlur,
-  CartWrapper: CartWrapper,
-  CartWrapperBlur: CartWrapperBlur
+  ProductPageWrapperBlur: ProductPageWrapperBlur
 };

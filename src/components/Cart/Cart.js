@@ -4,8 +4,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import "./styles/cart.css";
-import "./styles/swiper.css";
 
 class Cart extends Component {
   constructor(props) {
@@ -32,7 +30,7 @@ class Cart extends Component {
         />
         { addedItems.length > 0 ?
           <section
-            style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)" } : null }
+            style={ this.state.isBackgroundBlur ? { filter: "brightness(0.8) blur(1px)", pointerEvents: "none" } : null }
             className="cart-wrapper"
           >
             <Link to="/">
