@@ -11,7 +11,7 @@ class CartMini extends Component {
   }
 
   cartMiniCloser(event) {
-    if(!event.target.matches(".cart-mini-wrapper, .counter-btn, .remove-item-btn, .cart-mini-wrapper *, .header-wrapper, .currency-select, .currency-select *")) {
+    if(!event.target.matches(".cart-mini-wrapper, .counter-btn, .remove-item-btn, .cart-mini-wrapper *, .header-wrapper, .select, .select *")) {
       this.props.setCartVisible(event);
     }
   }

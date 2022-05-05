@@ -10,6 +10,7 @@
 @import "../../components/PageNotFound/page-not-found.css";
 @import "../../components/ProductCard/product-card.css";
 @import "../../components/ProductPage/product-page.css";
+@import "../../components/HeaderCurrencySwitcher/header-currency-swither.css";
 
 *,
 *::before,

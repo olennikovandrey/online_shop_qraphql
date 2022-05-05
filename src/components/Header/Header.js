@@ -1,4 +1,5 @@
 import CartMini from "../CartMini/CartMini";
+import HeaderCurrencySwither from "../HeaderCurrencySwitcher/HeaderCurrencySwither";
 import client from "../../apollo";
 import { changeCurrency, getCurrency, setCategory } from "../../actions/cart";
 import { GET_CURRENCY_CATEGORY } from "../../services/queries";
@@ -68,22 +69,13 @@ class Header extends Component {
           ) }
         </div>
         <Link to="/"><span className="logo"></span></Link>
-        <div>
-          <select
-            defaultValue={ currency }
-            className="currency-select"
-            onChange={ (event) => { this.currencyChanger(event.target.value); } }
-          >
-            { symbols.map(item =>
-              <option
-                key={ item.symbol }
-                value={ item.symbol }
-              >
-                { item.symbol } &nbsp; { item.label }
-              </option>
-            ) }
-          </select>
-          <div className="cart-icon-wrapper" onClick={ (event) => this.setCartVisible(event) }>
+        <div className="switcher-cart-wrapper">
+          <HeaderCurrencySwither
+            symbols={ symbols }
+            currency={ currency }
+            currencyChanger={this.currencyChanger}
+          />
+          <div onClick={ (event) => this.setCartVisible(event) }>
             <span className="cart-icon"></span>
             { totalItemsInCart > 0 && <span className="cart-icon-total">{ totalItemsInCart }</span> }
           </div>

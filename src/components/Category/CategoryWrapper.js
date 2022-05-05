@@ -79,7 +79,7 @@ class CategoryWrapper extends Component {
                     image={ item.gallery[0] }
                     brand={item.brand}
                     name={ item.name }
-                    amount={ item.prices.filter(el => el.currency.symbol === currency)[0].amount }
+                    amount={ item.prices.filter(el => el.currency.symbol === "$")[0].amount }
                     currency={ currency }
                     id={ item.id }
                     shopData={ shopData }

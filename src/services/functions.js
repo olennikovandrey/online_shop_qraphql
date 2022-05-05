@@ -61,3 +61,29 @@ export const loadCategoryDataAsync = async (categoryName) => {
 export const createMarkup = (value) => {
   return { __html: value };
 };
+
+export const selectChanger = (currencyChanger) => {
+  const selectSingle = document.querySelector(".select");
+  const selectSingleTitle = selectSingle.querySelector(".select-title");
+  const selectSingleLabels = selectSingle.querySelectorAll(".select-label");
+
+  if (selectSingle.hasAttribute("data-state" === "active")) {
+    selectSingle.setAttribute("data-state", "");
+  } else {
+    selectSingle.setAttribute("data-state", "active");
+  }
+
+  for (let i = 0; i < selectSingleLabels.length; i ++) {
+    selectSingleLabels[i].addEventListener("click", (event) => {
+      selectSingleTitle.textContent = event.target.textContent.split(" ")[0];
+      selectSingle.setAttribute("data-state", "");
+      currencyChanger(selectSingleTitle.textContent);
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.matches(".select, .select *")) {
+      selectSingle.setAttribute("data-state", "");
+    }
+  });
+};
