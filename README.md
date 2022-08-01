@@ -1,4 +1,6 @@
-To start project:
+# Online shop
+
+## To start project:
 
 1. Clone project using https://github.com/olennikovandrey/scandi-test.git
 2. Install dependencies.
@@ -8,3 +10,5 @@ Original GraphQL endpoint for Junior Developer position in Scandiweb - https://g
 5. Start the server - yarn start (npm start).
 6. Start the project - yarn start (npm start).
 7. Check it!
+
+![Image alt](https://github.com/olennikovandrey/scandi-test/raw/main/src/assets/images/scandi_demo.gif)
